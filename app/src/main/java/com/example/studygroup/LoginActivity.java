@@ -3,6 +3,7 @@ package com.example.studygroup;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -42,7 +43,7 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onError(FacebookException error) {
-
+                Toast.makeText(getApplicationContext() , "Error", Toast.LENGTH_LONG).show();
             }
         });
 

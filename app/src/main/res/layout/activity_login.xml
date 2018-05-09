@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/registration"
     tools:context=".LoginActivity">
 
     <RelativeLayout
@@ -17,7 +18,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="109dp"
+            android:layout_marginBottom="100dp"
             tools:layout_editor_absoluteX="103dp"
             tools:layout_editor_absoluteY="362dp" />
     </RelativeLayout>
