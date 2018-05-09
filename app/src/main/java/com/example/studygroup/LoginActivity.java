@@ -11,6 +11,9 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 
 import java.util.Arrays;
 
@@ -19,10 +22,12 @@ public class LoginActivity extends Activity {
 
     LoginButton loginButton;
     CallbackManager callbackManager;
+    private StorageReference usersStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login);
         loginButton = (LoginButton)findViewById(R.id.login_button);
@@ -32,6 +37,12 @@ public class LoginActivity extends Activity {
             public void onSuccess(LoginResult loginResult) {
                 Intent myIntent = new Intent(LoginActivity.this,
                         MainActivity.class);
+
+                //here i want to add the user to the data base
+
+                usersStorageRef = FirebaseStorage.getInstance().getReference();
+
+
                 startActivity(myIntent);
             }
 
