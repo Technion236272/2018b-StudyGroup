@@ -10,4 +10,7 @@
     <string name="facebook_app_id">1018232011662415</string>
     <string name="fb_login_protocol_scheme">fb1018232011662415</string>
     <string name="favorite">favorite</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

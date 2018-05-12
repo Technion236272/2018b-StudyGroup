@@ -51,14 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -114,11 +110,11 @@ public class MainActivity extends AppCompatActivity {
             return fragment;
         }
 
-        @Override
+        /*@Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+            /*switch (getArguments().getInt(ARG_SECTION_NUMBER)){
                 case 1:
                     return inflater.inflate(R.layout.fragment_courses, container, false);
 
@@ -131,7 +127,11 @@ public class MainActivity extends AppCompatActivity {
                         return rootView;
 
             }
-        }
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            return rootView;
+        }*/
     }
 
     /**
@@ -146,9 +146,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return new GroupsFragment();
+                case 1:
+                    return new CoursesFragment();
+                default:
+                    return new GroupsFragment();
+            }
         }
 
         @Override
