@@ -28,8 +28,9 @@
 
         <activity
             android:name=".LoginActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-        <activity android:name=".GroupsInACourseActivity"></activity>
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity android:name=".GroupsInACourseActivity" />
+        <activity android:name=".CreateGroup"></activity>
     </application>
 
 </manifest>
