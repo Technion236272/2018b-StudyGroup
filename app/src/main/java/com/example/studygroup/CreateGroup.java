@@ -1,6 +1,8 @@
 package com.example.studygroup;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -71,28 +73,6 @@ public class CreateGroup extends AppCompatActivity {
 
         numOfParticipants.setAdapter(adapter);
 
-        numOfParticipants.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0){
-                    Toast.makeText
-                            (getApplicationContext(), "Please select number of maximum participants!", Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
-
-
-
-
-
 
         Integer[] daysArr = new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22
                                             ,23,24,25,26,27,28,29,30,31};
@@ -119,6 +99,18 @@ public class CreateGroup extends AppCompatActivity {
                 String location = Location.getText().toString();
                 String date = day.getSelectedItem() + "-" + month.getSelectedItem() + "-"+year.getSelectedItem();
                 int numOfPart = (int)numOfParticipants.getSelectedItem();
+                AlertDialog.Builder myAlert = new AlertDialog.Builder(getApplicationContext());
+                /*if(subject == null || subject.length()==0)
+                {
+                    myAlert.setMessage(R.string.subjectAlert).setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+                    return;
+                }*/
+
                 myRef.child("Groups").child(subject).child("Coures Name").setValue("235503");
                 myRef.child("Groups").child(subject).child("Group Participants").setValue(numOfPart);
                 myRef.child("Groups").child(subject).child("Location").setValue(location);
@@ -128,4 +120,5 @@ public class CreateGroup extends AppCompatActivity {
         });
 
     }
+
 }
