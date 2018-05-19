@@ -4,10 +4,17 @@
     <string name="tab_text_1">Groups</string>
     <string name="tab_text_2">Courses</string>
     <string name="action_settings">Settings</string>
+    <string name="Subject">Subject</string>
+    <string name="Location">Location</string>
+    <string name="DateAndTime">YYYY/MM/DD HH:MM</string>
+    <string name="CreateGroup">Create Group</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="facebook_app_id">1018232011662415</string>
     <string name="fb_login_protocol_scheme">fb1018232011662415</string>
     <string name="favorite">favorite</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
