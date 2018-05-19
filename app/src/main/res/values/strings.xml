@@ -8,6 +8,8 @@
     <string name="Location">Location</string>
     <string name="DateAndTime">YYYY/MM/DD HH:MM</string>
     <string name="CreateGroup">Create Group</string>
+    <string id= "numOfParticipants "
+        name="numOfParticipants">Number Of Participants</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- TODO: Remove or change this placeholder text -->
