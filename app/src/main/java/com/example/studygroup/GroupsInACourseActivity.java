@@ -17,7 +17,6 @@ public class GroupsInACourseActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Click action
                 Intent intent = new Intent(GroupsInACourseActivity.this, CreateGroup.class);
                 startActivity(intent);
             }
