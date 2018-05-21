@@ -36,15 +36,21 @@ public class LoginActivity extends Activity {
 
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login);
-
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        if(isLoggedIn){
+            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(myIntent);
+        }
         loginButton = (LoginButton) findViewById(R.id.login_button);
         callbackManager = CallbackManager.Factory.create();
+
 
         loginButton.setReadPermissions("email", "public_profile");  //
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                //handleFacebookAccessToken(loginResult.getAccessToken());
+                handleFacebookAccessToken(loginResult.getAccessToken());
 
                 Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(myIntent);
