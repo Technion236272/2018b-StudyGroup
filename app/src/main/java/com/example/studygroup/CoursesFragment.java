@@ -18,7 +18,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +25,6 @@ public class CoursesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private Map<Integer, Course> allCourses;
-    private Map<Integer, Course> favorites;
     private MyItemRecyclerViewAdapter adapter;
 
     public CoursesFragment() {
@@ -74,7 +72,7 @@ public class CoursesFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int i = 0;
-                for(DataSnapshot child : dataSnapshot.getChildren()) {                  // works!
+                for(DataSnapshot child : dataSnapshot.getChildren()) {
                     String faculty = child.child("faculty").getValue().toString();
                     String id = child.child("id").getValue().toString();
                     String name = child.child("name").getValue().toString();
