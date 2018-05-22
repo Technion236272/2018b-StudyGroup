@@ -10,6 +10,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <EditText
+            android:id="@+id/editText11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp" />
+        
         <android.support.v7.widget.RecyclerView
             android:id="@+id/favouriteCoursesRecyclerView"
             android:layout_width="match_parent"
@@ -23,7 +29,6 @@
             android:scrollbars="vertical" />
 
     </LinearLayout>
-
 
 
 </FrameLayout>

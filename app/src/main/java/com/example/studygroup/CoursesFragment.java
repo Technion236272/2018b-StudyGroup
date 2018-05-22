@@ -1,19 +1,16 @@
 package com.example.studygroup;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,14 +19,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CoursesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    String[] strings = {"1", "2", "3", "4", "5", "6", "7"};
+    private Map<Integer, Course> allCourses;
+    private Map<Integer, Course> favorites;
+    private MyItemRecyclerViewAdapter adapter;
 
     public CoursesFragment() {
         // Required empty public constructor
@@ -44,8 +42,6 @@ public class CoursesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
-
         }
     }
 
@@ -53,22 +49,41 @@ public class CoursesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
+        allCourses = new HashMap<>();
+        EditText editText = (EditText) view.findViewById(R.id.editText11);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+            }
+        });
+
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("Courses").addValueEventListener(new ValueEventListener() {
-            ArrayList<Course> m = new ArrayList<>();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                int i = 0;
                 for(DataSnapshot child : dataSnapshot.getChildren()) {                  // works!
                     String faculty = child.child("faculty").getValue().toString();
                     String id = child.child("id").getValue().toString();
                     String name = child.child("name").getValue().toString();
 
-                    m.add(new Course(faculty, id, name));
+                    allCourses.put(i++, new Course(faculty, id, name));
                 }
                 final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.allCoursesRecyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(getContext(), m);
+                adapter = new MyItemRecyclerViewAdapter(getContext(), allCourses);
                 recyclerView.setAdapter(adapter);
             }
 
@@ -78,6 +93,19 @@ public class CoursesFragment extends Fragment {
         });
         return view;
 
+    }
+
+    private void filter(String text) {
+        Map<Integer, Course> filteredList = new HashMap<>();
+        int i = 0;
+        for(Map.Entry<Integer, Course> course : allCourses.entrySet()) {
+            Course c = course.getValue();
+            StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
+            if(sb.toString().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.put(i++, c);
+            }
+        }
+        adapter.filterList(filteredList);
     }
 
     public interface OnFragmentInteractionListener {

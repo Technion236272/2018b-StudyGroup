@@ -8,17 +8,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.CourseHolder>{
+public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.CourseHolder> {
 
-    private ArrayList<Course> data;
+    private Map<Integer, Course> data;
     private Context context;
 
     public MyItemRecyclerViewAdapter() {
-        this.data = new ArrayList<Course>();
+        this.data = new HashMap<>();
     }
 
-    public MyItemRecyclerViewAdapter(Context context, ArrayList<Course> data) {
+    public MyItemRecyclerViewAdapter(Context context, Map<Integer, Course> data) {
         this.context = context;
         this.data = data;
     }
@@ -31,10 +33,15 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     }
 
     @Override
-    public void onBindViewHolder(CourseHolder holder, int position) {
+    public void onBindViewHolder(CourseHolder holder, int key) {
    //     holder.courseFaculty.setText(data.get(position).getFaculty());
     //    holder.courseId.setText(data.get(position).getId());
-        holder.courseName.setText(data.get(position).getId() + " - " + data.get(position).getName());
+
+        Course c = data.get(key);
+        StringBuilder sb = new StringBuilder(c.getId());
+        sb.append(" - ");
+        sb.append(c.getName());
+        holder.courseName.setText(sb.toString());
     }
 
     @Override
@@ -42,6 +49,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         return data.size();
     }
 
+    public void filterList(Map<Integer, Course> filteredList) {
+        data = filteredList;
+        notifyDataSetChanged();
+    }
 
     static class CourseHolder extends RecyclerView.ViewHolder
     {
