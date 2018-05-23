@@ -9,7 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class GroupsInACourseActivity extends AppCompatActivity {
+
+    private ArrayList<Group> groups;
+    GroupCardsViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,15 @@ public class GroupsInACourseActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.GroupsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        groups = new ArrayList<>();
+        // here --> get all groups from firebase, according to the course.
+        Group g = new Group("CS", "Adham-Saif", "Android Project Test", "23/05/18",
+                5, 2, "AdminToken", new ArrayList<User>(), 236503);
+        groups.add(g);
+        // doesn't count (the two lines above, just test)
+
+        adapter = new GroupCardsViewAdapter(groups);
+        recyclerView.setAdapter(adapter);
 
     }
 
