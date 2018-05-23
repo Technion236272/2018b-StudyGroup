@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<!--
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        >
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/groupCardView" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp" >
+
+                <ImageView
+                    android:id="@+id/groupPhotoCardView"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+                    android:contentDescription="TODO" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/groupSubjectCardView"
+                    android:layout_toRightOf="@+id/groupPhotoCardView"
+                    android:layout_toLeftOf="@+id/userStateInGroupCardView"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/Subject"
+                    android:textSize="30sp"
+                    android:layout_toEndOf="@+id/groupPhotoCardView"
+                    android:layout_toStartOf="@+id/userStateInGroupCardView" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/groupDateCardView"
+                    android:text="Date"
+                    android:layout_toRightOf="@+id/groupPhotoCardView"
+                    android:layout_below="@+id/groupSubjectCardView"
+                    android:layout_toEndOf="@+id/groupPhotoCardView" />
+
+                <TextView
+                    android:id="@+id/userStateInGroupCardView"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center"
+                    android:text="Admin"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/groupNumberOfParticipantsCardView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/userStateInGroupCardView"
+                    android:text="00/??"
+                    android:layout_alignParentRight="true" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+-->
+</android.support.constraint.ConstraintLayout>
