@@ -4,37 +4,37 @@ package com.example.studygroup;
 import java.util.ArrayList;
 
 public class Group {
-    protected String faculty;
+ //   protected String faculty;
     protected String id;
     protected String subject;
     protected String date;
     protected int maxNumOfPart;
     protected int currentNumOfPart;
-    protected String adminToken;
-    protected ArrayList<User> users;
-    protected int courseId;
+//    protected String adminToken;
+//    protected ArrayList<User> users;
+ //   protected int courseId;
 
-    public Group(String faculty, String id, String subject, String date, int maxNumOfPart,
-                 int currentNumOfPart, String adminToken, ArrayList<User> users, int courseId) {
-        this.faculty = faculty;
+    public Group(String id, String subject, String date, int maxNumOfPart,
+                 int currentNumOfPart) {
+   //     this.faculty = faculty;
         this.id = id;
         this.subject = subject;
         this.date = date;
         this.maxNumOfPart = maxNumOfPart;
         this.currentNumOfPart = currentNumOfPart;
-        this.adminToken = adminToken;
-        this.users = users;
-        this.courseId = courseId;
+//        this.adminToken = adminToken;
+//        this.users = users;
+ //       this.courseId = courseId;
     }
 
 
-    public String getFaculty() {
-        return faculty;
-    }
+//    public String getFaculty() {
+//        return faculty;
+//    }
 
-    public void setFaculty(String faculty) {
-        this.faculty = faculty;
-    }
+//    public void setFaculty(String faculty) {
+//        this.faculty = faculty;
+//    }
 
     public String getId() {
         return id;
@@ -76,28 +76,28 @@ public class Group {
         this.currentNumOfPart = currentNumOfPart;
     }
 
-    public String getAdminToken() {
-        return adminToken;
-    }
-
-    public void setAdminToken(String adminToken) {
-        this.adminToken = adminToken;
-    }
-
-    public ArrayList<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
-    }
-
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
+//    public String getAdminToken() {
+//        return adminToken;
+//    }
+//
+//    public void setAdminToken(String adminToken) {
+//        this.adminToken = adminToken;
+//    }
+//
+//    public ArrayList<User> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(ArrayList<User> users) {
+//        this.users = users;
+//    }
+//
+//    public int getCourseId() {
+//        return courseId;
+//    }
+//
+//    public void setCourseId(int courseId) {
+//        this.courseId = courseId;
+//    }
 
 }

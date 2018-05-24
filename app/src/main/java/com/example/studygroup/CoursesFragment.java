@@ -57,15 +57,19 @@ public class CoursesFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Map<Integer, Course> filteredList = new HashMap<>();
-                int i = 0;
-                for(Map.Entry<Integer, Course> course : allCourses.entrySet()) {
-                    Course c = course.getValue();
-                    StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
-                    if(sb.toString().toLowerCase().contains(newText.toLowerCase())) {
-                        filteredList.put(i++, c);
+                if(newText.length() == 0) {
+                    adapter.filterList(allCourses);
+                } else {
+                    int i = 0;
+                    for (Map.Entry<Integer, Course> course : allCourses.entrySet()) {
+                        Course c = course.getValue();
+                        StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
+                        if (sb.toString().toLowerCase().contains(newText.toLowerCase())) {
+                            filteredList.put(i++, c);
+                        }
                     }
+                    adapter.filterList(filteredList);
                 }
-                adapter.filterList(filteredList);
                 return false;
             }
         });
@@ -78,7 +82,8 @@ public class CoursesFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
         allCourses = new HashMap<>();
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        MyDatabaseUtil my = new MyDatabaseUtil();
+        my.getDatabase();
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("Courses").addValueEventListener(new ValueEventListener() {
             @Override

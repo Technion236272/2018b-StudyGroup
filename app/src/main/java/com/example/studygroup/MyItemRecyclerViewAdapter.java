@@ -1,16 +1,18 @@
 package com.example.studygroup;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Map;
 
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.CourseHolder> {
 
-    private Map<Integer, Course> data;
+    private static Map<Integer, Course> data;
 
     public MyItemRecyclerViewAdapter(Map<Integer, Course> data) {
         this.data = data;
@@ -42,14 +44,29 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         notifyDataSetChanged();
     }
 
-    static class CourseHolder extends RecyclerView.ViewHolder
-    {
+    static class CourseHolder extends RecyclerView.ViewHolder {
         TextView courseName;
 
-        public CourseHolder(View itemView) {
+        public CourseHolder(final View itemView) {
             super(itemView);
                courseName = (TextView)itemView.findViewById(R.id.courseName);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    StringBuilder id = new StringBuilder(data.get(position).getId());
+                    StringBuilder name = new StringBuilder(data.get(position).getName());
+
+                    Intent intent = new Intent(itemView.getContext().getApplicationContext(), GroupsInACourseActivity.class); // BE ALERT!!!
+                    intent.putExtra("courseId", id.toString());
+                    intent.putExtra("courseName", name.toString());
+
+                    itemView.getContext().startActivity(intent);
+                }
+            });
         }
+
+
     }
 
 }
