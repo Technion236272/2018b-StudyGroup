@@ -11,6 +11,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,9 +22,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Arrays;
+
 
 public class LoginActivity extends Activity {
-
+    private static final String EMAIL = "email";
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
@@ -38,34 +41,83 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+
         if(isLoggedIn){
             Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(myIntent);
         }
-        loginButton = (LoginButton) findViewById(R.id.login_button);
         callbackManager = CallbackManager.Factory.create();
 
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        // If you are using in a fragment, call loginButton.setFragment(this);
 
-        loginButton.setReadPermissions("email", "public_profile");  //
+        // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                handleFacebookAccessToken(loginResult.getAccessToken());
-
-                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(myIntent);
+                // App code
             }
 
             @Override
             public void onCancel() {
-                //Todo: add cancel message.
+                // App code
             }
 
             @Override
-            public void onError(FacebookException error) {
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            public void onError(FacebookException exception) {
+                // App code
             }
         });
+
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+//
+                         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                         startActivity(myIntent);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+
+//        loginButton.setReadPermissions("email", "public_profile");  //
+//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                handleFacebookAccessToken(loginResult.getAccessToken());
+//
+//                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+//                startActivity(myIntent);
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                //Todo: add cancel message.
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+//            }
+//        });
+
+
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -83,15 +135,15 @@ public class LoginActivity extends Activity {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
