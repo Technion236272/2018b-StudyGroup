@@ -30,7 +30,9 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         viewHolder.subject.setText(group.getSubject());
         viewHolder.date.setText(group.getDate());
         viewHolder.userState.setText("Not finished!");
-        StringBuilder sb = new StringBuilder(group.getCurrentNumOfPart()).append("/").append(group.getmaxNumOfPart());
+        StringBuilder sb = new StringBuilder(String.valueOf(group.getCurrentNumOfPart()))
+                .append("/")
+                .append(String.valueOf(group.getmaxNumOfPart()));
         viewHolder.numOfPart.setText(sb.toString());
     }
 
