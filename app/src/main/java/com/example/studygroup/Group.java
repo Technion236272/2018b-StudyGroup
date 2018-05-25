@@ -1,30 +1,30 @@
 package com.example.studygroup;
 
 
-import java.util.ArrayList;
-
 public class Group {
  //   protected String faculty;
     protected String id;
     protected String subject;
     protected String date;
+    protected String location;
     protected int maxNumOfPart;
     protected int currentNumOfPart;
 //    protected String adminToken;
 //    protected ArrayList<User> users;
- //   protected int courseId;
 
-    public Group(String id, String subject, String date, int maxNumOfPart,
+    public Group() {}
+
+    public Group(String id, String subject, String date, String location, int maxNumOfPart,
                  int currentNumOfPart) {
    //     this.faculty = faculty;
         this.id = id;
         this.subject = subject;
         this.date = date;
+        this.setLocation(location);
         this.maxNumOfPart = maxNumOfPart;
         this.currentNumOfPart = currentNumOfPart;
 //        this.adminToken = adminToken;
 //        this.users = users;
- //       this.courseId = courseId;
     }
 
 
@@ -76,6 +76,14 @@ public class Group {
         this.currentNumOfPart = currentNumOfPart;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
 //    public String getAdminToken() {
 //        return adminToken;
 //    }
@@ -91,13 +99,6 @@ public class Group {
 //    public void setUsers(ArrayList<User> users) {
 //        this.users = users;
 //    }
-//
-//    public int getCourseId() {
-//        return courseId;
-//    }
-//
-//    public void setCourseId(int courseId) {
-//        this.courseId = courseId;
-//    }
+
 
 }

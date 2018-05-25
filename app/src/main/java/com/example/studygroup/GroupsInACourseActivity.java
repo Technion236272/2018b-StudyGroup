@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +22,8 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
     private ArrayList<Group> groups;
     private GroupCardsViewAdapter adapter;
+    private DatabaseReference myRef;
+    private FirebaseDatabase mDataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupsInACourseActivity.this, CreateGroup.class);
+                intent.putExtra("courseId", courseId);
                 startActivity(intent);
             }
         });
@@ -50,26 +53,35 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
         MyDatabaseUtil my = new MyDatabaseUtil();
         my.getDatabase();
-   //     FirebaseDatabase.getInstance().setPersistenceEnabled(true);     //
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        database.child("Groups").addValueEventListener(new ValueEventListener() {
+        mDataBase = FirebaseDatabase.getInstance();
+        myRef = mDataBase.getReference();
+
+        myRef.child("Groups").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                MyDatabaseUtil my1 = new MyDatabaseUtil();
                 int i = 0;
-                for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    if(child.getKey().contains(courseId)) {
-                        String id = child.child("Course Number").getValue().toString();
-                        String subject = child.child("Subject").getValue().toString();
-                        String date = child.child("Date").getValue().toString();
-                        Integer max = Integer.parseInt(child.child("Number of participants").getValue().toString());
-                        Integer current = Integer.parseInt(child.child("current number").getValue().toString());
-                        groups.add(new Group(id, subject, date, max, current));
+                for(DataSnapshot data : dataSnapshot.getChildren()) {
+                    if(data.getKey().contains(courseId)) {
+                        Group newGroup = new Group();
+                        newGroup.setId(data.getValue(Group.class).getId());
+                        newGroup.setSubject(data.getValue(Group.class).getSubject());
+                        newGroup.setDate(data.getValue(Group.class).getDate());
+                        newGroup.setLocation(data.getValue(Group.class).getLocation());
+                        newGroup.setmaxNumOfPart(data.getValue(Group.class).getmaxNumOfPart());
+                        newGroup.setCurrentNumOfPart(data.getValue(Group.class).getCurrentNumOfPart());
+                        groups.add(newGroup);
                     }
                 }
-                RecyclerView recyclerView = (RecyclerView) findViewById(R.id.GroupsRecyclerView);
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                adapter = new GroupCardsViewAdapter(groups);
-                recyclerView.setAdapter(adapter);
+                if(groups.isEmpty()) {
+                    TextView noGroups = (TextView) findViewById(R.id.noGroupsView);
+                    noGroups.setText(R.string.no_active_groups);
+                } else {
+                    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.GroupsRecyclerView);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                    adapter = new GroupCardsViewAdapter(groups);
+                    recyclerView.setAdapter(adapter);
+                }
             }
 
             @Override
