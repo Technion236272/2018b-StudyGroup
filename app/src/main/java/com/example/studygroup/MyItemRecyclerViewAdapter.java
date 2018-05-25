@@ -61,6 +61,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                     intent.putExtra("courseId", id.toString());
                     intent.putExtra("courseName", name.toString());
 
+
+
                     itemView.getContext().startActivity(intent);
                 }
             });

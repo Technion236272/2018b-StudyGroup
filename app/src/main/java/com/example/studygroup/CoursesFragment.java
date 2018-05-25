@@ -27,6 +27,9 @@ public class CoursesFragment extends Fragment {
     private Map<Integer, Course> allCourses;
     private MyItemRecyclerViewAdapter adapter;
 
+    private Map<Integer, Course> favorites;
+    private MyItemRecyclerViewAdapter favoritesAdapter;
+
     public CoursesFragment() {
     }
 
@@ -81,6 +84,7 @@ public class CoursesFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
         allCourses = new HashMap<>();
+        favorites = new HashMap<>();
 
         MyDatabaseUtil my = new MyDatabaseUtil();
         my.getDatabase();
@@ -100,6 +104,12 @@ public class CoursesFragment extends Fragment {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new MyItemRecyclerViewAdapter(allCourses);
                 recyclerView.setAdapter(adapter);
+
+//                iterate over the user favorite courses and add them into the favorites hashmap, and remove from allcourses    // ???
+//                final RecyclerView recyclerViewFavorites = (RecyclerView) view.findViewById(R.id.favouriteCoursesRecyclerView);
+//                recyclerViewFavorites.setLayoutManager(new LinearLayoutManager(getContext()));
+//                favoritesAdapter = new MyItemRecyclerViewAdapter(favorites);
+//                recyclerViewFavorites.setAdapter(favoritesAdapter);
             }
 
             @Override
