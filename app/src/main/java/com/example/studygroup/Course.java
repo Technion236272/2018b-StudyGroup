@@ -2,11 +2,11 @@ package com.example.studygroup;
 
 
 public class Course {
-    protected String faculty;
-    protected String id;
-    protected String name;
+    private String faculty;
+    private String id;
+    private String name;
 
-    public Course(String faculty, String id, String name) {
+    Course(String faculty, String id, String name) {
         this.setFaculty(faculty);
         this.setId(id);
         this.setName(name);
@@ -17,7 +17,7 @@ public class Course {
         return faculty;
     }
 
-    public void setFaculty(String faculty) {
+    private void setFaculty(String faculty) {
         this.faculty = faculty;
     }
 

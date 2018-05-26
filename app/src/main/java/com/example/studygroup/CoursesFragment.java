@@ -2,6 +2,7 @@ package com.example.studygroup;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,22 +28,13 @@ public class CoursesFragment extends Fragment {
     private Map<Integer, Course> allCourses;
     private MyItemRecyclerViewAdapter adapter;
 
-    private Map<Integer, Course> favorites;
-    private MyItemRecyclerViewAdapter favoritesAdapter;
-
     public CoursesFragment() {
-    }
-
-    public static CoursesFragment newInstance() {
-        CoursesFragment fragment = new CoursesFragment();
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
+        if (getArguments() != null) { }
         setHasOptionsMenu(true);
     }
 
@@ -80,14 +72,12 @@ public class CoursesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
         allCourses = new HashMap<>();
-        favorites = new HashMap<>();
 
         MyDatabaseUtil my = new MyDatabaseUtil();
-        my.getDatabase();
+        MyDatabaseUtil.getDatabase();
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("Courses").addValueEventListener(new ValueEventListener() {
             @Override
@@ -100,24 +90,18 @@ public class CoursesFragment extends Fragment {
 
                     allCourses.put(i++, new Course(faculty, id, name));
                 }
-                final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.allCoursesRecyclerView);
+                final RecyclerView recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new MyItemRecyclerViewAdapter(allCourses);
                 recyclerView.setAdapter(adapter);
-
-//                iterate over the user favorite courses and add them into the favorites hashmap, and remove from allcourses    // ???
-//                final RecyclerView recyclerViewFavorites = (RecyclerView) view.findViewById(R.id.favouriteCoursesRecyclerView);
-//                recyclerViewFavorites.setLayoutManager(new LinearLayoutManager(getContext()));
-//                favoritesAdapter = new MyItemRecyclerViewAdapter(favorites);
-//                recyclerViewFavorites.setAdapter(favoritesAdapter);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        return view;
 
+        return view;
     }
 
     public interface OnFragmentInteractionListener {

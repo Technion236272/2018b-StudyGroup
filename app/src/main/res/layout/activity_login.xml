@@ -23,5 +23,4 @@
             tools:layout_editor_absoluteY="362dp" />
     </RelativeLayout>
 
-
 </android.support.constraint.ConstraintLayout>

@@ -1,14 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.studygroup.CoursesFragment">
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="com.example.studygroup.CoursesFragment" >
         
         <android.support.v7.widget.RecyclerView
             android:id="@+id/favouriteCoursesRecyclerView"
@@ -22,7 +17,4 @@
             android:layout_height="wrap_content"
             android:scrollbars="vertical" />
 
-    </LinearLayout>
-
-
-</FrameLayout>
+</LinearLayout>

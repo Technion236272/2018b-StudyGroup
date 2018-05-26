@@ -3,19 +3,19 @@ package com.example.studygroup;
 
 public class Group {
  //   protected String faculty;
-    protected String id;
-    protected String subject;
-    protected String date;
-    protected String location;
-    protected int maxNumOfPart;
-    protected int currentNumOfPart;
+    private String id;
+    private String subject;
+    private String date;
+    private String location;
+    private int maxNumOfPart;
+    private int currentNumOfPart;
 //    protected String adminToken;
 //    protected ArrayList<User> users;
 
-    public Group() {}
+    Group() {}
 
-    public Group(String id, String subject, String date, String location, int maxNumOfPart,
-                 int currentNumOfPart) {
+    Group(String id, String subject, String date, String location, int maxNumOfPart,
+          int currentNumOfPart) {
    //     this.faculty = faculty;
         this.id = id;
         this.subject = subject;

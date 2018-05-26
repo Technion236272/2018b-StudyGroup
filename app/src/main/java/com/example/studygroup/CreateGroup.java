@@ -13,9 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.Profile;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -93,7 +91,6 @@ public class CreateGroup extends AppCompatActivity {
             alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
 
-
                 }
             }).show();
             return;
@@ -121,10 +118,10 @@ public class CreateGroup extends AppCompatActivity {
 
         Integer numOfPart = Integer.parseInt((numOfParticipants.getSelectedItem().toString()));
         Integer current = 1;
-        StringBuilder newSubject = new StringBuilder(courseId).append(" - ").append(subject);
 
         Group newGroup = new Group(courseId, subject, date, location, numOfPart, current);
-        myRef.child("Groups").child(newSubject.toString()).setValue(newGroup);
+        myRef.child("Groups").child(courseId + " - " + subject).setValue(newGroup);
     }
+
 
 }

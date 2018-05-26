@@ -1,5 +1,6 @@
 package com.example.studygroup;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,27 +14,25 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
 
     private ArrayList<Group> groups;
 
-    public GroupCardsViewAdapter(ArrayList<Group> groups) {
+    GroupCardsViewAdapter(ArrayList<Group> groups) {
         this.groups = groups;
     }
 
+    @NonNull
     @Override
-    public GroupViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_group_item, viewGroup, false);
-        GroupViewHolder gvh = new GroupViewHolder(v);
-        return gvh;
+        return new GroupViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(GroupViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull GroupViewHolder viewHolder, int i) {
         Group group = groups.get(i);
         viewHolder.subject.setText(group.getSubject());
         viewHolder.date.setText(group.getDate());
         viewHolder.userState.setText("Not finished!");
-        StringBuilder sb = new StringBuilder(String.valueOf(group.getCurrentNumOfPart()))
-                .append("/")
-                .append(String.valueOf(group.getmaxNumOfPart()));
-        viewHolder.numOfPart.setText(sb.toString());
+        String sb = String.valueOf(group.getCurrentNumOfPart()) + "/" + String.valueOf(group.getmaxNumOfPart());
+        viewHolder.numOfPart.setText(sb);
     }
 
     @Override
@@ -42,12 +41,12 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
 
-    public static class GroupViewHolder extends RecyclerView.ViewHolder {
+    static class GroupViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView subject;
         TextView date;
@@ -57,11 +56,11 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
 
         GroupViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.groupCardView);
-            subject = (TextView) itemView.findViewById(R.id.groupSubjectCardView);
-            date = (TextView) itemView.findViewById(R.id.groupDateCardView);
-            userState = (TextView) itemView.findViewById(R.id.userStateInGroupCardView);
-            numOfPart = (TextView) itemView.findViewById(R.id.groupNumberOfParticipantsCardView);
+            cv = itemView.findViewById(R.id.groupCardView);
+            subject = itemView.findViewById(R.id.groupSubjectCardView);
+            date = itemView.findViewById(R.id.groupDateCardView);
+            userState = itemView.findViewById(R.id.userStateInGroupCardView);
+            numOfPart = itemView.findViewById(R.id.groupNumberOfParticipantsCardView);
 
         }
     }

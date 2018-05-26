@@ -22,8 +22,6 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
     private ArrayList<Group> groups;
     private GroupCardsViewAdapter adapter;
-    private DatabaseReference myRef;
-    private FirebaseDatabase mDataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +30,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
         final String courseId = getIntent().getExtras().getString("courseId");
         String courseName = getIntent().getExtras().getString("courseName");
-        StringBuilder idName = new StringBuilder(courseId).append(" - ").append(courseName);
-        setTitle(idName.toString());
+        setTitle(courseId + " - " + courseName);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.createGroupFab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -53,8 +50,8 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
         MyDatabaseUtil my = new MyDatabaseUtil();
         my.getDatabase();
-        mDataBase = FirebaseDatabase.getInstance();
-        myRef = mDataBase.getReference();
+        FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = mDataBase.getReference();
 
         myRef.child("Groups").addValueEventListener(new ValueEventListener() {
             @Override

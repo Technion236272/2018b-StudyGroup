@@ -1,7 +1,7 @@
 package com.example.studygroup;
 
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,34 +16,29 @@ import android.view.ViewGroup;
  * Activities that contain this fragment must implement the
  * {@link GroupsFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link GroupsFragment#newInstance} factory method to
+ * Use the newInstance factory method to
  * create an instance of this fragment.
  */
 public class GroupsFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-
     public GroupsFragment() {
         // Required empty public constructor
     }
-    public static GroupsFragment newInstance() {
-        GroupsFragment fragment = new GroupsFragment();
-        return fragment;
-    }
+//    public static GroupsFragment newInstance() {
+//        return new GroupsFragment();
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_groups, container, false);
-        ViewPager mViewPager = (ViewPager) view.findViewById(R.id.container_main);
+        ViewPager mViewPager = view.findViewById(R.id.container_main);
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -53,7 +48,7 @@ public class GroupsFragment extends Fragment {
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -101,8 +96,8 @@ public class GroupsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+     //   void onFragmentInteraction(Uri uri);
     }
 }

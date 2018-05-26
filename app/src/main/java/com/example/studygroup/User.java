@@ -13,7 +13,7 @@ class User {
     private ArrayList<Group> favoriteCourses;
     // more
 
-    public User(String token, String name) {
+    User(String token, String name) {
         this.setToken(token);
         this.setName(name);
         this.setJoined(new ArrayList<Group>());
