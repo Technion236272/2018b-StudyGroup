@@ -41,9 +41,6 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-
         if(isLoggedIn){
             Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(myIntent);
@@ -93,31 +90,6 @@ public class LoginActivity extends Activity {
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                     }
                 });
-
-
-
-//        loginButton.setReadPermissions("email", "public_profile");  //
-//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                handleFacebookAccessToken(loginResult.getAccessToken());
-//
-//                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-//                startActivity(myIntent);
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                //Todo: add cancel message.
-//            }
-//
-//            @Override
-//            public void onError(FacebookException error) {
-//                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
-
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
