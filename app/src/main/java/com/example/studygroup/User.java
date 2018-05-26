@@ -1,29 +1,33 @@
 package com.example.studygroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 class User {
 
     private String token;
     private String name;
     private ArrayList<Group> joined;
-    private ArrayList<Group> interested;
+    private Map<String, String> interested;
     private ArrayList<Group> requests;
     private ArrayList<Group> groupAdmin;
     private ArrayList<Group> favoriteCourses;
     // more
 
+    User () {}
+
     User(String token, String name) {
         this.setToken(token);
         this.setName(name);
         this.setJoined(new ArrayList<Group>());
-        this.setInterested(new ArrayList<Group>());
+        this.setInterested(new HashMap<String, String>());
         this.setRequests(new ArrayList<Group>());
         this.setGroupAdmin(new ArrayList<Group>());
         this.setFavoriteCourses(new ArrayList<Group>());
     }
 
-    public User(String token, String name, ArrayList<Group> joined, ArrayList<Group> interested,
+    public User(String token, String name, ArrayList<Group> joined, Map<String, String> interested,
                 ArrayList<Group> requests, ArrayList<Group> groupAdmin, ArrayList<Group> favoriteCourses) {
         this.setToken(token);
         this.setName(name);
@@ -58,11 +62,11 @@ class User {
         this.joined = joined;
     }
 
-    public ArrayList<Group> getInterested() {
+    public Map<String, String> getInterested() {
         return interested;
     }
 
-    public void setInterested(ArrayList<Group> interested) {
+    public void setInterested(Map<String, String> interested) {
         this.interested = interested;
     }
 

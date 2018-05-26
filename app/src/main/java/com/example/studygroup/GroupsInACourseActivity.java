@@ -49,7 +49,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
         final Context context = this;
 
         MyDatabaseUtil my = new MyDatabaseUtil();
-        my.getDatabase();
+        MyDatabaseUtil.getDatabase();
         FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = mDataBase.getReference();
 
