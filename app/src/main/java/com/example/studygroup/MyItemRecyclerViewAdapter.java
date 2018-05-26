@@ -6,13 +6,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.facebook.Profile;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Map;
 
-public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.CourseHolder> {
+public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.CourseHolder>
+                                        {
 
     private static Map<Integer, Course> data;
+
 
     MyItemRecyclerViewAdapter(Map<Integer, Course> data) {
         MyItemRecyclerViewAdapter.data = data;
@@ -44,10 +52,22 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     static class CourseHolder extends RecyclerView.ViewHolder {
         TextView courseName;
+        Button favoutiteButton;
 
         CourseHolder(final View itemView) {
             super(itemView);
             courseName = itemView.findViewById(R.id.courseName);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference myRef = database.getReference();
+            favoutiteButton = (Button) itemView.findViewById(R.id.favouriteButton);
+            favoutiteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    myRef.child("Users").child(Profile.getCurrentProfile().getId()).
+                            child("FavouriteCourses").child(data.get(position).getName()).setValue(data.get(position).getId());
+                }
+            });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -62,6 +82,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 }
             });
         }
+
+
     }
 
 }
