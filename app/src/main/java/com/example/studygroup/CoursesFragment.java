@@ -14,12 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +32,10 @@ public class CoursesFragment extends Fragment {
     private static String lastQuery = "";
     private static MyItemRecyclerViewAdapter lastAdapter;
     private RecyclerView recyclerView;
+
+    private RecyclerView favouriteRecyclerView;
+    private Map<Integer, Course> favourite;
+    private static MyItemRecyclerViewAdapter adapter1;
 
     public CoursesFragment() {
     }
@@ -82,23 +88,55 @@ public class CoursesFragment extends Fragment {
 
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+        favourite = new HashMap<>();
+        final ArrayList<String> temp = new ArrayList<>();
+
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+        database.child("Users").child(Profile.getCurrentProfile().getId())
+                .child("FavouriteCourses").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String current;
+                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                    current = child.getValue().toString();
+                    temp.add(current);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         database.child("Courses").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int i = 0;
+                int j = 0;
+                recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                favouriteRecyclerView = view.findViewById(R.id.favouriteCoursesRecyclerView);
+                favouriteRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
                     String faculty = child.child("faculty").getValue().toString();
                     String id = child.child("id").getValue().toString();
                     String name = child.child("name").getValue().toString();
-
-                    allCourses.put(i++, new Course(faculty, id, name));
+                    if(temp.contains(id)) {
+                        favourite.put(j++, new Course(faculty, id, name));
+                    } else {
+                        allCourses.put(i++, new Course(faculty, id, name));
+                    }
                 }
-                recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
                 adapter = new MyItemRecyclerViewAdapter(allCourses);
                 lastAdapter = new MyItemRecyclerViewAdapter(allCourses);
                 recyclerView.setAdapter(adapter);
+                adapter1 = new MyItemRecyclerViewAdapter(favourite);
+                favouriteRecyclerView.setAdapter(adapter1);
             }
 
             @Override
@@ -108,4 +146,6 @@ public class CoursesFragment extends Fragment {
 
         return view;
     }
+
+
 }

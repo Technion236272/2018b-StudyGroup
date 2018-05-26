@@ -12,7 +12,7 @@ class User {
     private Map<String, String> interested;
     private ArrayList<Group> requests;
     private ArrayList<Group> groupAdmin;
-    private ArrayList<Group> favoriteCourses;
+    private ArrayList<Group> FavoriteCourses;
     // more
 
     User () {}
@@ -87,10 +87,10 @@ class User {
     }
 
     public ArrayList<Group> getFavoriteCourses() {
-        return favoriteCourses;
+        return FavoriteCourses;
     }
 
     public void setFavoriteCourses(ArrayList<Group> favoriteCourses) {
-        this.favoriteCourses = favoriteCourses;
+        this.FavoriteCourses = favoriteCourses;
     }
 }

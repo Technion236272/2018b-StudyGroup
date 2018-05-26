@@ -6,6 +6,8 @@ public class Course {
     private String id;
     private String name;
 
+    Course() {}
+
     Course(String faculty, String id, String name) {
         this.setFaculty(faculty);
         this.setId(id);
