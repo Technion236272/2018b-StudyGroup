@@ -26,7 +26,10 @@ import java.util.Map;
 public class CoursesFragment extends Fragment {
 
     private Map<Integer, Course> allCourses;
-    private MyItemRecyclerViewAdapter adapter;
+    private static MyItemRecyclerViewAdapter adapter;
+    private static String lastQuery = "";
+    private static MyItemRecyclerViewAdapter lastAdapter;
+    private RecyclerView recyclerView;
 
     public CoursesFragment() {
     }
@@ -43,28 +46,29 @@ public class CoursesFragment extends Fragment {
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem item = menu.findItem(R.id.menuSearch);
         SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQuery(lastQuery, true);
+        recyclerView.setAdapter(lastAdapter);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 Map<Integer, Course> filteredList = new HashMap<>();
-                if(newText.length() == 0) {
-                    adapter.filterList(allCourses);
-                } else {
-                    int i = 0;
-                    for (Map.Entry<Integer, Course> course : allCourses.entrySet()) {
-                        Course c = course.getValue();
-                        StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
-                        if (sb.toString().toLowerCase().contains(newText.toLowerCase())) {
-                            filteredList.put(i++, c);
-                        }
+                int i = 0;
+                for (Map.Entry<Integer, Course> course : allCourses.entrySet()) {
+                    Course c = course.getValue();
+                    StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
+                    if (sb.toString().toLowerCase().contains(newText.toLowerCase())) {
+                        filteredList.put(i++, c);
                     }
-                    adapter.filterList(filteredList);
                 }
+                lastQuery = newText;
+                lastAdapter.filterList(filteredList);
+                recyclerView.setAdapter(lastAdapter);
                 return false;
             }
         });
@@ -90,9 +94,10 @@ public class CoursesFragment extends Fragment {
 
                     allCourses.put(i++, new Course(faculty, id, name));
                 }
-                final RecyclerView recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
+                recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new MyItemRecyclerViewAdapter(allCourses);
+                lastAdapter = new MyItemRecyclerViewAdapter(allCourses);
                 recyclerView.setAdapter(adapter);
             }
 
@@ -102,9 +107,5 @@ public class CoursesFragment extends Fragment {
         });
 
         return view;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }
