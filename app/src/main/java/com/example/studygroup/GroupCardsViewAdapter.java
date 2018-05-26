@@ -1,6 +1,8 @@
 package com.example.studygroup;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -54,7 +56,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         TextView numOfPart;
         // group picture
 
-        GroupViewHolder(View itemView) {
+        GroupViewHolder(final View itemView) {
             super(itemView);
             cv = itemView.findViewById(R.id.groupCardView);
             subject = itemView.findViewById(R.id.groupSubjectCardView);
@@ -62,7 +64,26 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
             userState = itemView.findViewById(R.id.userStateInGroupCardView);
             numOfPart = itemView.findViewById(R.id.groupNumberOfParticipantsCardView);
 
+            cv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(itemView.getContext());
+                    alertDialog.setTitle(subject.getText());
+                    alertDialog.setPositiveButton(R.string.request_to_join_group, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //
+                        }
+                    }).show();
+                    alertDialog.setNegativeButton(R.string.group_of_interest, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    }).show();
+                }
+            });
+
         }
     }
+
 
 }

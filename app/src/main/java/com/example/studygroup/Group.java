@@ -9,7 +9,7 @@ public class Group {
     private String location;
     private int maxNumOfPart;
     private int currentNumOfPart;
-    protected String adminID;
+    private String adminID;
 //    protected ArrayList<User> users;
 
     Group() {}
@@ -23,7 +23,7 @@ public class Group {
         this.setLocation(location);
         this.maxNumOfPart = maxNumOfPart;
         this.currentNumOfPart = currentNumOfPart;
-        this.adminID = adminID;
+        this.setAdminID(adminID);
 //        this.users = users;
     }
 
@@ -84,13 +84,14 @@ public class Group {
         this.location = location;
     }
 
-//    public String getAdminToken() {
-//        return adminToken;
-//    }
-//
-//    public void setAdminToken(String adminToken) {
-//        this.adminToken = adminToken;
-//    }
+    public String getAdminID() {
+        return adminID;
+    }
+
+    public void setAdminID(String adminID) {
+        this.adminID = adminID;
+    }
+
 //
 //    public ArrayList<User> getUsers() {
 //        return users;

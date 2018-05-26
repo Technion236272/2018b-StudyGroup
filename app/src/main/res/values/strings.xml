@@ -26,4 +26,9 @@
     <string name="search">Search</string>
     <string name="group_picture">Group Picture</string>
     <string name="no_active_groups">There are no active groups at this course!</string>
+    <string name="request_to_join_group">Join Request</string>
+    <string name="group_of_interest">Interested</string>
+    <string name="admin">Admin</string>
+    <string name="joined">Joined</string>
+    <string name="requested">requested</string>
 </resources>

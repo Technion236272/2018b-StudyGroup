@@ -67,6 +67,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
                         newGroup.setLocation(data.getValue(Group.class).getLocation());
                         newGroup.setmaxNumOfPart(data.getValue(Group.class).getmaxNumOfPart());
                         newGroup.setCurrentNumOfPart(data.getValue(Group.class).getCurrentNumOfPart());
+                        newGroup.setAdminID(data.getValue(Group.class).getAdminID());
                         groups.add(newGroup);
                     }
                 }
