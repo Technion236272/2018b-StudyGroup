@@ -9,13 +9,13 @@ public class Group {
     private String location;
     private int maxNumOfPart;
     private int currentNumOfPart;
-//    protected String adminToken;
+    protected String adminID;
 //    protected ArrayList<User> users;
 
     Group() {}
 
     Group(String id, String subject, String date, String location, int maxNumOfPart,
-          int currentNumOfPart) {
+          int currentNumOfPart, String adminID) {
    //     this.faculty = faculty;
         this.id = id;
         this.subject = subject;
@@ -23,7 +23,7 @@ public class Group {
         this.setLocation(location);
         this.maxNumOfPart = maxNumOfPart;
         this.currentNumOfPart = currentNumOfPart;
-//        this.adminToken = adminToken;
+        this.adminID = adminID;
 //        this.users = users;
     }
 

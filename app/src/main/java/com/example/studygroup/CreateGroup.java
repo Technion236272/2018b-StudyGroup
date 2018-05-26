@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.facebook.Profile;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -119,8 +120,11 @@ public class CreateGroup extends AppCompatActivity {
         Integer numOfPart = Integer.parseInt((numOfParticipants.getSelectedItem().toString()));
         Integer current = 1;
 
-        Group newGroup = new Group(courseId, subject, date, location, numOfPart, current);
+        Group newGroup = new Group(courseId, subject, date, location, numOfPart, current,
+                Profile.getCurrentProfile().getId());
         myRef.child("Groups").child(courseId + " - " + subject).setValue(newGroup);
+        myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child("GroupID").setValue(subject);
+        finish();
     }
 
 
