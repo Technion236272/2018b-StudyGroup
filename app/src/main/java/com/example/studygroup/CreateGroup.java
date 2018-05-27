@@ -120,9 +120,10 @@ public class CreateGroup extends AppCompatActivity {
         Integer numOfPart = Integer.parseInt((numOfParticipants.getSelectedItem().toString()));
         Integer current = 1;
 
-        Group newGroup = new Group("",courseId, subject, date, location, numOfPart, current,
+        String key = myRef.child("Groups").push().getKey();
+        Group newGroup = new Group(key,courseId, subject, date, location, numOfPart, current,
                 Profile.getCurrentProfile().getId());
-        myRef.child("Groups").push().setValue(newGroup);
+        myRef.child("Groups").child(key).setValue(newGroup);
 //        myRef.child("Groups").child(courseId + " - " + subject).setValue(newGroup);
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child("GroupID").setValue(subject);
         finish();

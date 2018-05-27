@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.Profile;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class interedtedFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private Map<String, Group> interestedGroups;
+    private ArrayList<Group> interestedGroups;
     private static userInformationAboutGroupsAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -41,17 +42,19 @@ public class interedtedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) { }
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_interested, container, false);
-        final ArrayList<String> temp = new ArrayList<>();
-        interestedGroups = new HashMap<>();
+        interestedGroups = new ArrayList<>();
+
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
+
+        final ArrayList<String> temp = new ArrayList<>();
+
         FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = mDataBase.getReference();
 
@@ -71,17 +74,17 @@ public class interedtedFragment extends Fragment {
         myRef.child("Groups").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                recyclerView = view.findViewById(R.id.interestedGroupsRecyclerView);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
                     if(temp.contains(child.getKey())) {
                         Group g = child.getValue(Group.class);
-                        g.setGroupID(child.getKey());
-                        interestedGroups.put(child.getKey(), g);
+                        interestedGroups.add(g);
                     }
                 }
-                recyclerView = view.findViewById(R.id.interestedGroupsRecyclerView);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 adapter = new userInformationAboutGroupsAdapter(interestedGroups);
                 recyclerView.setAdapter(adapter);
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -91,7 +94,35 @@ public class interedtedFragment extends Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.fragment_interested, container, false);
+        myRef.child("Users").child(Profile.getCurrentProfile().getId())
+                .child("interested").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+           //     adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return view;
     }
 
     public interface OnFragmentInteractionListener {

@@ -62,7 +62,6 @@ public class GroupsInACourseActivity extends AppCompatActivity {
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
                     String groupID = data.getKey();
                     Group g = data.getValue(Group.class);
-                    g.setGroupID(groupID);
                     if(g.getName().contains(courseId)) {
 //                        Group newGroup = new Group();
 //                        newGroup.setId(data.getValue(Group.class).getId());

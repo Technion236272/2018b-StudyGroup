@@ -1,13 +1,11 @@
 package com.example.studygroup;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -21,10 +19,10 @@ import java.util.Map;
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.CourseHolder> {
 
     private Map<Integer, Course> data;
+
     MyItemRecyclerViewAdapter(Map<Integer, Course> data) {
         this.data = new HashMap<>(data);
     }
-
 
     @NonNull
     @Override
@@ -53,6 +51,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     class CourseHolder extends RecyclerView.ViewHolder {
         TextView courseName;
         CheckBox favouriteButton;
+
          CourseHolder(final View itemView) {
             super(itemView);
             courseName = itemView.findViewById(R.id.courseName);
