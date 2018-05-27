@@ -8,8 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.facebook.Profile;
@@ -30,6 +34,41 @@ public class interedtedFragment extends Fragment {
     private ArrayList<Group> interestedGroups;
     private static userInformationAboutGroupsAdapter adapter;
     private RecyclerView recyclerView;
+
+    private static userInformationAboutGroupsAdapter lastAdapter;
+    private static String lastQuery = "";
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.options_menu, menu);
+        MenuItem item = menu.findItem(R.id.searchGroup);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQuery(lastQuery, true);
+        recyclerView.setAdapter(lastAdapter);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                ArrayList<Group> filteredList = new ArrayList<>();
+                for (Group g: interestedGroups) {
+                    if(g.getSubject().contains(newText)){
+                        filteredList.add(g);
+                    }
+                }
+                lastQuery = newText;
+                lastAdapter.filterList(filteredList);
+                recyclerView.setAdapter(lastAdapter);
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
 
     public interedtedFragment() {
         // Required empty public constructor
@@ -83,9 +122,8 @@ public class interedtedFragment extends Fragment {
                     }
                 }
                 adapter = new userInformationAboutGroupsAdapter(interestedGroups);
+                lastAdapter = new userInformationAboutGroupsAdapter(interestedGroups);
                 recyclerView.setAdapter(adapter);
-
-            //    adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -124,6 +162,7 @@ public class interedtedFragment extends Fragment {
 
         return view;
     }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
