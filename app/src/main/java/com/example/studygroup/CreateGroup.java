@@ -18,9 +18,15 @@ import com.facebook.Profile;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+
+import static java.text.DateFormat.getDateInstance;
 
 public class CreateGroup extends AppCompatActivity {
     private EditText groupSubject;
@@ -94,7 +100,7 @@ public class CreateGroup extends AppCompatActivity {
         year.setAdapter(yearAdapter);
     }
 
-    public void openAlertDialog(View view) {
+    public void openAlertDialog(View view) throws ParseException {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         String subject = groupSubject.getText().toString();
         if(subject.length()==0) {
@@ -116,7 +122,20 @@ public class CreateGroup extends AppCompatActivity {
             }).show();
             return;
         }
-        String date = day.getSelectedItem() + "-" + month.getSelectedItem() + "-" + year.getSelectedItem();
+        String date = day.getSelectedItem() + "/" + month.getSelectedItem() + "/" + year.getSelectedItem();
+        Date currentDate = new Date();
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+        Date strDate = sdf1.parse(date);
+        if(currentDate.after(strDate)) {
+            alertDialog.setTitle(R.string.irrelevant_date);
+            alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            }).show();
+            return;
+        }
+
         if(numOfParticipants.getSelectedItemPosition() == 0) {
             alertDialog.setTitle(R.string.participantsError);
             alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {

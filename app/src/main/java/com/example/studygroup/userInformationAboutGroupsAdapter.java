@@ -27,6 +27,12 @@ public class userInformationAboutGroupsAdapter extends RecyclerView.Adapter<user
         this.data = new ArrayList<>(data);
     }
 
+    public void filterList(ArrayList<Group> filteredList) {
+
+        this.data = new ArrayList<>(filteredList);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public InfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
