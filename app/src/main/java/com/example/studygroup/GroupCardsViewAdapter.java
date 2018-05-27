@@ -57,19 +57,27 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         viewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), GroupActivity.class);
-                intent.putExtra("groupSubject",group.getSubject());
-                intent.putExtra("groupDate",group.getDate());
-                intent.putExtra("groupID",group.getId());
-                intent.putExtra("groupLocation",group.getLocation());
-                if(group.getAdminID().equals(Profile.getCurrentProfile().getId().toString()))
-                {
-                    v.getContext().startActivity(intent);
-                }
-                else
-                {
-                    v.getContext().startActivity(intent);
-                }
+                Intent userGroup = new Intent(v.getContext(), GroupActivity.class);
+                userGroup.putExtra("groupSubject",group.getSubject());
+                userGroup.putExtra("groupDate",group.getDate());
+                userGroup.putExtra("groupID",group.getGroupID());
+                userGroup.putExtra("groupLocation",group.getLocation());
+                userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
+
+//                Intent adminGroup = new Intent(v.getContext(), GroupAdminActivity.class);
+//                adminGroup.putExtra("groupSubject",group.getSubject());
+//                adminGroup.putExtra("groupDate",group.getDate());
+//                adminGroup.putExtra("groupID",group.getGroupID());
+//                adminGroup.putExtra("groupLocation",group.getLocation());
+//                if(group.getAdminID().equals(Profile.getCurrentProfile().getId()))
+//                {
+//                    v.getContext().startActivity(adminGroup);
+//                }
+//                else
+//                {
+//                    v.getContext().startActivity(userGroup);
+//                }
+                v.getContext().startActivity(userGroup);
 
             }
         });
