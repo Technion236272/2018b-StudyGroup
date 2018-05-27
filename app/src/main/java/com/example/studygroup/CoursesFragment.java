@@ -1,6 +1,5 @@
 package com.example.studygroup;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -22,20 +21,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 public class CoursesFragment extends Fragment {
-
-    private Map<Integer, Course> allCourses;
+    private ArrayList<Course> allCoursesList;
     private static MyItemRecyclerViewAdapter adapter;
     private static String lastQuery = "";
     private static MyItemRecyclerViewAdapter lastAdapter;
     private RecyclerView recyclerView;
-
+    private static int favouritesCount = 0;
     private RecyclerView favouriteRecyclerView;
-    private Map<Integer, Course> favourite;
-    private static MyItemRecyclerViewAdapter adapter1;
 
     public CoursesFragment() {
     }
@@ -63,13 +58,13 @@ public class CoursesFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                Map<Integer, Course> filteredList = new HashMap<>();
+                ArrayList<Course> filteredList = new ArrayList<>();
                 int i = 0;
-                for (Map.Entry<Integer, Course> course : allCourses.entrySet()) {
-                    Course c = course.getValue();
+                for (Course c: allCoursesList) {
+
                     StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
                     if (sb.toString().toLowerCase().contains(newText.toLowerCase())) {
-                        filteredList.put(i++, c);
+                        filteredList.add(c);
                     }
                 }
                 lastQuery = newText;
@@ -84,12 +79,10 @@ public class CoursesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
-        allCourses = new HashMap<>();
-
+        allCoursesList =  new ArrayList<>();
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
 
-        favourite = new HashMap<>();
         final ArrayList<String> temp = new ArrayList<>();
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -113,8 +106,8 @@ public class CoursesFragment extends Fragment {
         database.child("Courses").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                allCoursesList = new ArrayList<>();
                 int i = 0;
-                int j = 0;
                 recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 favouriteRecyclerView = view.findViewById(R.id.favouriteCoursesRecyclerView);
@@ -123,24 +116,30 @@ public class CoursesFragment extends Fragment {
                     String faculty = (String)child.child("faculty").getValue();
                     String id = (String)child.child("id").getValue();
                     String name = (String)child.child("name").getValue();
+
                     if(temp.contains(id)) {
-                        favourite.put(j++, new Course(faculty, id, name));
+                        allCoursesList.add(0,new Course(faculty,id,name,true,i++));
+                        favouritesCount++;
                     } else {
-                        allCourses.put(i++, new Course(faculty, id, name));
+                        allCoursesList.add(new Course(faculty,id,name,false,i++));
                     }
                 }
-                adapter = new MyItemRecyclerViewAdapter(allCourses);
-                lastAdapter = new MyItemRecyclerViewAdapter(allCourses);
+//                Collections.sort(allCoursesList);
+//                for(Course c:allCoursesList){
+//                    c.index = i++;
+//                }
+
+                adapter = new MyItemRecyclerViewAdapter(allCoursesList,favouritesCount);
+                lastAdapter = new MyItemRecyclerViewAdapter(allCoursesList,favouritesCount);
                 recyclerView.setAdapter(adapter);
-                adapter1 = new MyItemRecyclerViewAdapter(favourite);
-                favouriteRecyclerView.setAdapter(adapter1);
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
+        //Collections.sort(allCoursesList);
         return view;
     }
 
