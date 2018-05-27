@@ -11,6 +11,7 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,12 +37,24 @@ public class GroupActivity extends AppCompatActivity {
         String location = getIntent().getExtras().getString("groupLocation");
         final String groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
+        final String adminID = getIntent().getExtras().getString("adminID");
 
         TextView subjectTV = (TextView)findViewById(R.id.SubjectInGroupContent);
         TextView dateTV = (TextView)findViewById(R.id.DateInGroupContent);
         TextView locationTV = (TextView)findViewById(R.id.LocationInGroupContent);
         TextView currentNumOfParticipants = (TextView)findViewById(R.id.groupParticipants);
+        Button joinRequest = (Button)  findViewById(R.id.Request);
 
+        joinRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                String userID = Profile.getCurrentProfile().getId();
+                String userName = Profile.getCurrentProfile().getName();
+                database.child("Users").child(userID).child("Requests").child(groupID).setValue(adminID);
+                database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
+            }
+        });
 
         dateTV.setText(date);
         subjectTV.setText(subject);

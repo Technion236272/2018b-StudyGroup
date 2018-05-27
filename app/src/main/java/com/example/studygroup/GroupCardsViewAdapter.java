@@ -26,7 +26,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     private ArrayList<Group> groups;
 
     GroupCardsViewAdapter(ArrayList<Group> groups) {
-        this.groups = new ArrayList<>(groups);
+        this.groups = groups;
     }
 
     @NonNull
@@ -57,27 +57,27 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         viewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent userGroup = new Intent(v.getContext(), GroupActivity.class);
-                userGroup.putExtra("groupSubject",group.getSubject());
-                userGroup.putExtra("groupDate",group.getDate());
-                userGroup.putExtra("groupID",group.getGroupID());
-                userGroup.putExtra("groupLocation",group.getLocation());
-                userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
+                if(group.getAdminID().equals(Profile.getCurrentProfile().getId()))
+                {
+                    Intent adminGroup = new Intent(v.getContext(), GroupAdminActivity.class);
+                    adminGroup.putExtra("groupSubject",group.getSubject());
+                    adminGroup.putExtra("groupDate",group.getDate());
+                    adminGroup.putExtra("groupID",group.getGroupID());
+                    adminGroup.putExtra("groupLocation",group.getLocation());
+                    v.getContext().startActivity(adminGroup);
+                }
+                else
+                {
+                    Intent userGroup = new Intent(v.getContext(), GroupActivity.class);
+                    userGroup.putExtra("groupSubject",group.getSubject());
+                    userGroup.putExtra("groupDate",group.getDate());
+                    userGroup.putExtra("groupID",group.getGroupID());
+                    userGroup.putExtra("groupLocation",group.getLocation());
+                    userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
+                    userGroup.putExtra("adminID",group.getAdminID());
+                    v.getContext().startActivity(userGroup);
+                }
 
-//                Intent adminGroup = new Intent(v.getContext(), GroupAdminActivity.class);
-//                adminGroup.putExtra("groupSubject",group.getSubject());
-//                adminGroup.putExtra("groupDate",group.getDate());
-//                adminGroup.putExtra("groupID",group.getGroupID());
-//                adminGroup.putExtra("groupLocation",group.getLocation());
-//                if(group.getAdminID().equals(Profile.getCurrentProfile().getId()))
-//                {
-//                    v.getContext().startActivity(adminGroup);
-//                }
-//                else
-//                {
-//                    v.getContext().startActivity(userGroup);
-//                }
-                v.getContext().startActivity(userGroup);
 
             }
         });
