@@ -6,27 +6,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
-public class groupParticipantsAdapter extends RecyclerView.Adapter<groupParticipantsAdapter.userHolder>{
 
+class adminParticipantsAdapter extends RecyclerView.Adapter<adminParticipantsAdapter.adminPartHolder>{
     private ArrayList<String> participants;
 
-    groupParticipantsAdapter(ArrayList<String> arr)
+    adminParticipantsAdapter(ArrayList<String> arr)
     {
         participants = new ArrayList<>(arr);
     }
 
     @NonNull
     @Override
-    public userHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.group_participants_recycler, parent, false);
-        return new userHolder(view);
+    public adminPartHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.admin_participants_adapter, parent, false);
+        return new adminPartHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull userHolder holder, int position) {
+    public void onBindViewHolder(@NonNull adminPartHolder holder, int position) {
         String currentParticipant = participants.get(position);
         holder.participant.setText(currentParticipant);
     }
@@ -36,13 +35,12 @@ public class groupParticipantsAdapter extends RecyclerView.Adapter<groupParticip
         return participants.size();
     }
 
-    class userHolder extends RecyclerView.ViewHolder {
+    class adminPartHolder extends RecyclerView.ViewHolder {
         TextView participant;
-
-        userHolder(final View itemView) {
+        adminPartHolder(final View itemView) {
             super(itemView);
-
-            participant = itemView.findViewById(R.id.recyclerPaticipantsGroup);
+            participant = itemView.findViewById(R.id.adminPart);
         }
     }
+
 }

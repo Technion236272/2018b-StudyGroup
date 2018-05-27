@@ -17,6 +17,10 @@
     <string name="JoinGroup">Join Group!</string>
     <string name="DeleteGroup">Delete Group!</string>
     <string name="Requests">Requests</string>
+    <string name="Accept">Accept</string>
+    <string name="Reject">Reject</string>
+    <string name="Remove">Remove</string>
+    <string name="Name">Name</string>
     <string name="numOfParticipants" id="numOfParticipants ">Number Of Participants</string>
     <string name="section_format">Hello World from section: %1$d</string>
 

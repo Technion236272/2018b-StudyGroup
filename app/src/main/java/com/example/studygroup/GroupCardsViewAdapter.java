@@ -64,6 +64,8 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                     adminGroup.putExtra("groupDate",group.getDate());
                     adminGroup.putExtra("groupID",group.getGroupID());
                     adminGroup.putExtra("groupLocation",group.getLocation());
+                    adminGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
+                    adminGroup.putExtra("adminID",group.getAdminID());
                     v.getContext().startActivity(adminGroup);
                 }
                 else
