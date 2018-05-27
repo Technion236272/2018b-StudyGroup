@@ -64,22 +64,15 @@ public class GroupsInACourseActivity extends AppCompatActivity {
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
              //       String groupID = data.getKey();
                     Group g = data.getValue(Group.class);
-                    if(g.getName().contains(courseId)) {
-//                        Group newGroup = new Group();
-//                        newGroup.setId(data.getValue(Group.class).getId());
-//                        newGroup.setSubject(data.getValue(Group.class).getSubject());
-//                        newGroup.setDate(data.getValue(Group.class).getDate());
-//                        newGroup.setLocation(data.getValue(Group.class).getLocation());
-//                        newGroup.setmaxNumOfPart(data.getValue(Group.class).getmaxNumOfPart());
-//                        newGroup.setCurrentNumOfPart(data.getValue(Group.class).getCurrentNumOfPart());
-//                        newGroup.setAdminID(data.getValue(Group.class).getAdminID());
+                    if(g.getId().equals(courseId) && !groups.contains(g)) {
                         groups.add(g);
                     }
                 }
+                TextView noGroups = findViewById(R.id.noGroupsView);
                 if(groups.isEmpty()) {
-                    TextView noGroups = findViewById(R.id.noGroupsView);
                     noGroups.setText(R.string.no_active_groups);
                 } else {
+                    noGroups.setText("");
                     RecyclerView recyclerView = findViewById(R.id.GroupsRecyclerView);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     adapter = new GroupCardsViewAdapter(groups);
@@ -100,7 +93,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                adapter.notifyDataSetChanged();
+             //   adapter.notifyDataSetChanged();
             }
 
             @Override

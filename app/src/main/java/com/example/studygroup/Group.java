@@ -120,5 +120,12 @@ public class Group {
 //        this.users = users;
 //    }
 
+    @Override
+    public boolean equals(Object other){
+        if(other == null){
+            return false;
+        }
+        return other instanceof Group && this.getGroupID().equals(((Group)other).getGroupID());
+    }
 
 }
