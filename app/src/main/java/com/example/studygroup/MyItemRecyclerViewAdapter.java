@@ -26,8 +26,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     MyItemRecyclerViewAdapter(ArrayList<Course> filteredList,int originalFavouritesCount,int filteredCount,MyItemRecyclerViewAdapter otherAdapter) {
         this.filteredList = new ArrayList<>(filteredList);
         this.favouritesCount = originalFavouritesCount;
-        oA= otherAdapter;
         this.filteredCount = filteredCount;
+        oA= otherAdapter;
     }
 
 
@@ -93,15 +93,31 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                                     d.getRef().removeValue();
                                     Course c = filteredList.get(position);
                                     c.setFav(false);
-                                    filteredList.remove(position);
-                                    filteredList.add((c.filteredIndex > filteredCount)?c.filteredIndex :filteredCount,c);
-
-                                    if(oA!= null){
-                                        oA.filteredList.remove(c.originalIndex);
-                                        oA.filteredList.add((c.originalIndex >favouritesCount)?c.originalIndex :favouritesCount,c);
+                                    if(oA == null){
+                                        if(favouritesCount > 0) {
+                                            favouritesCount--;
+                                        }
+                                        filteredList.remove(position);
+                                        filteredList.add((c.indexInAdapter>favouritesCount)?c.indexInAdapter:favouritesCount,c);
+                                    }else{
+                                        if(favouritesCount>0) {
+                                            favouritesCount--;
+                                        }if(filteredCount>0) {
+                                            filteredCount--;
+                                        }
+                                        filteredList.remove(position);
+                                        filteredList.add((c.indexInFilteredAdapter>filteredCount)?c.indexInFilteredAdapter:filteredCount,c);
+                                        oA.filteredList.remove(c.indexInAdapter);
+                                        oA.filteredList.add((c.indexInAdapter>favouritesCount)?c.indexInAdapter:favouritesCount,c);
                                     }
-                                    favouritesCount--;
-                                    filteredCount--;
+//                                    filteredList.remove(position);
+//                                    filteredList.add((c.indexInFilteredAdapter > filteredCount)?c.indexInFilteredAdapter :filteredCount,c);
+//
+//                                    if(oA!= null){
+//                                        oA.filteredList.remove(c.indexInAdapter);
+//                                        oA.filteredList.add((c.indexInAdapter >favouritesCount)?c.indexInAdapter :favouritesCount,c);
+//                                    }
+
                                     CheckBox cc = itemView.findViewById(R.id.favouriteButton);
                                     cc.setChecked(false);
                                     notifyDataSetChanged();
@@ -112,14 +128,32 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                                     child("FavouriteCourses").child(filteredList.get(position).getName()).setValue(filteredList.get(position).getId());
                             Course c = filteredList.get(position);
                             c.setFav(true);
-                            filteredList.remove(position);
-                            filteredList.add((filteredCount>c.filteredIndex)?c.filteredIndex :filteredCount,c);
-                            if(oA!= null){
-                                oA.filteredList.remove(c);
-                                oA.filteredList.add((favouritesCount>c.originalIndex)?c.originalIndex :favouritesCount,c);
+                            if(oA == null){
+
+                                filteredList.remove(position);
+                                filteredList.add((c.indexInAdapter>favouritesCount)?favouritesCount:c.indexInAdapter,c);
+                                favouritesCount++;
+//                                favouritesCount++;
+                            }else{
+
+                                filteredList.remove(position);
+                                filteredList.add((c.indexInFilteredAdapter>filteredCount)?filteredCount:c.indexInFilteredAdapter,c);
+                                oA.filteredList.remove(c.indexInAdapter);
+                                oA.filteredList.add((c.indexInAdapter>favouritesCount)?favouritesCount:c.indexInAdapter,c);
+                                favouritesCount++;
+                                filteredCount++;
                             }
-                            favouritesCount++;
-                            filteredCount++;
+
+//                            Course c = filteredList.get(position);
+//                            c.setFav(true);
+//                            filteredList.remove(position);
+//                            filteredList.add((filteredCount>c.indexInFilteredAdapter)?c.indexInFilteredAdapter :filteredCount,c);
+//                            if(oA!= null){
+//                                oA.filteredList.remove(c);
+//                                oA.filteredList.add((favouritesCount>c.indexInAdapter)?c.indexInAdapter :favouritesCount,c);
+//                            }
+//                            favouritesCount++;
+//                            filteredCount++;
                             CheckBox cc = itemView.findViewById(R.id.favouriteButton);
                             cc.setChecked(true);
                             notifyDataSetChanged();

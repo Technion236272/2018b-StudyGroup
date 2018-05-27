@@ -21,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class CoursesFragment extends Fragment {
     private ArrayList<Course> allCoursesList;
@@ -60,19 +59,21 @@ public class CoursesFragment extends Fragment {
 
                 ArrayList<Course> filteredList = new ArrayList<>();
                 int i = 0;
-                int filteredCount = 0;
+                int favouritesCountInFilteredAdapter = 0;
                 for (Course c: allCoursesList) {
                     StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
                     if (sb.toString().toLowerCase().contains(newText.toLowerCase())) {
-                        filteredList.add(c);
-                        c.filteredIndex = i++;
-                    }
-                    if(c.isFav()){
-                        filteredCount++;
+                        if (c.isFav()) {
+                            filteredList.add(0, c);
+                        } else {
+                            filteredList.add(c);
+                        }
+                        c.indexInFilteredAdapter = i++;
                     }
                 }
+
                 lastQuery = newText;
-                lastAdapter.filterList(filteredList,filteredCount);
+                lastAdapter.filterList(filteredList,favouritesCountInFilteredAdapter);
                 recyclerView.setAdapter(lastAdapter);
                 return false;
             }
@@ -111,7 +112,7 @@ public class CoursesFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 allCoursesList = new ArrayList<>();
-                int i = 0;
+                int i = 0, j = temp.size();
                 recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 favouriteRecyclerView = view.findViewById(R.id.favouriteCoursesRecyclerView);
