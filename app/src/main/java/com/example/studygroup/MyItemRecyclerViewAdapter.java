@@ -20,11 +20,14 @@ import java.util.ArrayList;
 
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.CourseHolder> {
 
-    private ArrayList< Course> data;
-    private int favouritesCount;
-    MyItemRecyclerViewAdapter(ArrayList<Course> data,int favouritesCount) {
-        this.data = data;
-        this.favouritesCount = favouritesCount;
+    private ArrayList< Course> filteredList;
+    private int favouritesCount, filteredCount;
+    MyItemRecyclerViewAdapter oA;
+    MyItemRecyclerViewAdapter(ArrayList<Course> filteredList,int originalFavouritesCount,int filteredCount,MyItemRecyclerViewAdapter otherAdapter) {
+        this.filteredList = new ArrayList<>(filteredList);
+        this.favouritesCount = originalFavouritesCount;
+        oA= otherAdapter;
+        this.filteredCount = filteredCount;
     }
 
 
@@ -39,7 +42,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(@NonNull CourseHolder holder, int key) {
-        Course c = data.get(key);
+        Course c = filteredList.get(key);
 
         String sb = c.getId() + " - " + c.getName();
         holder.courseName.setText(sb);
@@ -49,11 +52,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return filteredList.size();
     }
 
-    public void filterList(ArrayList<Course> filteredList) {
-        data = filteredList;
+    public void filterList(ArrayList<Course> filteredList,int filteredCount) {
+        this.filteredCount = filteredCount;
+        this.filteredList = new ArrayList<>(filteredList);
         notifyDataSetChanged();
     }
 
@@ -70,8 +74,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                     int position = getAdapterPosition();
 
                     Intent intent = new Intent(itemView.getContext().getApplicationContext(), GroupsInACourseActivity.class);
-                    intent.putExtra("courseId", data.get(position).getId());
-                    intent.putExtra("courseName", data.get(position).getName());
+                    intent.putExtra("courseId", filteredList.get(position).getId());
+                    intent.putExtra("courseName", filteredList.get(position).getName());
                     itemView.getContext().startActivity(intent);
                 }
             });
@@ -85,13 +89,19 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for(DataSnapshot d : dataSnapshot.getChildren()){
-                                if(((String)d.getValue()).equals(data.get(position).getId())){
+                                if(((String)d.getValue()).equals(filteredList.get(position).getId())){
                                     d.getRef().removeValue();
-                                    Course c = data.get(position);
+                                    Course c = filteredList.get(position);
                                     c.setFav(false);
-                                    data.remove(position);
-                                    data.add((c.index>favouritesCount)?c.index:favouritesCount,c);
+                                    filteredList.remove(position);
+                                    filteredList.add((c.filteredIndex > filteredCount)?c.filteredIndex :filteredCount,c);
+
+                                    if(oA!= null){
+                                        oA.filteredList.remove(c.originalIndex);
+                                        oA.filteredList.add((c.originalIndex >favouritesCount)?c.originalIndex :favouritesCount,c);
+                                    }
                                     favouritesCount--;
+                                    filteredCount--;
                                     CheckBox cc = itemView.findViewById(R.id.favouriteButton);
                                     cc.setChecked(false);
                                     notifyDataSetChanged();
@@ -99,12 +109,17 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                                 }
                             }
                             myRef.child("Users").child(Profile.getCurrentProfile().getId()).
-                                    child("FavouriteCourses").child(data.get(position).getName()).setValue(data.get(position).getId());
-                            Course c = data.get(position);
+                                    child("FavouriteCourses").child(filteredList.get(position).getName()).setValue(filteredList.get(position).getId());
+                            Course c = filteredList.get(position);
                             c.setFav(true);
-                            data.remove(position);
-                            data.add((favouritesCount>c.index)?c.index:favouritesCount,c);
+                            filteredList.remove(position);
+                            filteredList.add((filteredCount>c.filteredIndex)?c.filteredIndex :filteredCount,c);
+                            if(oA!= null){
+                                oA.filteredList.remove(c);
+                                oA.filteredList.add((favouritesCount>c.originalIndex)?c.originalIndex :favouritesCount,c);
+                            }
                             favouritesCount++;
+                            filteredCount++;
                             CheckBox cc = itemView.findViewById(R.id.favouriteButton);
                             cc.setChecked(true);
                             notifyDataSetChanged();

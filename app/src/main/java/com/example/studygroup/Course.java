@@ -3,21 +3,19 @@ package com.example.studygroup;
 
 import android.support.annotation.NonNull;
 
-import java.util.Comparator;
-
 public class Course implements Comparable<Course> {
     private String faculty;
     private String id;
     private String name;
     private boolean isFav;
-    int index;
+    int originalIndex, filteredIndex;
 
     Course(String faculty, String id, String name,boolean fav,int idx) {
         this.setFaculty(faculty);
         this.setId(id);
         this.setName(name);
         this.isFav = fav;
-        index=idx;
+        originalIndex = idx;
     }
 
 
@@ -51,6 +49,14 @@ public class Course implements Comparable<Course> {
 
     public void setFav(boolean fav) {
         isFav = fav;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o==null){
+            return false;
+        }
+        return o instanceof Course && this.getId().equals(((Course) o).getId());
     }
 
     @Override

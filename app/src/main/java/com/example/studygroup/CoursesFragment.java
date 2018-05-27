@@ -60,15 +60,19 @@ public class CoursesFragment extends Fragment {
 
                 ArrayList<Course> filteredList = new ArrayList<>();
                 int i = 0;
+                int filteredCount = 0;
                 for (Course c: allCoursesList) {
-
                     StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
                     if (sb.toString().toLowerCase().contains(newText.toLowerCase())) {
                         filteredList.add(c);
+                        c.filteredIndex = i++;
+                    }
+                    if(c.isFav()){
+                        filteredCount++;
                     }
                 }
                 lastQuery = newText;
-                lastAdapter.filterList(filteredList);
+                lastAdapter.filterList(filteredList,filteredCount);
                 recyclerView.setAdapter(lastAdapter);
                 return false;
             }
@@ -124,13 +128,9 @@ public class CoursesFragment extends Fragment {
                         allCoursesList.add(new Course(faculty,id,name,false,i++));
                     }
                 }
-//                Collections.sort(allCoursesList);
-//                for(Course c:allCoursesList){
-//                    c.index = i++;
-//                }
 
-                adapter = new MyItemRecyclerViewAdapter(allCoursesList,favouritesCount);
-                lastAdapter = new MyItemRecyclerViewAdapter(allCoursesList,favouritesCount);
+                adapter = new MyItemRecyclerViewAdapter(allCoursesList,favouritesCount,favouritesCount,null);
+                lastAdapter = new MyItemRecyclerViewAdapter(allCoursesList,favouritesCount,favouritesCount,adapter);
                 recyclerView.setAdapter(adapter);
 
             }
@@ -139,7 +139,6 @@ public class CoursesFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        //Collections.sort(allCoursesList);
         return view;
     }
 
