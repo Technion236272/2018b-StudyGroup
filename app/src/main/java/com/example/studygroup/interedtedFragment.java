@@ -85,7 +85,7 @@ public class interedtedFragment extends Fragment {
                 adapter = new userInformationAboutGroupsAdapter(interestedGroups);
                 recyclerView.setAdapter(adapter);
 
-                adapter.notifyDataSetChanged();
+            //    adapter.notifyDataSetChanged();
             }
 
             @Override

@@ -31,10 +31,15 @@ public class CreateGroup extends AppCompatActivity {
     private Spinner numOfParticipants;
     private Button createButton;
     private DatabaseReference myRef;
+
+    private String courseId;
+    private String courseName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
+
         groupSubject = findViewById(R.id.groupSubject);
         Location = findViewById(R.id.Location);
         day = findViewById(R.id.daySpinner);
@@ -42,6 +47,12 @@ public class CreateGroup extends AppCompatActivity {
         year = findViewById(R.id.yearsSpinner);
         numOfParticipants = findViewById(R.id.NumOfParticipants);
         createButton = findViewById(R.id.CreateGroup);
+
+        courseId = getIntent().getExtras().getString("courseId");
+        courseName = getIntent().getExtras().getString("courseName");
+        String title = courseId + " - " + courseName;
+        setTitle(title);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
@@ -86,7 +97,6 @@ public class CreateGroup extends AppCompatActivity {
     public void openAlertDialog(View view) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         String subject = groupSubject.getText().toString();
-        String courseId = getIntent().getExtras().getString("courseId");
         if(subject.length()==0) {
             alertDialog.setTitle(R.string.subjectError);
             alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {

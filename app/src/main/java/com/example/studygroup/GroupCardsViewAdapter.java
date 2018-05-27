@@ -26,7 +26,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     private ArrayList<Group> groups;
 
     GroupCardsViewAdapter(ArrayList<Group> groups) {
-        this.groups = groups;
+        this.groups = new ArrayList<>(groups);
     }
 
     @NonNull

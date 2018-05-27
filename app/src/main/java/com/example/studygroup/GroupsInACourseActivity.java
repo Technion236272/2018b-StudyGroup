@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +31,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_groups_in_acourse);
 
         final String courseId = getIntent().getExtras().getString("courseId");
-        String courseName = getIntent().getExtras().getString("courseName");
+        final String courseName = getIntent().getExtras().getString("courseName");
         setTitle(courseId + " - " + courseName);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.createGroupFab);
@@ -39,6 +40,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(GroupsInACourseActivity.this, CreateGroup.class);
                 intent.putExtra("courseId", courseId);
+                intent.putExtra("courseName", courseName);
                 startActivity(intent);
             }
         });
@@ -58,9 +60,9 @@ public class GroupsInACourseActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 MyDatabaseUtil my1 = new MyDatabaseUtil();
-                int i = 0;
+          //      int i = 0;
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
-                    String groupID = data.getKey();
+             //       String groupID = data.getKey();
                     Group g = data.getValue(Group.class);
                     if(g.getName().contains(courseId)) {
 //                        Group newGroup = new Group();
@@ -87,6 +89,33 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        myRef.child("Groups").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
