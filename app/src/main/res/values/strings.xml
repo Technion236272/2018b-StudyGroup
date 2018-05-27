@@ -13,6 +13,7 @@
     <string name="Continue">Continue</string>
     <string name="participantsError">Please select number of participants</string>
     <string name="locationError">Please enter location!</string>
+    <string name="irrelevant_date">Sorry, this date has already passed, please enter a new one!</string>
     <string name="favorite">favorite</string>
     <string name="JoinGroup">Join Group!</string>
     <string name="DeleteGroup">Delete Group!</string>
