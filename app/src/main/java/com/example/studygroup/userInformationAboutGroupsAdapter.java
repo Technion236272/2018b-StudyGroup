@@ -11,11 +11,11 @@ import android.widget.TextView;
 import java.util.Map;
 
 public class userInformationAboutGroupsAdapter extends RecyclerView.Adapter<userInformationAboutGroupsAdapter.InfoHolder>{
-    private static Map<Integer, Course> data;
+    private static Map<String, Group> data;
 
     userInformationAboutGroupsAdapter() {}
 
-    userInformationAboutGroupsAdapter(Map<Integer, Course> data) {
+    userInformationAboutGroupsAdapter(Map<String, Group> data) {
         userInformationAboutGroupsAdapter.data = data;
     }
 
@@ -28,7 +28,12 @@ public class userInformationAboutGroupsAdapter extends RecyclerView.Adapter<user
 
     @Override
     public void onBindViewHolder(@NonNull userInformationAboutGroupsAdapter.InfoHolder holder, int key) {
-
+        Group group = data.get(key);
+        holder.subject.setText(group.getSubject());
+        holder.idAndName.setText(group.getId());
+        holder.date.setText(group.getDate());
+        String sb = String.valueOf(group.getCurrentNumOfPart()) + "/" + String.valueOf(group.getmaxNumOfPart());
+        holder.participants.setText(sb);
     }
 
     @Override
@@ -37,10 +42,17 @@ public class userInformationAboutGroupsAdapter extends RecyclerView.Adapter<user
     }
 
     static class InfoHolder extends RecyclerView.ViewHolder {
-        TextView courseName;
+        TextView subject;
+        TextView idAndName;
+        TextView date;
+        TextView participants;
 
         InfoHolder(final View itemView) {
             super(itemView);
+            subject = itemView.findViewById(R.id.groupSubjectInfo);
+            idAndName = itemView.findViewById(R.id.groupIdAndName);
+            date = itemView.findViewById(R.id.groupMeetingDate);
+            participants = itemView.findViewById(R.id.groupNumberOfParticipantsInfo);
         }
     }
 }

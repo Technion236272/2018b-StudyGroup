@@ -3,6 +3,7 @@ package com.example.studygroup;
 
 public class Group {
  //   protected String faculty;
+    private String name;
     private String id;
     private String subject;
     private String date;
@@ -10,13 +11,15 @@ public class Group {
     private int maxNumOfPart;
     private int currentNumOfPart;
     private String adminID;
+    private String groupID;
 //    protected ArrayList<User> users;
 
     Group() {}
 
-    Group(String id, String subject, String date, String location, int maxNumOfPart,
+    Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
           int currentNumOfPart, String adminID) {
    //     this.faculty = faculty;
+        this.name = id + "-" + subject;
         this.id = id;
         this.subject = subject;
         this.date = date;
@@ -24,6 +27,7 @@ public class Group {
         this.maxNumOfPart = maxNumOfPart;
         this.currentNumOfPart = currentNumOfPart;
         this.setAdminID(adminID);
+        this.groupID = groupID;
 //        this.users = users;
     }
 
@@ -90,6 +94,21 @@ public class Group {
 
     public void setAdminID(String adminID) {
         this.adminID = adminID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setGroupID(String id){
+        groupID = id;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getGroupID() {
+        return groupID;
     }
 
 //

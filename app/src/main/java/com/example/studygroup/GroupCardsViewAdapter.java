@@ -47,6 +47,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         final DatabaseReference myRef = database.getReference();
 
         final Group group = groups.get(i);
+
         viewHolder.subject.setText(group.getSubject());
         viewHolder.date.setText(group.getDate());
         viewHolder.userState.setText("Not finished!");
@@ -69,27 +70,28 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                                 .child(Profile.getCurrentProfile().getId()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                Boolean flag = false;
-                                User currentUser = new User();
-                                currentUser.setToken(dataSnapshot.getValue(User.class).getToken());
-                                currentUser.setName(dataSnapshot.getValue(User.class).getName());
-                                currentUser.setInterested(dataSnapshot.getValue(User.class).getInterested());
+//                                Boolean flag = false;
+//                                User currentUser = new User();
+//                                currentUser.setToken(dataSnapshot.getValue(User.class).getToken());
+//                                currentUser.setName(dataSnapshot.getValue(User.class).getName());
+//                                currentUser.setInterested(dataSnapshot.getValue(User.class).getInterested());
 
-                                String groupId = group.getId() + " - " + group.getSubject();
-
-                                if(currentUser.getInterested() != null) {
-                                    for(Map.Entry<String, String> current : currentUser.getInterested().entrySet()) {
-                                        if(current.getKey().equals(groupId)) {
-                                            flag = true;
-                                        }
-                                    }
-                                }
-                                if(!flag) {
+                                String groupId = group.getGroupID();
+//
+//                                if(currentUser.getInterested() != null) {
+//                                    for(Map.Entry<String, String> current : currentUser.getInterested().entrySet()) {
+//                                        if(current.getKey().equals(groupId)) {
+////                                            flag = true;
+//                                        }
+//                                    }
+//                                }
+//                                if(!flag) {
                                     myRef.child("Users")
                                             .child(Profile.getCurrentProfile().getId())
                                             .child("interested")
-                                            .child(groupId).setValue(group.getId());
-                                }
+                                            .child(groupId)
+                                            .setValue("");
+//                                }
 
                             }
 

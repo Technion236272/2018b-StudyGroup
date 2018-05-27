@@ -100,15 +100,13 @@ public class CoursesFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String current;
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    current = child.getValue().toString();
+                    current = (String)child.getValue();
                     temp.add(current);
-
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -122,16 +120,15 @@ public class CoursesFragment extends Fragment {
                 favouriteRecyclerView = view.findViewById(R.id.favouriteCoursesRecyclerView);
                 favouriteRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    String faculty = child.child("faculty").getValue().toString();
-                    String id = child.child("id").getValue().toString();
-                    String name = child.child("name").getValue().toString();
+                    String faculty = (String)child.child("faculty").getValue();
+                    String id = (String)child.child("id").getValue();
+                    String name = (String)child.child("name").getValue();
                     if(temp.contains(id)) {
                         favourite.put(j++, new Course(faculty, id, name));
                     } else {
                         allCourses.put(i++, new Course(faculty, id, name));
                     }
                 }
-
                 adapter = new MyItemRecyclerViewAdapter(allCourses);
                 lastAdapter = new MyItemRecyclerViewAdapter(allCourses);
                 recyclerView.setAdapter(adapter);

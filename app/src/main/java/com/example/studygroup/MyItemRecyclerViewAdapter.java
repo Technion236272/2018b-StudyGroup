@@ -52,10 +52,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     class CourseHolder extends RecyclerView.ViewHolder {
         TextView courseName;
-        CheckBox favouriteButton = (CheckBox)itemView.findViewById(R.id.favouriteButton);
+        CheckBox favouriteButton;
          CourseHolder(final View itemView) {
             super(itemView);
             courseName = itemView.findViewById(R.id.courseName);
+            favouriteButton = itemView.findViewById(R.id.favouriteButton);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,16 +68,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                     itemView.getContext().startActivity(intent);
                 }
             });
-
-             FirebaseDatabase database = FirebaseDatabase.getInstance();
-             final DatabaseReference myRef = database.getReference();
-             favouriteButton = (CheckBox) itemView.findViewById(R.id.favouriteButton);
-             favouriteButton.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                     int position = getAdapterPosition();
-                     myRef.child("Users").child(Profile.getCurrentProfile().getId()).
-                             child("FavouriteCourses").child(data.get(position).getName()).setValue(data.get(position).getId());
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference myRef = database.getReference();
+            favouriteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    myRef.child("Users").child(Profile.getCurrentProfile().getId()).
+                            child("FavouriteCourses").child(data.get(position).getName()).setValue(data.get(position).getId());
                  }
              });
 

@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GroupsInACourseActivity extends AppCompatActivity {
 
@@ -59,23 +60,26 @@ public class GroupsInACourseActivity extends AppCompatActivity {
                 MyDatabaseUtil my1 = new MyDatabaseUtil();
                 int i = 0;
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
-                    if(data.getKey().contains(courseId)) {
-                        Group newGroup = new Group();
-                        newGroup.setId(data.getValue(Group.class).getId());
-                        newGroup.setSubject(data.getValue(Group.class).getSubject());
-                        newGroup.setDate(data.getValue(Group.class).getDate());
-                        newGroup.setLocation(data.getValue(Group.class).getLocation());
-                        newGroup.setmaxNumOfPart(data.getValue(Group.class).getmaxNumOfPart());
-                        newGroup.setCurrentNumOfPart(data.getValue(Group.class).getCurrentNumOfPart());
-                        newGroup.setAdminID(data.getValue(Group.class).getAdminID());
-                        groups.add(newGroup);
+                    String groupID = data.getKey();
+                    Group g = data.getValue(Group.class);
+                    g.setGroupID(groupID);
+                    if(g.getName().contains(courseId)) {
+//                        Group newGroup = new Group();
+//                        newGroup.setId(data.getValue(Group.class).getId());
+//                        newGroup.setSubject(data.getValue(Group.class).getSubject());
+//                        newGroup.setDate(data.getValue(Group.class).getDate());
+//                        newGroup.setLocation(data.getValue(Group.class).getLocation());
+//                        newGroup.setmaxNumOfPart(data.getValue(Group.class).getmaxNumOfPart());
+//                        newGroup.setCurrentNumOfPart(data.getValue(Group.class).getCurrentNumOfPart());
+//                        newGroup.setAdminID(data.getValue(Group.class).getAdminID());
+                        groups.add(g);
                     }
                 }
                 if(groups.isEmpty()) {
-                    TextView noGroups = (TextView) findViewById(R.id.noGroupsView);
+                    TextView noGroups = findViewById(R.id.noGroupsView);
                     noGroups.setText(R.string.no_active_groups);
                 } else {
-                    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.GroupsRecyclerView);
+                    RecyclerView recyclerView = findViewById(R.id.GroupsRecyclerView);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                     adapter = new GroupCardsViewAdapter(groups);
                     recyclerView.setAdapter(adapter);
