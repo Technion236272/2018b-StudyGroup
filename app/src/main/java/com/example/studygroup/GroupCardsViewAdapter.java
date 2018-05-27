@@ -66,6 +66,8 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                     adminGroup.putExtra("groupLocation",group.getLocation());
                     adminGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
                     adminGroup.putExtra("adminID",group.getAdminID());
+                    adminGroup.putExtra("groupName",group.getName());
+
                     v.getContext().startActivity(adminGroup);
                 }
                 else
@@ -77,6 +79,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                     userGroup.putExtra("groupLocation",group.getLocation());
                     userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
                     userGroup.putExtra("adminID",group.getAdminID());
+                    userGroup.putExtra("groupName",group.getName());
                     v.getContext().startActivity(userGroup);
                 }
 

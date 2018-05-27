@@ -31,6 +31,9 @@ public class GroupAdminActivity extends AppCompatActivity {
         final String groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
         final String adminID = getIntent().getExtras().getString("adminID");
+        final String groupName = getIntent().getExtras().getString("groupName");
+
+        setTitle(groupName);
 
         EditText subjectET = findViewById(R.id.subjectAdminEdit);
         EditText dateET = findViewById(R.id.dateAdminEdit);

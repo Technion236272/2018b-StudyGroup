@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GroupActivity extends AppCompatActivity {
-
+    static boolean isExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,21 +38,78 @@ public class GroupActivity extends AppCompatActivity {
         final String groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
         final String adminID = getIntent().getExtras().getString("adminID");
+        final String groupName = getIntent().getExtras().getString("groupName");
+
+        setTitle(subject);
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        final String userID = Profile.getCurrentProfile().getId();
+        final String userName = Profile.getCurrentProfile().getName();
+        final Button joinRequest = (Button)  findViewById(R.id.Request);
+
+        database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                isExist = false;
+                for (DataSnapshot d : dataSnapshot.getChildren())
+                {
+                    if(d.getKey().equals(groupID))
+                    {
+                        isExist = true;
+                    }
+                }
+                if(isExist == true) {
+                    joinRequest.setText("Cancel Request");
+                }
+                else
+                {
+                    joinRequest.setText("Request to join");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         TextView subjectTV = (TextView)findViewById(R.id.SubjectInGroupContent);
         TextView dateTV = (TextView)findViewById(R.id.DateInGroupContent);
         TextView locationTV = (TextView)findViewById(R.id.LocationInGroupContent);
         TextView currentNumOfParticipants = (TextView)findViewById(R.id.groupParticipants);
-        Button joinRequest = (Button)  findViewById(R.id.Request);
 
         joinRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-                String userID = Profile.getCurrentProfile().getId();
-                String userName = Profile.getCurrentProfile().getName();
-                database.child("Users").child(userID).child("Requests").child(groupID).setValue(adminID);
-                database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
+                database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        isExist = false;
+                        for (DataSnapshot d : dataSnapshot.getChildren())
+                        {
+                            if(d.getKey().equals(groupID))
+                            {
+                                isExist = true;
+                            }
+                        }
+                        if(isExist == true)
+                        {
+                            joinRequest.setText("Request to join");
+                            database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
+                            database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
+                        }
+                        else
+                        {
+                            joinRequest.setText("Cancel Request");
+                            database.child("Users").child(userID).child("Requests").child(groupID).setValue(adminID);
+                            database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
@@ -63,7 +120,6 @@ public class GroupActivity extends AppCompatActivity {
 
         final ArrayList<String> participants = new ArrayList<>();
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
