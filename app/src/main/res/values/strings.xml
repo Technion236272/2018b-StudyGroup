@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="Subject">Subject</string>
     <string name="Location">Location</string>
+    <string name="Date">Date</string>
     <string name="DateAndTime">YYYY/MM/DD HH:MM</string>
     <string name="CreateGroup">Create Group</string>
     <string name="subjectError">Please enter subject!</string>
@@ -13,8 +14,10 @@
     <string name="participantsError">Please select number of participants</string>
     <string name="locationError">Please enter location!</string>
     <string name="favorite">favorite</string>
-    <string id= "numOfParticipants "
-        name="numOfParticipants">Number Of Participants</string>
+    <string name="JoinGroup">Join Group!</string>
+    <string name="DeleteGroup">Delete Group!</string>
+    <string name="Requests">Requests</string>
+    <string name="numOfParticipants" id="numOfParticipants ">Number Of Participants</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- TODO: Remove or change this placeholder text -->
