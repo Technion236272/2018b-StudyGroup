@@ -41,4 +41,5 @@
     <string name="joined">Joined</string>
     <string name="requested">requested</string>
     <string name="search_title">group subject</string>
+    <string name="cancel_join_request">cancel request</string>
 </resources>
