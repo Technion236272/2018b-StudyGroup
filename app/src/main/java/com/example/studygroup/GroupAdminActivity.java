@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -33,33 +35,39 @@ public class GroupAdminActivity extends AppCompatActivity {
         final String adminID = getIntent().getExtras().getString("adminID");
         final String groupName = getIntent().getExtras().getString("groupName");
 
+        final ArrayList<String> participants = new ArrayList<>();
+        final ArrayList<User> requests = new ArrayList<>();
+
         setTitle(groupName);
 
         EditText subjectET = findViewById(R.id.subjectAdminEdit);
         EditText dateET = findViewById(R.id.dateAdminEdit);
         EditText locationET = findViewById(R.id.locationAdminEdit);
         TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
-
+        Button removeUser = findViewById(R.id.removeUser);
+        Button AcceptBtn = findViewById(R.id.AcceptBtn);
+        Button IgnoreBtn = findViewById(R.id.IgnoreBtn);
 
         subjectET.setText(subject);
         dateET.setText(date);
         locationET.setText(location);
         currentNumOfParticipants.setText(numOfParticipants.toString() + " Participants");
-
-        final ArrayList<String> participants = new ArrayList<>();
+        final RecyclerView requestsRecycler = findViewById(R.id.requestAdminRecycler);
+        requestsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("Groups").child(groupID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                RecyclerView requestsRecycler = findViewById(R.id.requestAdminRecycler);
-                requestsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
+
                 for (DataSnapshot d : dataSnapshot.getChildren())
                 {
-                    participants.add(d.getValue().toString());
+                    User userToAdd = new User(d.getKey().toString(),d.getValue().toString());
+                    requests.add(userToAdd);
                 }
-                adminRequestsAdapter requestsAdapter = new adminRequestsAdapter(participants);
+                adminRequestsAdapter requestsAdapter = new adminRequestsAdapter(requests,groupID);
                 requestsRecycler.setAdapter(requestsAdapter);
+
             }
 
             @Override

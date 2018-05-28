@@ -1,6 +1,7 @@
 package com.example.studygroup;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,10 +60,12 @@ public class GroupActivity extends AppCompatActivity {
                 }
                 if(isExist == true) {
                     joinRequest.setText("Cancel Request");
+                    joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
                 }
                 else
                 {
                     joinRequest.setText("Request to join");
+                    joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 }
             }
 
@@ -94,12 +97,14 @@ public class GroupActivity extends AppCompatActivity {
                         if(isExist == true)
                         {
                             joinRequest.setText("Request to join");
+                            joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                             database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
                             database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
                         }
                         else
                         {
                             joinRequest.setText("Cancel Request");
+                            joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
                             database.child("Users").child(userID).child("Requests").child(groupID).setValue(adminID);
                             database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
                         }
