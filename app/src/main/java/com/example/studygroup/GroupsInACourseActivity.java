@@ -61,26 +61,10 @@ public class GroupsInACourseActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 MyDatabaseUtil my1 = new MyDatabaseUtil();
           //      int i = 0;
+                groups.clear();
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
-             //       String groupID = data.getKey();
-
-//                    data.getValue()
                     Group g = data.getValue(Group.class);
-//                    Group tmp = new Group();
-//                    tmp.setGroupID((String)(data.child("groupID").getValue()));
-//                    tmp.setAdminID((String)(data.child("adminID").getValue()));
-//                    tmp.setCurrentNumOfPart((Integer) (data.child("currentNumOfPart").getValue()));
-//                    tmp.setmaxNumOfPart((Integer)(data.child("maxNumOfPart").getValue()));
-//                    tmp.setLocation((String)(data.child("location").getValue()));
-//                    tmp.setSubject((String)(data.child("subject").getValue()));
-//                    tmp.setId((String)(data.child("id").getValue()));
-//                    tmp.setDate((String)(data.child("date").getValue()));
-//                    tmp.setGroupID((String)(data.child("groupID").getValue()));
-//                    tmp.setGroupID((String)(data.child("groupID").getValue()));
 
-
-//                    Group gg = new Group();
-//                    gg.setGroupID((String)data.child("groupID").getValue());
                     if(g.getId().equals(courseId) && !groups.contains(g)) {
                         groups.add(g);
                     }
@@ -115,7 +99,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                adapter.notifyDataSetChanged();
             }
 
             @Override

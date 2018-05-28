@@ -1,11 +1,14 @@
 package com.example.studygroup;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,8 +27,7 @@ public class GroupAdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_admin);
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         final Context currentContext = this;
 
         String subject = getIntent().getExtras().getString("groupSubject");
@@ -46,6 +48,64 @@ public class GroupAdminActivity extends AppCompatActivity {
         EditText locationET = findViewById(R.id.locationAdminEdit);
         TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
 
+        Button deleteGroup = findViewById(R.id.deleteAdmin);
+        deleteGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentContext);
+                alertDialog.setTitle(R.string.AreYouSure);
+                alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        database.child("Groups").child(groupID).child("participants")
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot child : dataSnapshot.getChildren())
+                                        {
+                                            String currentUser = child.getKey();
+                                            database.child("Users").child(currentUser).child("Joined").child(groupID).removeValue();
+                                            database.child("Groups").child(groupID).child("participants")
+                                                    .child(currentUser).removeValue();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                        database.child("Groups").child(groupID).child("Requests")
+                                .addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot child : dataSnapshot.getChildren())
+                                        {
+                                            String currentUser = child.getKey();
+                                            database.child("Users").child(currentUser).child("Requests").child(groupID).removeValue();
+                                            database.child("Groups").child(groupID).child("Requests")
+                                                    .child(currentUser).removeValue();
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                        database.child("Groups").child(groupID).removeValue();
+                        finish();
+                    }
+                }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
+            }
+        });
 
         subjectET.setText(subject);
         dateET.setText(date);
@@ -55,16 +115,17 @@ public class GroupAdminActivity extends AppCompatActivity {
         requestsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
 
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        database.child("Groups").child(groupID).child("Requests").addValueEventListener(new ValueEventListener() {
+        database.child("Groups").child(groupID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot d : dataSnapshot.getChildren()) {
-                    User userToAdd = new User(d.getKey(),d.getValue().toString());
+                for (DataSnapshot d : dataSnapshot.getChildren())
+                {
+                    User userToAdd = new User(d.getKey().toString(),d.getValue().toString());
                     requests.add(userToAdd);
                 }
                 AdminRequestsAdapter requestsAdapter = new AdminRequestsAdapter(requests,groupID,numOfParticipants);
                 requestsRecycler.setAdapter(requestsAdapter);
+
             }
 
             @Override
@@ -78,7 +139,8 @@ public class GroupAdminActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecyclerView participantsRecycler = findViewById(R.id.recyclerPaticipantsGroup);
                 participantsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
-                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                for (DataSnapshot d : dataSnapshot.getChildren())
+                {
                     participants.add(d.getValue().toString());
                 }
 
@@ -91,7 +153,5 @@ public class GroupAdminActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 }

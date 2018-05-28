@@ -24,7 +24,7 @@ import java.util.Map;
 public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAdapter.GroupViewHolder> {
 
     private ArrayList<Group> groups;
-
+    private String id;
     GroupCardsViewAdapter(ArrayList<Group> groups) {
         this.groups = groups;
     }
@@ -46,11 +46,11 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         MyDatabaseUtil.getDatabase();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference();
-
+        boolean isJoined = false;
         final Group group = groups.get(i);
         viewHolder.subject.setText(group.getSubject());
         viewHolder.date.setText(group.getDate());
-        viewHolder.userState.setText("Not finished!");
+        viewHolder.userState.setText(R.string.admin);
         String sb = String.valueOf(group.getCurrentNumOfPart()) + "/" + String.valueOf(group.getmaxNumOfPart());
         viewHolder.numOfPart.setText(sb);
 
@@ -97,7 +97,6 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-
 
     static class GroupViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
