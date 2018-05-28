@@ -17,6 +17,7 @@
     <string name="yearError">Please select year</string>
     <string name="locationError">Please enter location!</string>
     <string name="cancel_request">Cancel Request</string>
+    <string name="leave_group">Leave Group</string>
     <string name="request_to_join">Join Request</string>
     <string name="irrelevant_date">Sorry, this date has already passed, please enter a new one!</string>
     <string name="favorite">favorite</string>

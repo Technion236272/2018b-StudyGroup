@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.studygroup.CreateGroup">
+
+    <EditText
+        android:id="@+id/groupSubject"
+        android:layout_width="500dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="70dp"
+        android:ems="10"
+        android:hint="@string/Subject"
+        android:inputType="textPersonName"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/Location"
+        android:layout_width="500dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="90dp"
+        android:ems="10"
+        android:hint="@string/Location"
+        android:inputType="textPersonName"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupSubject" />
+
+    <Spinner
+        android:id="@+id/NumOfParticipants"
+        android:layout_width="500dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/monthSpinner" />
+
+    <Button
+        android:id="@+id/CreateGroup"
+        android:layout_width="310dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="130dp"
+        android:background="@color/colorPrimary"
+        android:onClick="openAlertDialog"
+        android:text="@string/CreateGroup"
+        android:textColor="@color/textColor"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/NumOfParticipants" />
+
+    <Spinner
+        android:id="@+id/daySpinner"
+        android:layout_width="125dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintStart_toStartOf="@+id/Location"
+        app:layout_constraintTop_toBottomOf="@+id/Location" />
+
+    <Spinner
+        android:id="@+id/monthSpinner"
+        android:layout_width="125dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintStart_toEndOf="@+id/daySpinner"
+        app:layout_constraintTop_toBottomOf="@+id/Location" />
+
+    <Spinner
+        android:id="@+id/yearsSpinner"
+        android:layout_width="235dp"
+        android:layout_height="70dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintStart_toEndOf="@+id/monthSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/Location" />
+
+</android.support.constraint.ConstraintLayout>
