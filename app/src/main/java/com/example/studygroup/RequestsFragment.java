@@ -49,7 +49,7 @@ public class RequestsFragment extends Fragment {
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
 
-        final ArrayList<String> temp = new ArrayList<>();
+    //    final ArrayList<String> temp = new ArrayList<>();
 
         FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = mDataBase.getReference();
