@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -44,9 +42,6 @@ public class GroupAdminActivity extends AppCompatActivity {
         EditText dateET = findViewById(R.id.dateAdminEdit);
         EditText locationET = findViewById(R.id.locationAdminEdit);
         TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
-        Button removeUser = findViewById(R.id.removeUser);
-        Button AcceptBtn = findViewById(R.id.AcceptBtn);
-        Button IgnoreBtn = findViewById(R.id.IgnoreBtn);
 
         subjectET.setText(subject);
         dateET.setText(date);
@@ -55,12 +50,6 @@ public class GroupAdminActivity extends AppCompatActivity {
         final RecyclerView requestsRecycler = findViewById(R.id.requestAdminRecycler);
         requestsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
 
-        AcceptBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("Groups").child(groupID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -72,7 +61,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                     User userToAdd = new User(d.getKey().toString(),d.getValue().toString());
                     requests.add(userToAdd);
                 }
-                adminRequestsAdapter requestsAdapter = new adminRequestsAdapter(requests,groupID);
+                AdminRequestsAdapter requestsAdapter = new AdminRequestsAdapter(requests,groupID,numOfParticipants);
                 requestsRecycler.setAdapter(requestsAdapter);
 
             }
@@ -93,7 +82,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                     participants.add(d.getValue().toString());
                 }
 
-                adminParticipantsAdapter participantAdapter= new adminParticipantsAdapter(participants);
+                AdminParticipantsAdapter participantAdapter= new AdminParticipantsAdapter(participants);
                 participantsRecycler.setAdapter(participantAdapter);
             }
 

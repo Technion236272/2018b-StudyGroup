@@ -9,10 +9,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-class adminParticipantsAdapter extends RecyclerView.Adapter<adminParticipantsAdapter.adminPartHolder>{
+class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAdapter.adminPartHolder>{
     private ArrayList<String> participants;
 
-    adminParticipantsAdapter(ArrayList<String> arr)
+    AdminParticipantsAdapter(ArrayList<String> arr)
     {
         participants = new ArrayList<>(arr);
     }

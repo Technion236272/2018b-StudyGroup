@@ -2,7 +2,6 @@ package com.example.studygroup;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +15,18 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-class adminRequestsAdapter extends RecyclerView.Adapter<adminRequestsAdapter.adminHolder>{
+class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adminHolder>{
 
     private ArrayList<User> requests;
     private String groupID;
     private Context context;
-    adminRequestsAdapter(){
+    private Integer part;
 
-    }
-    adminRequestsAdapter(ArrayList<User> arr,String g)
+    AdminRequestsAdapter(ArrayList<User> arr, String g,Integer numOfPart)
     {
         requests = new ArrayList<>(arr);
         groupID = g;
+        part = numOfPart;
     }
 
     @NonNull
@@ -51,8 +50,6 @@ class adminRequestsAdapter extends RecyclerView.Adapter<adminRequestsAdapter.adm
 
     class adminHolder extends RecyclerView.ViewHolder {
         TextView requestsText;
-
-
         adminHolder(final View itemView) {
             super(itemView);
             requestsText = itemView.findViewById(R.id.userRequest);
@@ -66,10 +63,14 @@ class adminRequestsAdapter extends RecyclerView.Adapter<adminRequestsAdapter.adm
                     User user = requests.get(getAdapterPosition());
                     database.child("Users").child(user.getToken()).
                             child("Requests").child(groupID).removeValue();
-                    database.child("Groups").child("Requests").child(user.getToken()).removeValue();
+                    database.child("Groups").child(groupID).child("Requests").child(user.getToken()).removeValue();
 
-                    database.child("Groups").child("participants")
+                    database.child("Groups").child(groupID).child("participants")
                             .child(user.getToken()).setValue(user.getName());
+                    database.child("Groups").child(groupID).child("currentNumOfPart").setValue(part);
+                    database.child("Users").child(user.getToken()).child("Joined").child(groupID).setValue("");
+                    requests.remove(getAdapterPosition());
+                    notifyDataSetChanged();
                     CharSequence text = "Request accepted!";
 
                     Toast.makeText(context,text,Toast.LENGTH_LONG);
@@ -83,13 +84,14 @@ class adminRequestsAdapter extends RecyclerView.Adapter<adminRequestsAdapter.adm
                     database.child("Users").child(user.getToken()).
                             child("Requests").child(groupID).removeValue();
 
-                    database.child("Groups").child("Requests").child(user.getToken()).removeValue();
-
+                    database.child("Groups").child(groupID).child("Requests").child(user.getToken()).removeValue();
+                    requests.remove(getAdapterPosition());
+                    notifyDataSetChanged();
                     CharSequence text = "Request declined!";
+
                     Toast.makeText(context,text,Toast.LENGTH_LONG);
                 }
             });
-
         }
     }
 }
