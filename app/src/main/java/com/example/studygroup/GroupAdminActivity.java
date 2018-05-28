@@ -43,6 +43,7 @@ public class GroupAdminActivity extends AppCompatActivity {
         EditText locationET = findViewById(R.id.locationAdminEdit);
         TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
 
+
         subjectET.setText(subject);
         dateET.setText(date);
         locationET.setText(location);
