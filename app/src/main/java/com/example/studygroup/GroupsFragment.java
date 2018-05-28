@@ -58,9 +58,9 @@ public class GroupsFragment extends Fragment {
                 case 0:
                     return joinedFragment.newInstance();
                 case 1:
-                    return interedtedFragment.newInstance();
+                    return InterestedFragment.newInstance();
                 default:
-                    return requestsFragment.newInstance();
+                    return RequestsFragment.newInstance();
             }
 
         }
