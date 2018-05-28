@@ -80,7 +80,7 @@ public class UserInformationAboutJoinedGroupsAdapter extends RecyclerView.Adapte
                             myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
                                     .child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
                             myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
-                                    .child("numOfPart").setValue((data.get(getAdapterPosition()).getCurrentNumOfPart()-1));
+                                    .child("currentNumOfPart").setValue((data.get(getAdapterPosition()).getCurrentNumOfPart()-1));
 //                                (data.get(getAdapterPosition()).getCurrentNumOfPart()-1)
                             data.remove(getAdapterPosition());
                             notifyDataSetChanged();

@@ -7,11 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.internal.on;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,10 +47,61 @@ public class GroupAdminActivity extends AppCompatActivity {
 
         setTitle(groupName);
 
-        EditText subjectET = findViewById(R.id.subjectAdminEdit);
-        EditText dateET = findViewById(R.id.dateAdminEdit);
-        EditText locationET = findViewById(R.id.locationAdminEdit);
+        final EditText subjectET = findViewById(R.id.subjectAdminEdit);
+        final EditText dateET = findViewById(R.id.dateAdminEdit);
+        final EditText locationET = findViewById(R.id.locationAdminEdit);
         TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
+
+        subjectET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                database.child("Groups").child(groupID).child("subject").setValue(subjectET.getText().toString());
+            }
+        });
+
+        dateET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                database.child("Groups").child(groupID).child("date").setValue(dateET.getText().toString());
+            }
+        });
+
+        locationET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                database.child("Groups").child(groupID).child("location").setValue(locationET.getText().toString());
+            }
+        });
 
         Button deleteGroup = findViewById(R.id.deleteAdmin);
         deleteGroup.setOnClickListener(new View.OnClickListener() {

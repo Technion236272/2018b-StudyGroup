@@ -128,8 +128,8 @@ public class LoginActivity extends Activity {
                             //updateUI(user);   // something
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            //       Toast.LENGTH_SHORT).show();
                             //updateUI(null);   // something
                         }
                     }
