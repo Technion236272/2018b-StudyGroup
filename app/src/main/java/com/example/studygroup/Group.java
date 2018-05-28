@@ -1,6 +1,10 @@
 package com.example.studygroup;
 
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Group {
  //   protected String faculty;
     private String name;
@@ -12,9 +16,27 @@ public class Group {
     private int currentNumOfPart;
     private String adminID;
     private String groupID;
+    private HashMap<String,String> Requests, participants;
 //    protected ArrayList<User> users;
 
     Group() {}
+
+    Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
+          int currentNumOfPart, String adminID,HashMap<String,String> Requests, HashMap<String,String> participants) {
+        //     this.faculty = faculty;
+        this.name = id + "-" + subject;
+        this.id = id;
+        this.subject = subject;
+        this.date = date;
+        this.setLocation(location);
+        this.maxNumOfPart = maxNumOfPart;
+        this.currentNumOfPart = currentNumOfPart;
+        this.setAdminID(adminID);
+        this.groupID = groupID;
+        this.participants = Requests;
+        this.Requests = participants;
+//        this.users = users;
+    }
 
     Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
           int currentNumOfPart, String adminID) {
@@ -28,6 +50,8 @@ public class Group {
         this.currentNumOfPart = currentNumOfPart;
         this.setAdminID(adminID);
         this.groupID = groupID;
+        this.participants = new HashMap<>();
+        this.Requests = new HashMap<>();
 //        this.users = users;
     }
 
@@ -120,6 +144,23 @@ public class Group {
 //        this.users = users;
 //    }
 
+
+    public HashMap<String,String> getRequests() {
+        return Requests;
+    }
+
+    public void setRequests(HashMap<String,String> requests) {
+        Requests = requests;
+    }
+
+    public HashMap<String,String> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(HashMap<String,String> participants) {
+        this.participants = participants;
+    }
+
     @Override
     public boolean equals(Object other){
         if(other == null){
@@ -127,5 +168,4 @@ public class Group {
         }
         return other instanceof Group && this.getGroupID().equals(((Group)other).getGroupID());
     }
-
 }

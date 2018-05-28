@@ -30,7 +30,6 @@ public class GroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-
         final Context currentContext = this;
 
         String subject = getIntent().getExtras().getString("groupSubject");
@@ -39,13 +38,13 @@ public class GroupActivity extends AppCompatActivity {
         final String groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
         final String adminID = getIntent().getExtras().getString("adminID");
-        final String groupName = getIntent().getExtras().getString("groupName");
 
         setTitle(subject);
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         final String userID = Profile.getCurrentProfile().getId();
         final String userName = Profile.getCurrentProfile().getName();
         final Button joinRequest = (Button)  findViewById(R.id.Request);
+        Button interestedButton = findViewById(R.id.Interested);
 
         database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -130,8 +129,7 @@ public class GroupActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecyclerView participantsRecycler = (RecyclerView)findViewById(R.id.recyclerPaticipantsGroup);
                 participantsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
-                for (DataSnapshot d : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
                     participants.add(d.getValue().toString());
                 }
                 groupParticipantsAdapter participantsAdapter = new groupParticipantsAdapter(participants);
@@ -143,6 +141,29 @@ public class GroupActivity extends AppCompatActivity {
 
             }
         });
+
+        interestedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                final String userID = Profile.getCurrentProfile().getId();
+
+                database.child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        database.child("Users").child(userID).child("interested")
+                                .child(groupID).setValue("");
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
 
     }
 }
