@@ -21,6 +21,9 @@ class adminRequestsAdapter extends RecyclerView.Adapter<adminRequestsAdapter.adm
     private ArrayList<User> requests;
     private String groupID;
     private Context context;
+    adminRequestsAdapter(){
+
+    }
     adminRequestsAdapter(ArrayList<User> arr,String g)
     {
         requests = new ArrayList<>(arr);

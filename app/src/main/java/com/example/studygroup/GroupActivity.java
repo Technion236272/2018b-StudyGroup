@@ -120,7 +120,7 @@ public class GroupActivity extends AppCompatActivity {
         dateTV.setText(date);
         subjectTV.setText(subject);
         locationTV.setText(location);
-        currentNumOfParticipants.setText(numOfParticipants.toString() + " Participants");
+        currentNumOfParticipants.setText(String.valueOf(numOfParticipants) + " Participants");
 
         final ArrayList<String> participants = new ArrayList<>();
 

@@ -55,6 +55,13 @@ public class GroupAdminActivity extends AppCompatActivity {
         final RecyclerView requestsRecycler = findViewById(R.id.requestAdminRecycler);
         requestsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
 
+        AcceptBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child("Groups").child(groupID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -95,6 +102,7 @@ public class GroupAdminActivity extends AppCompatActivity {
 
             }
         });
+
 
     }
 }
