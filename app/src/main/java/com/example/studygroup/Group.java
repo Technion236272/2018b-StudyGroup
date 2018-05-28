@@ -3,6 +3,7 @@ package com.example.studygroup;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Group {
  //   protected String faculty;
@@ -15,10 +16,27 @@ public class Group {
     private int currentNumOfPart;
     private String adminID;
     private String groupID;
-    private ArrayList<String> Requests, participants;
+    private HashMap<String,String> Requests, participants;
 //    protected ArrayList<User> users;
 
     Group() {}
+
+    Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
+          int currentNumOfPart, String adminID,HashMap<String,String> Requests, HashMap<String,String> participants) {
+        //     this.faculty = faculty;
+        this.name = id + "-" + subject;
+        this.id = id;
+        this.subject = subject;
+        this.date = date;
+        this.setLocation(location);
+        this.maxNumOfPart = maxNumOfPart;
+        this.currentNumOfPart = currentNumOfPart;
+        this.setAdminID(adminID);
+        this.groupID = groupID;
+        this.participants = Requests;
+        this.Requests = participants;
+//        this.users = users;
+    }
 
     Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
           int currentNumOfPart, String adminID) {
@@ -32,8 +50,8 @@ public class Group {
         this.currentNumOfPart = currentNumOfPart;
         this.setAdminID(adminID);
         this.groupID = groupID;
-        this.participants = new ArrayList<>();
-        this.Requests = new ArrayList<>();
+        this.participants = new HashMap<>();
+        this.Requests = new HashMap<>();
 //        this.users = users;
     }
 
@@ -127,19 +145,19 @@ public class Group {
 //    }
 
 
-    public ArrayList<String> getRequests() {
+    public HashMap<String,String> getRequests() {
         return Requests;
     }
 
-    public void setRequests(ArrayList<String> requests) {
+    public void setRequests(HashMap<String,String> requests) {
         Requests = requests;
     }
 
-    public ArrayList<String> getParticipants() {
+    public HashMap<String,String> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(ArrayList<String> participants) {
+    public void setParticipants(HashMap<String,String> participants) {
         this.participants = participants;
     }
 
