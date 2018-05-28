@@ -1,6 +1,9 @@
 package com.example.studygroup;
 
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Group {
  //   protected String faculty;
     private String name;
@@ -12,6 +15,7 @@ public class Group {
     private int currentNumOfPart;
     private String adminID;
     private String groupID;
+    private ArrayList<String> Requests, participants;
 //    protected ArrayList<User> users;
 
     Group() {}
@@ -28,6 +32,8 @@ public class Group {
         this.currentNumOfPart = currentNumOfPart;
         this.setAdminID(adminID);
         this.groupID = groupID;
+        this.participants = new ArrayList<>();
+        this.Requests = new ArrayList<>();
 //        this.users = users;
     }
 
@@ -120,6 +126,23 @@ public class Group {
 //        this.users = users;
 //    }
 
+
+    public ArrayList<String> getRequests() {
+        return Requests;
+    }
+
+    public void setRequests(ArrayList<String> requests) {
+        Requests = requests;
+    }
+
+    public ArrayList<String> getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(ArrayList<String> participants) {
+        this.participants = participants;
+    }
+
     @Override
     public boolean equals(Object other){
         if(other == null){
@@ -127,5 +150,4 @@ public class Group {
         }
         return other instanceof Group && this.getGroupID().equals(((Group)other).getGroupID());
     }
-
 }

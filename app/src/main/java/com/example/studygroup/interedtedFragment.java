@@ -35,39 +35,39 @@ public class interedtedFragment extends Fragment {
     private static userInformationAboutGroupsAdapter adapter;
     private RecyclerView recyclerView;
 
-    private static userInformationAboutGroupsAdapter lastAdapter;
-    private static String lastQuery = "";
+//    private static userInformationAboutGroupsAdapter lastAdapter;
+//    private static String lastQuery = "";
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.options_menu, menu);
-        MenuItem item = menu.findItem(R.id.searchGroup);
-        SearchView searchView = (SearchView) item.getActionView();
-        searchView.setQuery(lastQuery, true);
-        recyclerView.setAdapter(lastAdapter);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                ArrayList<Group> filteredList = new ArrayList<>();
-                for (Group g: interestedGroups) {
-                    if(g.getSubject().contains(newText)){
-                        filteredList.add(g);
-                    }
-                }
-                lastQuery = newText;
-                lastAdapter.filterList(filteredList);
-                recyclerView.setAdapter(lastAdapter);
-                return false;
-            }
-        });
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.options_menu, menu);
+//        MenuItem item = menu.findItem(R.id.searchGroup);
+//        SearchView searchView = (SearchView) item.getActionView();
+//        searchView.setQuery(lastQuery, true);
+//        recyclerView.setAdapter(lastAdapter);
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                ArrayList<Group> filteredList = new ArrayList<>();
+//                for (Group g: interestedGroups) {
+//                    if(g.getSubject().contains(newText)){
+//                        filteredList.add(g);
+//                    }
+//                }
+//                lastQuery = newText;
+//                lastAdapter.filterList(filteredList);
+//                recyclerView.setAdapter(lastAdapter);
+//                return false;
+//            }
+//        });
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
 
     public interedtedFragment() {
@@ -87,6 +87,10 @@ public class interedtedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_interested, container, false);
+
+        recyclerView = view.findViewById(R.id.interestedGroupsRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         interestedGroups = new ArrayList<>();
 
         MyDatabaseUtil my = new MyDatabaseUtil();
@@ -100,58 +104,79 @@ public class interedtedFragment extends Fragment {
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("interested").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                final ArrayList<String> tempArray = new ArrayList<>();
+                final ArrayList<Group> newInterested = new ArrayList<>();
                 for(DataSnapshot d : dataSnapshot.getChildren()){
+                    tempArray.add(d.getKey());
+                    if(temp.contains(d.getKey())){
+                        continue;
+                    }
                     temp.add(d.getKey());
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        myRef.child("Groups").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                recyclerView = view.findViewById(R.id.interestedGroupsRecyclerView);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    if(temp.contains(child.getKey())) {
-                        Group g = child.getValue(Group.class);
-                        interestedGroups.add(g);
+                myRef.child("Groups").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot child : dataSnapshot.getChildren()) {
+                            if(tempArray.contains(child.getKey())) {
+                                Group g = child.getValue(Group.class);
+                                newInterested.add(g);
+                            }
+                        }
+                        adapter = new userInformationAboutGroupsAdapter(newInterested);
+                        recyclerView.setAdapter(adapter);
                     }
-                }
-                adapter = new userInformationAboutGroupsAdapter(interestedGroups);
-                lastAdapter = new userInformationAboutGroupsAdapter(interestedGroups);
-                recyclerView.setAdapter(adapter);
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
+
+//        myRef.child("Groups").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for(DataSnapshot child : dataSnapshot.getChildren()) {
+//                    if(interestedGroups.contains(child.getValue(Group.class))){
+//                        continue;
+//                    }
+//                    if(temp.contains(child.getKey())) {
+//                        Group g = child.getValue(Group.class);
+//                        interestedGroups.add(g);
+//                    }
+//                }
+//                adapter = new userInformationAboutGroupsAdapter(interestedGroups);
+//                recyclerView.setAdapter(adapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         myRef.child("Users").child(Profile.getCurrentProfile().getId())
                 .child("interested").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-           //     adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override

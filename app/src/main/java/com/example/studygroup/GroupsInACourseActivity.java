@@ -93,7 +93,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-             //   adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
 
             @Override

@@ -28,9 +28,11 @@
 
         <TextView
             android:id="@+id/groupSubjectInfo"
-            android:layout_width="200dp"
+            android:layout_width="184dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
             android:layout_toEndOf="@+id/groupPhotoInfo"
             android:layout_toLeftOf="@+id/groupMeetingDate"
             android:layout_toRightOf="@+id/groupPhotoInfo"
