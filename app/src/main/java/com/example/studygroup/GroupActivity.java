@@ -99,6 +99,7 @@ public class GroupActivity extends AppCompatActivity {
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                             database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
                             database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
+
                         }
                         else
                         {

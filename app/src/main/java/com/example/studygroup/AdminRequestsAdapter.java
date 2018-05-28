@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -73,7 +76,7 @@ class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adm
                     notifyDataSetChanged();
                     CharSequence text = "Request accepted!";
 
-                    Toast.makeText(context,text,Toast.LENGTH_LONG);
+                    Toast.makeText(context,text,Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -89,7 +92,7 @@ class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adm
                     notifyDataSetChanged();
                     CharSequence text = "Request declined!";
 
-                    Toast.makeText(context,text,Toast.LENGTH_LONG);
+                    Toast.makeText(context,text,Toast.LENGTH_LONG).show();
                 }
             });
         }
