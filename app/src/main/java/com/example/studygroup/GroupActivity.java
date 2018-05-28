@@ -43,8 +43,34 @@ public class GroupActivity extends AppCompatActivity {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         final String userID = Profile.getCurrentProfile().getId();
         final String userName = Profile.getCurrentProfile().getName();
-        final Button joinRequest = (Button)  findViewById(R.id.Request);
-        Button interestedButton = findViewById(R.id.Interested);
+        final Button joinRequest = (Button) findViewById(R.id.Request);
+        Button interestedButton = (Button) findViewById(R.id.Interested);
+
+
+
+//        database.child("Users").child(userID).child("interested").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                isExist = false;
+//                for (DataSnapshot d : dataSnapshot.getChildren()) {
+//                    if (d.getKey().equals(groupID)) {
+//                        isExist = true;
+//                    }
+//                }
+//                if (isExist == true) {
+//                    interestedButton.setText(R.string.uninterested);
+//                    interestedButton.setBackgroundColor(getResources().getColor(R.color.Red));
+//                } else {
+//                    interestedButton.setText(R.string.group_of_interest);
+//                    interestedButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -58,12 +84,12 @@ public class GroupActivity extends AppCompatActivity {
                     }
                 }
                 if(isExist == true) {
-                    joinRequest.setText("Cancel Request");
+                    joinRequest.setText(R.string.cancel_request);
                     joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
                 }
                 else
                 {
-                    joinRequest.setText("Request to join");
+                    joinRequest.setText(R.string.request_to_join);
                     joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 }
             }
@@ -78,6 +104,45 @@ public class GroupActivity extends AppCompatActivity {
         TextView dateTV = (TextView)findViewById(R.id.DateInGroupContent);
         TextView locationTV = (TextView)findViewById(R.id.LocationInGroupContent);
         TextView currentNumOfParticipants = (TextView)findViewById(R.id.groupParticipants);
+
+//        interestedButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                database.child("Users").child(userID).child("interested").addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        isExist = false;
+//                        for (DataSnapshot d : dataSnapshot.getChildren())
+//                        {
+//                            if(d.getKey().equals(groupID))
+//                            {
+//                                isExist = true;
+//                            }
+//                        }
+//                        if(isExist == true)
+//                        {
+//                            interestedButton.setText("Request to join");
+//                            interestedButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//                            database.child("Users").child(userID).child("interested").child(groupID).removeValue();
+//                            database.child("Groups").child(groupID).child("interested").child(userID).removeValue();
+//
+//                        }
+//                        else
+//                        {
+//                            interestedButton.setText("Cancel Request");
+//                            interestedButton.setBackgroundColor(getResources().getColor(R.color.Red));
+//                            database.child("Users").child(userID).child("interested").child(groupID).setValue(adminID);
+//                            database.child("Groups").child(groupID).child("interested").child(userID).setValue(userName);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
+//            }
+//        });
 
         joinRequest.setOnClickListener(new View.OnClickListener() {
             @Override

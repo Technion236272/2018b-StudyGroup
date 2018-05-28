@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +47,8 @@ public class CreateGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         groupSubject = findViewById(R.id.groupSubject);
         Location = findViewById(R.id.Location);
         day = findViewById(R.id.daySpinner);
@@ -83,20 +86,76 @@ public class CreateGroup extends AppCompatActivity {
                 return view;
             }
         };
-
         numOfParticipants.setAdapter(adapter);
 
-        Integer[] daysArr = new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22
-                                            ,23,24,25,26,27,28,29,30,31};
-        ArrayAdapter<Integer> daysAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, daysArr );
+        String[] daysArr = new String[]{"Day","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19"
+                ,"20","21","22","23","24","25","26","27","28","29","30","31"};
+        final ArrayList<String> dayList = new ArrayList<>(Arrays.asList(daysArr));
+        ArrayAdapter<String> daysAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, dayList ){
+            @Override
+            public boolean isEnabled(int position){
+                return position != 0;
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
         day.setAdapter(daysAdapter);
 
-        Integer[] monthArr = new Integer[]{1,2,3,4,5,6,7,8,9,10,11,12};
-        ArrayAdapter<Integer> monthAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, monthArr);
+        String[] monthArr = new String[]{"Month","1","2","3","4","5","6","7","8","9","10","11","12"};
+        final ArrayList<String> monthList = new ArrayList<>(Arrays.asList(monthArr));
+        ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, monthList){
+            @Override
+            public boolean isEnabled(int position){
+                return position != 0;
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
         month.setAdapter(monthAdapter);
 
-        Integer[] yearsArr = new Integer[]{2018,2019};
-        ArrayAdapter<Integer> yearAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, yearsArr);
+        String[] yearsArr = new String[]{"Year","2018","2019"};
+        final ArrayList<String> yearList = new ArrayList<>(Arrays.asList(yearsArr));
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, yearList){
+            @Override
+            public boolean isEnabled(int position){
+                return position != 0;
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
         year.setAdapter(yearAdapter);
     }
 
@@ -113,7 +172,7 @@ public class CreateGroup extends AppCompatActivity {
             return;
         }
         String location = Location.getText().toString();
-        if (location .length()==0) {
+        if (location.length()==0) {
             alertDialog.setTitle(R.string.locationError);
             alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -122,6 +181,37 @@ public class CreateGroup extends AppCompatActivity {
             }).show();
             return;
         }
+
+        if(day.getSelectedItemPosition() == 0) {
+            alertDialog.setTitle(R.string.dayError);
+            alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            }).show();
+            return;
+        }
+
+        if(month.getSelectedItemPosition() == 0) {
+            alertDialog.setTitle(R.string.monthError);
+            alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            }).show();
+            return;
+        }
+
+        if(year.getSelectedItemPosition() == 0) {
+            alertDialog.setTitle(R.string.yearError);
+            alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            }).show();
+            return;
+        }
+
         String date = day.getSelectedItem() + "/" + month.getSelectedItem() + "/" + year.getSelectedItem();
         Date currentDate = new Date();
         SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
