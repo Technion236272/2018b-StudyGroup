@@ -42,4 +42,7 @@
     <string name="requested">requested</string>
     <string name="search_title">group subject</string>
     <string name="cancel_join_request">cancel request</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    <string name="AreYouSure">Are you sure you want to delete the group?</string>
 </resources>
