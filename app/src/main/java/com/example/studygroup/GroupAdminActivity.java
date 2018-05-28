@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,6 +23,8 @@ public class GroupAdminActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_admin);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         final Context currentContext = this;
 
@@ -53,18 +56,15 @@ public class GroupAdminActivity extends AppCompatActivity {
 
 
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        database.child("Groups").child(groupID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child("Groups").child(groupID).child("Requests").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot d : dataSnapshot.getChildren())
-                {
-                    User userToAdd = new User(d.getKey().toString(),d.getValue().toString());
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    User userToAdd = new User(d.getKey(),d.getValue().toString());
                     requests.add(userToAdd);
                 }
                 AdminRequestsAdapter requestsAdapter = new AdminRequestsAdapter(requests,groupID,numOfParticipants);
                 requestsRecycler.setAdapter(requestsAdapter);
-
             }
 
             @Override
@@ -78,8 +78,7 @@ public class GroupAdminActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecyclerView participantsRecycler = findViewById(R.id.recyclerPaticipantsGroup);
                 participantsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
-                for (DataSnapshot d : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
                     participants.add(d.getValue().toString());
                 }
 

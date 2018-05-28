@@ -79,11 +79,11 @@ public class UserInformationAboutRequestedGroupsAdapter extends RecyclerView.Ada
                                         .child("Requests").child((data.get(getAdapterPosition()).getGroupID())).removeValue();
                                 myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
                                         .child("Requests").child(Profile.getCurrentProfile().getId()).removeValue();
-                            myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
+                                myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
                                         .child("numOfPart").setValue((data.get(getAdapterPosition()).getCurrentNumOfPart()-1));
 //                                (data.get(getAdapterPosition()).getCurrentNumOfPart()-1)
-                            data.remove(getAdapterPosition());
-                            notifyDataSetChanged();
+                                data.remove(getAdapterPosition());
+                                notifyDataSetChanged();
                         }
                     }).show();
                 }

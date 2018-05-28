@@ -61,10 +61,6 @@ public class RequestsFragment extends Fragment {
                 final ArrayList<Group> newInterested = new ArrayList<>();
                 for(DataSnapshot d : dataSnapshot.getChildren()){
                     tempArray.add(d.getKey());
-                    if(temp.contains(d.getKey())){
-                        continue;
-                    }
-                    temp.add(d.getKey());
                 }
                 myRef.child("Groups").addValueEventListener(new ValueEventListener() {
                     @Override

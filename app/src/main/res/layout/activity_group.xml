@@ -20,7 +20,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/Subject"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,7 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subjectInGroup"
@@ -45,7 +44,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/Date"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SubjectInGroupContent" />
 
@@ -55,7 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateAdmin"
@@ -69,8 +67,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/Location"
+        android:textSize="20sp"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DateInGroupContent" />
 
@@ -80,7 +78,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationAdmin"
@@ -101,7 +98,7 @@
 
     <Button
         android:id="@+id/Interested"
-        android:layout_width="wrap_content"
+        android:layout_width="143dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -109,19 +106,21 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="50dp"
         android:text="@string/group_of_interest"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/Request"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/Request"
-        android:layout_width="wrap_content"
+        android:layout_width="143dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="70dp"
         android:layout_marginRight="70dp"
         android:layout_marginTop="16dp"
-        android:text="@string/JoinGroup"
+        android:text="@string/request_to_join"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerPaticipantsGroup" />
@@ -132,7 +131,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LocationInGroupContent"
