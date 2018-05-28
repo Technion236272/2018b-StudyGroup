@@ -14,12 +14,12 @@
         android:id="@+id/userRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="16dp" />
 
     <Button
         android:id="@+id/IgnoreBtn"
@@ -38,10 +38,10 @@
         android:layout_width="80dp"
         android:layout_height="30dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/holo_green_light"
         android:text="@string/Accept"
         app:layout_constraintEnd_toStartOf="@+id/IgnoreBtn"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="8dp" />
 </android.support.constraint.ConstraintLayout>

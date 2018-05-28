@@ -17,7 +17,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,12 +26,13 @@
         android:layout_width="80dp"
         android:layout_height="30dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/holo_red_dark"
         android:text="@string/Reject"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="8dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/AcceptBtn"
@@ -42,6 +43,7 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/holo_green_light"
         android:text="@string/Accept"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/IgnoreBtn"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
