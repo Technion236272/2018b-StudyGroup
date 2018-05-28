@@ -18,10 +18,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class RequestsFragment extends Fragment {
-    private static UserInformationAboutRequestedGroupsAdapter adapter;
+    private UserInformationAboutRequestedGroupsAdapter adapter;
     private RecyclerView recyclerView;
 
 
@@ -58,7 +60,8 @@ public class RequestsFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final ArrayList<String> tempArray = new ArrayList<>();
-                final ArrayList<Group> newInterested = new ArrayList<>();
+//                final ArrayList<Group> newInterested = new ArrayList<>();
+                final Set<Group> tmpInterested = new HashSet<>();
                 for(DataSnapshot d : dataSnapshot.getChildren()){
                     tempArray.add(d.getKey());
                 }
@@ -68,10 +71,11 @@ public class RequestsFragment extends Fragment {
                         for(DataSnapshot child : dataSnapshot.getChildren()) {
                             if(tempArray.contains(child.getKey())) {
                                 Group g = child.getValue(Group.class);
-                                newInterested.add(g);
+                                tmpInterested.add(g);
+//                                newInterested.add(g);
                             }
                         }
-                        adapter = new UserInformationAboutRequestedGroupsAdapter(newInterested);
+                        adapter = new UserInformationAboutRequestedGroupsAdapter(new ArrayList<Group>(tmpInterested));
                         recyclerView.setAdapter(adapter);
                     }
 

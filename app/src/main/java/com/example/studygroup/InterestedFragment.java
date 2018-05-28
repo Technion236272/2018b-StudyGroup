@@ -18,9 +18,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InterestedFragment extends Fragment {
-    private static userInformationAboutGroupsAdapter adapter;
+    private userInformationAboutGroupsAdapter adapter;
     private RecyclerView recyclerView;
 
 //    private static userInformationAboutGroupsAdapter lastAdapter;
@@ -90,13 +92,14 @@ public class InterestedFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final ArrayList<String> tempArray = new ArrayList<>();
-                final ArrayList<Group> newInterested = new ArrayList<>();
+//                final ArrayList<Group> newInterested = new ArrayList<>();
+                final Set<Group> tmpInterested = new HashSet<>();
                 for(DataSnapshot d : dataSnapshot.getChildren()){
                     tempArray.add(d.getKey());
-                    if(temp.contains(d.getKey())){
-                        continue;
-                    }
-                    temp.add(d.getKey());
+//                    if(temp.contains(d.getKey())){
+//                        continue;
+//                    }
+//                    temp.add(d.getKey());
                 }
                 myRef.child("Groups").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -104,10 +107,11 @@ public class InterestedFragment extends Fragment {
                         for(DataSnapshot child : dataSnapshot.getChildren()) {
                             if(tempArray.contains(child.getKey())) {
                                 Group g = child.getValue(Group.class);
-                                newInterested.add(g);
+//                                newInterested.add(g);
+                                tmpInterested.add(g);
                             }
                         }
-                        adapter = new userInformationAboutGroupsAdapter(newInterested);
+                        adapter = new userInformationAboutGroupsAdapter(new ArrayList<Group>(tmpInterested));
                         recyclerView.setAdapter(adapter);
                     }
 

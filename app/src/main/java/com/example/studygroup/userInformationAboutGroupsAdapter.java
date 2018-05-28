@@ -83,11 +83,12 @@ public class userInformationAboutGroupsAdapter extends RecyclerView.Adapter<user
                     }).show();
                     alertDialog.setNegativeButton(R.string.uninterested, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            int position = getAdapterPosition();
+                            Group g=data.remove(position);
                             myRef.child("Users")
                                     .child(Profile.getCurrentProfile().getId())
                                     .child("interested")
-                                    .child(data.get(getAdapterPosition()).getGroupID()).removeValue();
-                            data.remove(getAdapterPosition());
+                                    .child(g.getGroupID()).removeValue();
                             notifyDataSetChanged();
                         }
                     }).show();

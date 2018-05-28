@@ -18,10 +18,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class joinedFragment extends Fragment {
-    private static UserInformationAboutJoinedGroupsAdapter adapter;
+    private UserInformationAboutJoinedGroupsAdapter adapter;
     private RecyclerView recyclerView;
 
 
@@ -60,8 +62,9 @@ public class joinedFragment extends Fragment {
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                final Set<Group> tmpJoined = new HashSet<>();
                 final ArrayList<String> tempArray = new ArrayList<>();
-                final ArrayList<Group> newJoined = new ArrayList<>();
+//                final ArrayList<Group> newJoined = new ArrayList<>();
                 for(DataSnapshot d : dataSnapshot.getChildren()){
                     tempArray.add(d.getKey());
                 }
@@ -71,10 +74,11 @@ public class joinedFragment extends Fragment {
                         for(DataSnapshot child : dataSnapshot.getChildren()) {
                             if(tempArray.contains(child.getKey())) {
                                 Group g = child.getValue(Group.class);
-                                newJoined.add(g);
+                                tmpJoined.add(g);
+//                                newJoined.add(g);
                             }
                         }
-                        adapter = new UserInformationAboutJoinedGroupsAdapter(newJoined);
+                        adapter = new UserInformationAboutJoinedGroupsAdapter(new ArrayList<Group>(tmpJoined));
                         recyclerView.setAdapter(adapter);
                     }
 
