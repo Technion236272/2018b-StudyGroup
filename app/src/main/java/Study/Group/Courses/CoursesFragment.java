@@ -112,7 +112,7 @@ public class CoursesFragment extends Fragment {
             }
         });
 
-        database.child("Courses").addValueEventListener(new ValueEventListener() {
+        database.child("Courses").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 allCoursesList = new ArrayList<>();
