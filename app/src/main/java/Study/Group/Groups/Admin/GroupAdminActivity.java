@@ -22,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import Study.Group.R;
 import Study.Group.Utilities.User;
@@ -45,8 +47,8 @@ public class GroupAdminActivity extends AppCompatActivity {
         final String adminID = getIntent().getExtras().getString("adminID");
         final String groupName = getIntent().getExtras().getString("groupName");
 
-        final ArrayList<String> participants = new ArrayList<>();
-        final ArrayList<User> requests = new ArrayList<>();
+        final Set<String> participants = new HashSet<>();
+        final Set<User> requests = new HashSet<>();
 
         setTitle(groupName);
 
@@ -119,16 +121,12 @@ public class GroupAdminActivity extends AppCompatActivity {
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        String groupAdmin = database.child("Groups").child(groupID).child("adminID").getKey();
-                                        for(DataSnapshot child : dataSnapshot.getChildren())
-                                        {
-                                            String currentUser = child.getKey();
-                                            if (currentUser.equals(groupAdmin)) {
-                                                database.child("Users").child(groupAdmin).child("myGroups").child(groupID).removeValue();
+                                        for (DataSnapshot participant : dataSnapshot.getChildren()) {
+                                            if (participant.getKey().equals(adminID)) {
+                                                database.child("Users").child(participant.getKey()).child("myGroups").child(groupID).removeValue();
                                             }
-                                            database.child("Users").child(currentUser).child("Joined").child(groupID).removeValue();
-                                            database.child("Groups").child(groupID).child("participants")
-                                                    .child(currentUser).removeValue();
+                                            database.child("Users").child(participant.getKey()).child("Joined").child(groupID).removeValue();
+                                            //database.child("Groups").child(groupID).child("participants").child(participant.getKey()).removeValue();
 
                                         }
                                     }
@@ -147,8 +145,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                                         {
                                             String currentUser = child.getKey();
                                             database.child("Users").child(currentUser).child("Requests").child(groupID).removeValue();
-                                            database.child("Groups").child(groupID).child("Requests")
-                                                    .child(currentUser).removeValue();
+                                            //database.child("Groups").child(groupID).child("Requests").child(currentUser).removeValue();
                                         }
 
                                     }
@@ -159,7 +156,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                                     }
                                 });
                         database.child("Groups").child(groupID).removeValue();
-                        finish();
+                        //finish();
                     }
                 }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override
@@ -186,7 +183,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                     User userToAdd = new User(d.getKey().toString(),d.getValue().toString());
                     requests.add(userToAdd);
                 }
-                AdminRequestsAdapter requestsAdapter = new AdminRequestsAdapter(requests,groupID,numOfParticipants);
+                AdminRequestsAdapter requestsAdapter = new AdminRequestsAdapter(new ArrayList<User>(requests), groupID, numOfParticipants);
                 requestsRecycler.setAdapter(requestsAdapter);
 
             }
@@ -207,7 +204,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                     participants.add(d.getValue().toString());
                 }
 
-                AdminParticipantsAdapter participantAdapter= new AdminParticipantsAdapter(participants);
+                AdminParticipantsAdapter participantAdapter = new AdminParticipantsAdapter(new ArrayList<String>(participants));
                 participantsRecycler.setAdapter(participantAdapter);
             }
 
