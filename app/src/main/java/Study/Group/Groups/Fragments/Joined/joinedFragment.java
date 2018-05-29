@@ -63,6 +63,7 @@ public class joinedFragment extends Fragment {
         FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = mDataBase.getReference();
 
+
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -82,7 +83,7 @@ public class joinedFragment extends Fragment {
 //                                newJoined.add(g);
                             }
                         }
-                        adapter = new UserInformationAboutJoinedGroupsAdapter(new ArrayList<Group>(tmpJoined));
+                        adapter = new UserInformationAboutJoinedGroupsAdapter(new ArrayList<>(tmpJoined));
                         recyclerView.setAdapter(adapter);
                     }
 

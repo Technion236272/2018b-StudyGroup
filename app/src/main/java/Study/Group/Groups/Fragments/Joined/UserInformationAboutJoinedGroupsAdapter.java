@@ -1,8 +1,7 @@
 package Study.Group.Groups.Fragments.Joined;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import Study.Group.Groups.Admin.GroupAdminActivity;
+import Study.Group.Groups.Participant.GroupActivity;
 import Study.Group.R;
 import Study.Group.Utilities.Group;
 import Study.Group.Utilities.MyDatabaseUtil;
@@ -73,22 +74,45 @@ public class UserInformationAboutJoinedGroupsAdapter extends RecyclerView.Adapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(itemView.getContext());
-                    alertDialog.setTitle(subject.getText());
-                    alertDialog.setPositiveButton(R.string.leave_group, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            myRef.child("Users")
-                                    .child(Profile.getCurrentProfile().getId())
-                                    .child("Joined").child((data.get(getAdapterPosition()).getGroupID())).removeValue();
-                            myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
-                                    .child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
-                            myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
-                                    .child("currentNumOfPart").setValue((data.get(getAdapterPosition()).getCurrentNumOfPart()-1));
-//                                (data.get(getAdapterPosition()).getCurrentNumOfPart()-1)
-                            data.remove(getAdapterPosition());
-                            notifyDataSetChanged();
-                        }
-                    }).show();
+                    Group group = data.get(getAdapterPosition());
+                    if (group.getAdminID().equals(Profile.getCurrentProfile().getId())) {
+                        Intent adminGroup = new Intent(v.getContext(), GroupAdminActivity.class);
+                        adminGroup.putExtra("groupSubject", group.getSubject());
+                        adminGroup.putExtra("groupDate", group.getDate());
+                        adminGroup.putExtra("groupID", group.getGroupID());
+                        adminGroup.putExtra("groupLocation", group.getLocation());
+                        adminGroup.putExtra("numOfParticipants", group.getCurrentNumOfPart());
+                        adminGroup.putExtra("adminID", group.getAdminID());
+                        adminGroup.putExtra("groupName", group.getName());
+
+                        v.getContext().startActivity(adminGroup);
+                    } else {
+                        Intent userGroup = new Intent(v.getContext(), GroupActivity.class);
+                        userGroup.putExtra("groupSubject", group.getSubject());
+                        userGroup.putExtra("groupDate", group.getDate());
+                        userGroup.putExtra("groupID", group.getGroupID());
+                        userGroup.putExtra("groupLocation", group.getLocation());
+                        userGroup.putExtra("numOfParticipants", group.getCurrentNumOfPart());
+                        userGroup.putExtra("adminID", group.getAdminID());
+                        userGroup.putExtra("groupName", group.getName());
+                        v.getContext().startActivity(userGroup);
+                    }
+//                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(itemView.getContext());
+//                    alertDialog.setTitle(subject.getText());
+//                    alertDialog.setPositiveButton(R.string.leave_group, new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int id) {
+//                            myRef.child("Users")
+//                                    .child(Profile.getCurrentProfile().getId())
+//                                    .child("Joined").child((data.get(getAdapterPosition()).getGroupID())).removeValue();
+//                            myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
+//                                    .child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
+//                            myRef.child("Groups").child((data.get(getAdapterPosition()).getGroupID()))
+//                                    .child("currentNumOfPart").setValue((data.get(getAdapterPosition()).getCurrentNumOfPart()-1));
+////                                (data.get(getAdapterPosition()).getCurrentNumOfPart()-1)
+//                            data.remove(getAdapterPosition());
+//                            notifyDataSetChanged();
+//                        }
+//                    }).show();
                 }
             });
 
