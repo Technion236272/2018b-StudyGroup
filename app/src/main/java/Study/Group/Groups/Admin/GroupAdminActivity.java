@@ -119,12 +119,17 @@ public class GroupAdminActivity extends AppCompatActivity {
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
+                                        String groupAdmin = database.child("Groups").child(groupID).child("adminID").getKey();
                                         for(DataSnapshot child : dataSnapshot.getChildren())
                                         {
                                             String currentUser = child.getKey();
+                                            if (currentUser.equals(groupAdmin)) {
+                                                database.child("Users").child(groupAdmin).child("myGroups").child(groupID).removeValue();
+                                            }
                                             database.child("Users").child(currentUser).child("Joined").child(groupID).removeValue();
                                             database.child("Groups").child(groupID).child("participants")
                                                     .child(currentUser).removeValue();
+
                                         }
                                     }
 

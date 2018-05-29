@@ -46,7 +46,7 @@ public class Group {
         this.setLocation(location);
         this.maxNumOfPart = maxNumOfPart;
         this.currentNumOfPart = currentNumOfPart;
-        this.setAdminID(adminID);
+        this.adminID = adminID;
         this.groupID = groupID;
         this.participants = new HashMap<>();
         this.Requests = new HashMap<>();

@@ -242,7 +242,9 @@ public class CreateGroup extends AppCompatActivity {
         String key = myRef.child("Groups").push().getKey();
         Group newGroup = new Group(key,courseId, subject, date, location, numOfPart, current,
                 Profile.getCurrentProfile().getId());
+
         myRef.child("Groups").child(key).setValue(newGroup);
+        myRef.child("Groups").child(key).child("participants").child(Profile.getCurrentProfile().getId()).setValue(Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName());
 //        myRef.child("Groups").child(courseId + " - " + subject).setValue(newGroup);
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child("GroupID").setValue(key);
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child("GroupID").setValue(key);
