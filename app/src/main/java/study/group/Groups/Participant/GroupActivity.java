@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import study.group.R;
 
 public class GroupActivity extends AppCompatActivity {
-    static boolean isExist;
+//    static boolean isExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +32,7 @@ public class GroupActivity extends AppCompatActivity {
 
         final Context currentContext = this;
 
-        String subject = getIntent().getExtras().getString("groupSubject");
+        final String subject = getIntent().getExtras().getString("groupSubject");
         String date = getIntent().getExtras().getString("groupDate");
         String location = getIntent().getExtras().getString("groupLocation");
         final String groupID = getIntent().getExtras().getString("groupID");
@@ -44,12 +44,12 @@ public class GroupActivity extends AppCompatActivity {
         final String userID = Profile.getCurrentProfile().getId();
         final String userName = Profile.getCurrentProfile().getName();
         final Button joinRequest = (Button) findViewById(R.id.Request);
-        Button interestedButton = (Button) findViewById(R.id.Interested);
+        final Button interestedButton = (Button) findViewById(R.id.Interested);
 
         database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                isExist = false;
+                boolean isExist = false;
                 for (DataSnapshot d : dataSnapshot.getChildren())
                 {
                     if(d.getKey().equals(groupID))
@@ -85,28 +85,26 @@ public class GroupActivity extends AppCompatActivity {
                 database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        boolean isExist = false;
                         isExist = false;
                         for (DataSnapshot d : dataSnapshot.getChildren())
                         {
-                            if(d.getKey().equals(groupID))
-                            {
+                            if(d.getKey().equals(groupID)) {
                                 isExist = true;
+                                break;
                             }
                         }
-                        if(isExist == true)
-                        {
-                            joinRequest.setText("Request to join");
-                            joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                        if(isExist) {
                             database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
                             database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
+                            joinRequest.setText("Request to join");
+                            joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
-                        }
-                        else
-                        {
+                        } else {
+                            database.child("Users").child(userID).child("Requests").child(groupID).setValue(subject);
+                            database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
                             joinRequest.setText("Cancel Request");
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
-                            database.child("Users").child(userID).child("Requests").child(groupID).setValue(adminID);
-                            database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
                         }
                     }
 
@@ -149,11 +147,30 @@ public class GroupActivity extends AppCompatActivity {
                 final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                 final String userID = Profile.getCurrentProfile().getId();
 
-                database.child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                database.child("Users").child(userID).child("interested").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        database.child("Users").child(userID).child("interested")
-                                .child(groupID).setValue("");
+//                        database.child("Users").child(userID).child("interested")
+//                                .child(groupID).setValue("");
+
+                        boolean isExist = false;
+                        for (DataSnapshot d : dataSnapshot.getChildren())
+                        {
+                            if(d.getKey().equals(groupID)) {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if(isExist) {
+                            database.child("Users").child(userID).child("interested").child(groupID).removeValue();
+                            interestedButton.setText("Interested");
+                            interestedButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                        } else {
+                            database.child("Users").child(userID).child("interested").child(groupID).setValue(subject);
+                            interestedButton.setText("Uninterested");
+                            interestedButton.setBackgroundColor(getResources().getColor(R.color.Red));
+                        }
 
                     }
 
