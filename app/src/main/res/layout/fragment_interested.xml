@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="Study.Group.Groups.Fragments.Interested.InterestedFragment">
+    tools:context="study.group.Groups.Fragments.Interested.InterestedFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/interestedGroupsRecyclerView"

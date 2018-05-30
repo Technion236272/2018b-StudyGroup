@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="Study.Group.Courses.CoursesFragment">
+    tools:context="study.group.Courses.CoursesFragment">
         
         <android.support.v7.widget.RecyclerView
             android:id="@+id/favouriteCoursesRecyclerView"
