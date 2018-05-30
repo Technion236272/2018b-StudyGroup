@@ -44,7 +44,7 @@ public class GroupParticipantsAdapter extends RecyclerView.Adapter<GroupParticip
         userHolder(final View itemView) {
             super(itemView);
 
-            participant = itemView.findViewById(R.id.recyclerPaticipantsGroup);
+            participant = itemView.findViewById(R.id.participantInGroupRecycler);
         }
     }
 }

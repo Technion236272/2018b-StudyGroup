@@ -156,7 +156,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                                     }
                                 });
                         database.child("Groups").child(groupID).removeValue();
-                        //finish();
+                        finish();
                     }
                 }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override
