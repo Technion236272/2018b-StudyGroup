@@ -1,4 +1,5 @@
-package study.group.Groups.Fragments.Requests;
+package study.group.Groups.Fragments;
+
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -21,19 +22,23 @@ import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
 
-public class UserInformationAboutRequestedGroupsAdapter extends RecyclerView.Adapter<UserInformationAboutRequestedGroupsAdapter.InfoHolder> {
+/*
+ * GroupInformationAdapter.
+ * This adapter contains all the relevant groups to show according to the user movements.
+ */
+public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformationAdapter.InfoHolder> {
+
     private ArrayList<Group> data;
 
-    UserInformationAboutRequestedGroupsAdapter(ArrayList<Group> data) {
+    public GroupInformationAdapter(ArrayList<Group> data) {
         this.data = data;
     }
-
 
     @NonNull
     @Override
     public InfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_information_item, parent, false);
-        return new UserInformationAboutRequestedGroupsAdapter.InfoHolder(view);
+        return new InfoHolder(view);
     }
 
     @Override
@@ -61,7 +66,7 @@ public class UserInformationAboutRequestedGroupsAdapter extends RecyclerView.Ada
 
         InfoHolder(final View itemView) {
             super(itemView);
-            recyclerItem = itemView.findViewById(R.id.requestsRecyclerView);
+            recyclerItem = itemView.findViewById(R.id.interestedGroupsRecyclerView);
             subject = itemView.findViewById(R.id.groupSubjectInfo);
             idAndName = itemView.findViewById(R.id.groupIdAndName);
             date = itemView.findViewById(R.id.groupMeetingDate);
@@ -72,6 +77,10 @@ public class UserInformationAboutRequestedGroupsAdapter extends RecyclerView.Ada
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
             final DatabaseReference myRef = database.getReference();
 
+            /*
+             * On clickListener, if the user is the admin of the clicked group, the Admin activity will be started, otherwise,
+             * The participant activity will be started (not an admin).
+             */
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -103,5 +112,4 @@ public class UserInformationAboutRequestedGroupsAdapter extends RecyclerView.Ada
             });
         }
     }
-
 }

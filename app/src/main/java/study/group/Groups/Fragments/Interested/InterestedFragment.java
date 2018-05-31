@@ -21,12 +21,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import study.group.Groups.Fragments.GroupInformationAdapter;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
 
 public class InterestedFragment extends Fragment {
-    private UserInformationAboutInterestedGroupsAdapter adapter;
+    private GroupInformationAdapter adapter;
     private RecyclerView recyclerView;
 
 
@@ -76,7 +77,7 @@ public class InterestedFragment extends Fragment {
                                 tmpInterested.add(g);
                             }
                         }
-                        adapter = new UserInformationAboutInterestedGroupsAdapter(new ArrayList<Group>(tmpInterested));
+                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested));
                         recyclerView.setAdapter(adapter);
                     }
 
