@@ -46,7 +46,7 @@ public class GroupActivity extends AppCompatActivity {
         final Button joinRequest = (Button) findViewById(R.id.Request);
         final Button interestedButton = (Button) findViewById(R.id.Interested);
 
-        database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child("Users").child(userID).child("interested").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean isExist = false;
@@ -57,12 +57,36 @@ public class GroupActivity extends AppCompatActivity {
                         isExist = true;
                     }
                 }
-                if(isExist == true) {
-                    joinRequest.setText(R.string.cancel_request);
-                    joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
+                if (isExist) {
+                    interestedButton.setText(R.string.uninterested);
+                    interestedButton.setBackgroundColor(getResources().getColor(R.color.Red));
                 }
                 else
                 {
+                    interestedButton.setText(R.string.Interested);
+                    interestedButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isExist = false;
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    if (d.getKey().equals(groupID)) {
+                        isExist = true;
+                    }
+                }
+                if (isExist) {
+                    joinRequest.setText(R.string.cancel_request);
+                    joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
+                } else {
                     joinRequest.setText(R.string.request_to_join);
                     joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 }
@@ -97,13 +121,13 @@ public class GroupActivity extends AppCompatActivity {
                         if(isExist) {
                             database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
                             database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
-                            joinRequest.setText("Request to join");
+                            joinRequest.setText(R.string.request_to_join);
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
                         } else {
                             database.child("Users").child(userID).child("Requests").child(groupID).setValue(subject);
                             database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
-                            joinRequest.setText("Cancel Request");
+                            joinRequest.setText(R.string.cancel_join_request);
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
                         }
                     }
@@ -163,12 +187,12 @@ public class GroupActivity extends AppCompatActivity {
                         }
                         if(isExist) {
                             database.child("Users").child(userID).child("interested").child(groupID).removeValue();
-                            interestedButton.setText("Interested");
+                            interestedButton.setText(R.string.Interested);
                             interestedButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
                         } else {
                             database.child("Users").child(userID).child("interested").child(groupID).setValue(subject);
-                            interestedButton.setText("Uninterested");
+                            interestedButton.setText(R.string.uninterested);
                             interestedButton.setBackgroundColor(getResources().getColor(R.color.Red));
                         }
 

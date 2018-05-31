@@ -66,6 +66,8 @@ class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adm
                     User user = requests.get(getAdapterPosition());
                     database.child("Users").child(user.getToken()).
                             child("Requests").child(groupID).removeValue();
+                    database.child("Users").child(user.getToken()).
+                            child("interested").child(groupID).removeValue();
                     database.child("Groups").child(groupID).child("Requests").child(user.getToken()).removeValue();
 
                     database.child("Groups").child(groupID).child("participants")
@@ -74,9 +76,8 @@ class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adm
                     database.child("Users").child(user.getToken()).child("Joined").child(groupID).setValue("");
                     requests.remove(getAdapterPosition());
                     notifyDataSetChanged();
-                    CharSequence text = "Request accepted!";
 
-                    Toast.makeText(context,text,Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.request_accepted, Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -84,15 +85,13 @@ class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adm
                 @Override
                 public void onClick(View v) {
                     User user = requests.get(getAdapterPosition());
-                    database.child("Users").child(user.getToken()).
-                            child("Requests").child(groupID).removeValue();
+                    database.child("Users").child(user.getToken()).child("Requests").child(groupID).removeValue();
 
                     database.child("Groups").child(groupID).child("Requests").child(user.getToken()).removeValue();
                     requests.remove(getAdapterPosition());
                     notifyDataSetChanged();
-                    CharSequence text = "Request declined!";
 
-                    Toast.makeText(context,text,Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.request_declined, Toast.LENGTH_LONG).show();
                 }
             });
         }

@@ -67,7 +67,7 @@ public class InterestedFragment extends Fragment {
                     tempArray.add(d.getKey());
 //
                 }
-                myRef.child("Groups").addValueEventListener(new ValueEventListener() {
+                myRef.child("Groups").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for(DataSnapshot child : dataSnapshot.getChildren()) {

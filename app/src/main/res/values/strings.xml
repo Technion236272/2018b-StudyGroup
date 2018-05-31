@@ -51,4 +51,7 @@
     <string name="Yes">Yes</string>
     <string name="No">No</string>
     <string name="AreYouSure">Are you sure you want to delete the group?</string>
+    <string name="Interested">Interested</string>
+    <string name="request_declined">Request declined!</string>
+    <string name="request_accepted">Request accepted!</string>
 </resources>
