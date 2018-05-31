@@ -29,8 +29,10 @@ import study.group.Utilities.MyDatabaseUtil;
 public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformationAdapter.InfoHolder> {
 
     private ArrayList<Group> data;
+    private int fragment;
 
-    public GroupInformationAdapter(ArrayList<Group> data) {
+    public GroupInformationAdapter(ArrayList<Group> data, int fragment) {
+        this.fragment = fragment;
         this.data = data;
     }
 
@@ -66,7 +68,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
 
         InfoHolder(final View itemView) {
             super(itemView);
-            recyclerItem = itemView.findViewById(R.id.interestedGroupsRecyclerView);
+            recyclerItem = itemView.findViewById(fragment);
             subject = itemView.findViewById(R.id.groupSubjectInfo);
             idAndName = itemView.findViewById(R.id.groupIdAndName);
             date = itemView.findViewById(R.id.groupMeetingDate);

@@ -77,7 +77,7 @@ public class InterestedFragment extends Fragment {
                                 tmpInterested.add(g);
                             }
                         }
-                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested));
+                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested), R.id.interestedGroupsRecyclerView);
                         recyclerView.setAdapter(adapter);
                     }
 

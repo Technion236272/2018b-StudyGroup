@@ -47,8 +47,8 @@ public class CoursesFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_search, menu);
-        MenuItem item = menu.findItem(R.id.menuSearch);
+        inflater.inflate(R.menu.course_menu, menu);
+        MenuItem item = menu.findItem(R.id.search_course);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQuery(lastQuery, true);
         recyclerView.setAdapter(lastAdapter);
