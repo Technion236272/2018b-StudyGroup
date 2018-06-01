@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +74,9 @@ class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adm
                     database.child("Groups").child(groupID).child("participants")
                             .child(user.getToken()).setValue(user.getName());
                     database.child("Groups").child(groupID).child("currentNumOfPart").setValue(part);
-                    database.child("Users").child(user.getToken()).child("Joined").child(groupID).setValue("");
+               //     EditText subject = itemView.findViewById(R.id.subjectAdminEdit);
+                    database.child("Users").child(user.getToken()).child("Joined").child(groupID)
+                            .setValue("");
                     requests.remove(getAdapterPosition());
                     notifyDataSetChanged();
 
