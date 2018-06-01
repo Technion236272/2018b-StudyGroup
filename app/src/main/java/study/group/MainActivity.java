@@ -12,8 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +60,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        if(id == R.id.action_settings) {
+            Toast.makeText(this, "Settings will be available soon", Toast.LENGTH_LONG).show();
+        } else if(id == R.id.credits) {
+            Toast.makeText(this, "Credits will be available soon", Toast.LENGTH_LONG).show();
+        } else {
+            LoginManager.getInstance().logOut();
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public static class PlaceholderFragment extends Fragment {

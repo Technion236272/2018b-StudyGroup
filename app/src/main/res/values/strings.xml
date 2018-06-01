@@ -30,6 +30,8 @@
     <string name="Name">Name</string>
     <string name="numOfParticipants" id="numOfParticipants ">Number Of Participants</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="log_out">Log out</string>
+    <string name="credits">Credits</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="facebook_app_id">248931792334356</string>

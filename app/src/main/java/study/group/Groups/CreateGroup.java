@@ -244,7 +244,7 @@ public class CreateGroup extends AppCompatActivity {
                 Profile.getCurrentProfile().getId());
 
         myRef.child("Groups").child(key).setValue(newGroup);
-        myRef.child("Groups").child(key).child("participants").child(Profile.getCurrentProfile().getId()).setValue(Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName());
+        myRef.child("Groups").child(key).child("participants").child(Profile.getCurrentProfile().getId()).setValue(Profile.getCurrentProfile().getFirstName() + " " + Profile.getCurrentProfile().getLastName());
 //        myRef.child("Groups").child(courseId + " - " + subject).setValue(newGroup);
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(key).setValue(subject);
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(key).setValue(subject);
