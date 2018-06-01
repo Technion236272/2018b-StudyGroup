@@ -30,7 +30,7 @@ import study.group.Utilities.MyDatabaseUtil;
 public class joinedFragment extends Fragment {
     private GroupInformationAdapter adapter;
     private RecyclerView recyclerView;
-
+    private ArrayList<Group> groups;
 
     public joinedFragment() {
         // Required empty public constructor
@@ -52,9 +52,9 @@ public class joinedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view =  inflater.inflate(R.layout.fragment_requests, container, false);
+        final View view = inflater.inflate(R.layout.fragment_joined, container, false);
 
-        recyclerView = view.findViewById(R.id.requestsRecyclerView);
+        recyclerView = view.findViewById(R.id.joinedGroupsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
@@ -84,7 +84,9 @@ public class joinedFragment extends Fragment {
 //                                newJoined.add(g);
                             }
                         }
-                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined));
+                        groups = new ArrayList<>(tmpJoined);
+                        adapter = new GroupInformationAdapter(groups, R.id.joinedGroupsRecyclerView);
+//                        lastAdapter = new GroupInformationAdapter(groups,R.id.joinedGroupsRecyclerView);
                         recyclerView.setAdapter(adapter);
                     }
 

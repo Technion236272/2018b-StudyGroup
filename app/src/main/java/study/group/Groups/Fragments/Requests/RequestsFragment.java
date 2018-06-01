@@ -80,7 +80,7 @@ public class RequestsFragment extends Fragment {
 //                                newInterested.add(g);
                             }
                         }
-                        adapter = new GroupInformationAdapter(new ArrayList<Group>(tmpInterested));
+                        adapter = new GroupInformationAdapter(new ArrayList<Group>(tmpInterested), R.id.requestsRecyclerView);
                         recyclerView.setAdapter(adapter);
                     }
 
