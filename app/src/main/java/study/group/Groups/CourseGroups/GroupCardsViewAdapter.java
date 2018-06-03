@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 import study.group.Groups.Admin.GroupAdminActivity;
+import study.group.Groups.Chat;
 import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
 import study.group.Utilities.Group;
@@ -59,7 +60,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
             public void onClick(View v) {
                 if(group.getAdminID().equals(Profile.getCurrentProfile().getId()))
                 {
-                    Intent adminGroup = new Intent(v.getContext(), GroupAdminActivity.class);
+                    Intent adminGroup = new Intent(v.getContext(), Chat.class);
                     adminGroup.putExtra("groupSubject",group.getSubject());
                     adminGroup.putExtra("groupDate",group.getDate());
                     adminGroup.putExtra("groupID",group.getGroupID());
@@ -72,7 +73,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                 }
                 else
                 {
-                    Intent userGroup = new Intent(v.getContext(), GroupActivity.class);
+                    Intent userGroup = new Intent(v.getContext(), Chat.class);
                     userGroup.putExtra("groupSubject",group.getSubject());
                     userGroup.putExtra("groupDate",group.getDate());
                     userGroup.putExtra("groupID",group.getGroupID());
