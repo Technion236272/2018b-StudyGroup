@@ -1,6 +1,7 @@
 package study.group;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import study.group.Courses.CoursesFragment;
 import study.group.Groups.Fragments.GroupsFragment;
+import study.group.Utilities.Credits;
 import study.group.Utilities.MyDatabaseUtil;
 import study.group.Utilities.User;
 
@@ -64,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
         if(id == R.id.action_settings) {
             Toast.makeText(this, "Settings will be available soon", Toast.LENGTH_LONG).show();
         } else if(id == R.id.credits) {
-            Toast.makeText(this, "Credits will be available soon", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, Credits.class);
+            startActivity(intent);
         } else {
             LoginManager.getInstance().logOut();
             finish();

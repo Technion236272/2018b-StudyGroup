@@ -60,4 +60,6 @@
 
     <string name="notification_join_title">StudyGroup - Join request</string>
     <string name="notification_wish_to_join"> is wish to join </string>
+    <string name="credits_to">Credits to:</string>
+    <string name="free_pik">http://www.freepik.com</string>
 </resources>
