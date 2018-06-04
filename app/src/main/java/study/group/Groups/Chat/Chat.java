@@ -76,6 +76,7 @@ public class Chat extends AppCompatActivity {
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("user").setValue(Profile.getCurrentProfile().getId());
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue(message);
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
+                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("name").setValue(Profile.getCurrentProfile().getName());
                 messageToSend.setText("");
 
             }
@@ -117,13 +118,19 @@ public class Chat extends AppCompatActivity {
     {
 
 
-        if(ds.getChildrenCount() == 3) {
-            User currentUser = new User(Profile.getCurrentProfile().getId(),Profile.getCurrentProfile().getName(),
-                    Profile.getCurrentProfile().getProfilePictureUri(30,30));
+        if(ds.getChildrenCount() == 4) {
+            //TODO: fix things here
 
             HashMap<String, Object> data = (HashMap<String, Object>) ds.getValue();
             HashMap<String,Long> timeStamp = (HashMap<String, Long>)data.get("TimeStamp");
+
+            String userID = (String) data.get("user");
             String chatMessage;
+
+            String userName = (String) data.get("name");
+            User currentUser = new User(userID,userName,
+                    Profile.getCurrentProfile().getProfilePictureUri(30,30));
+
             long time =timeStamp.get("time");
             chatMessage = (String)data.get("Message");
             UserMessage um = new UserMessage(chatMessage,currentUser,time);
