@@ -1,7 +1,5 @@
 package study.group.Groups;
 
-import android.os.Message;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,9 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.HashMap;
 
 import study.group.R;
 
@@ -92,15 +88,14 @@ public class Chat extends AppCompatActivity {
     //a helper function that creates the TextView that holds all of the group chat
     private void append_chat_conversation(DataSnapshot ds)
     {
-        Iterator<DataSnapshot> i = ds.getChildren().iterator();
+        HashMap<String, String> data = (HashMap<String, String>) ds.getValue();
         String chatMessage, userName;
-        while(i.hasNext())
-        {
-            DataSnapshot d = i.next();
-            userName = (String)(d.child("user").getValue());
-            chatMessage = (String)(d.child("Message")).getValue();
+        userName = data.get("user");
+        chatMessage = data.get("Message");
+        if(ds.getChildrenCount() == 2) {
             Messages.append(userName + " : " + chatMessage + "\n");
         }
+
     }
 
 
