@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,11 +29,15 @@ import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
 
+import android.widget.SearchView;
 
 public class RequestsFragment extends Fragment {
     private GroupInformationAdapter adapter;
     private RecyclerView recyclerView;
+    private ArrayList<Group> requests;
 
+    private static String lastQuery = "";
+    private static GroupInformationAdapter lastAdapter;
 
     public RequestsFragment() {
         // Required empty public constructor
@@ -43,20 +50,49 @@ public class RequestsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {}
+        setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View view =  inflater.inflate(R.layout.fragment_requests, container, false);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.joined_menu, menu);
+        MenuItem item = menu.findItem(R.id.search_joined);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQuery(lastQuery, true);
+        recyclerView.setAdapter(lastAdapter);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ArrayList<Group> filteredList = new ArrayList<>();
+                for (Group g: requests) {
+                    if (g.getName().toLowerCase().contains(newText.toLowerCase())) {
+                        filteredList.add(g);
+                    }
+                }
+                lastQuery = newText;
+                lastAdapter.filterList(filteredList);
+                recyclerView.setAdapter(lastAdapter);
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_requests, container, false);
+        requests = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.requestsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
-
-    //    final ArrayList<String> temp = new ArrayList<>();
 
         FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = mDataBase.getReference();
@@ -64,9 +100,9 @@ public class RequestsFragment extends Fragment {
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Requests").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                requests = new ArrayList<>();
                 final ArrayList<String> tempArray = new ArrayList<>();
-//                final ArrayList<Study.Study.Study.Study.Study.Group> newInterested = new ArrayList<>();
-                final Set<Group> tmpInterested = new HashSet<>();
+                final Set<Group> tmpRequests = new HashSet<>();
                 for(DataSnapshot d : dataSnapshot.getChildren()){
                     tempArray.add(d.getKey());
                 }
@@ -76,11 +112,12 @@ public class RequestsFragment extends Fragment {
                         for(DataSnapshot child : dataSnapshot.getChildren()) {
                             if(tempArray.contains(child.getKey())) {
                                 Group g = child.getValue(Group.class);
-                                tmpInterested.add(g);
-//                                newInterested.add(g);
+                                tmpRequests.add(g);
+                                requests.add(g);
                             }
                         }
-                        adapter = new GroupInformationAdapter(new ArrayList<Group>(tmpInterested), R.id.requestsRecyclerView);
+                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
+                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
                         recyclerView.setAdapter(adapter);
                     }
 
@@ -97,6 +134,7 @@ public class RequestsFragment extends Fragment {
         });
         return view;
     }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

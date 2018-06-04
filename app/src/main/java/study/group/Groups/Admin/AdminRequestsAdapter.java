@@ -30,7 +30,7 @@ class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adm
     {
         requests = new ArrayList<>(arr);
         groupID = g;
-        part = numOfPart;
+        part = numOfPart + 1;
     }
 
     @NonNull

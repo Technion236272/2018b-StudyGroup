@@ -58,6 +58,11 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
         return data.size();
     }
 
+    public void filterList(ArrayList<Group> filteredList) {
+        this.data = new ArrayList<>(filteredList);
+        notifyDataSetChanged();
+    }
+
     class InfoHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerItem;
         TextView subject;

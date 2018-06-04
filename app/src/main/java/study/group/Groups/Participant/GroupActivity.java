@@ -1,7 +1,14 @@
 package study.group.Groups.Participant;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -19,9 +27,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import study.group.MainActivity;
 import study.group.R;
 
 public class GroupActivity extends AppCompatActivity {
+
+    private static final int NOTIFICATION_ID = 101;
+    public static final String CHANNEL_ID = "my_notification_channel";
+    public static final String TEXT_REPLY = "text_reply";
+
 //    static boolean isExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,12 +137,18 @@ public class GroupActivity extends AppCompatActivity {
                             database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
                             joinRequest.setText(R.string.request_to_join);
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                            Toast.makeText(currentContext, "Join request canceled", Toast.LENGTH_SHORT).show();
 
                         } else {
                             database.child("Users").child(userID).child("Requests").child(groupID).setValue(subject);
                             database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
                             joinRequest.setText(R.string.cancel_join_request);
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
+                            Toast.makeText(currentContext, "Join request has been sent", Toast.LENGTH_SHORT).show();
+
+                     //       String notificationTitle = "StudyGroup - Join request";
+                     //       String notificationContent = userName + " is wish to join " + subject;
+                     //       setNotification(notificationTitle, notificationContent);
                         }
                     }
 
@@ -206,6 +226,48 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    public void setNotification(String title, String content) {
+        createNotificationChannel();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        mBuilder.setSmallIcon(R.drawable.ic_logo);
+        mBuilder.setAutoCancel(true);
+        mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        mBuilder.setWhen(System.currentTimeMillis());
+        mBuilder.setContentTitle(title);
+        mBuilder.setContentText(content);
+//        mBuilder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+  //      mBuilder.setContentIntent(pendingIntent);
+
+        //      mBuilder.addAction(R.drawable.ic_logo, "Yes", pendingIntent);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
     }
+
+    public void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Personal Notifications";
+            String description = "Include all the personal notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+
+            notificationChannel.setDescription(description);
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);     // TODO : check it out
+        }
+    }
+
 }
