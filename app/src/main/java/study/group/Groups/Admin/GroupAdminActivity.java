@@ -3,6 +3,7 @@ package study.group.Groups.Admin;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -180,7 +182,7 @@ public class GroupAdminActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot d : dataSnapshot.getChildren())
                 {
-                    User userToAdd = new User(d.getKey().toString(),d.getValue().toString());
+                    User userToAdd = new User(d.getKey().toString(),d.getValue().toString(), Profile.getCurrentProfile().getProfilePictureUri(30,30));
                     requests.add(userToAdd);
                 }
                 AdminRequestsAdapter requestsAdapter = new AdminRequestsAdapter(new ArrayList<User>(requests), groupID, numOfParticipants);

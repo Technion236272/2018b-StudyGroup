@@ -1,6 +1,7 @@
 package study.group;
 
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void insertUserInfoToDatabase() {
-        MyDatabaseUtil my = new MyDatabaseUtil();
+        final MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference();
@@ -154,8 +155,19 @@ public class MainActivity extends AppCompatActivity {
                 if(!flag) {
                     String fullName = Profile.getCurrentProfile().getFirstName() + " " +
                             Profile.getCurrentProfile().getLastName();
-                    User user = new User(Profile.getCurrentProfile().getId(), fullName);
-                    myRef.child("Users").child(Profile.getCurrentProfile().getId()).setValue(user);
+                    class UserData{
+                        String token, name,profile;
+
+                        UserData(String t,String n,Uri p){
+                            token = t;
+                            name = n;
+                            profile = p.getPath();
+                        }
+                    }
+                    UserData user = new UserData(Profile.getCurrentProfile().getId(), fullName,Profile.getCurrentProfile().getProfilePictureUri(30,30));
+
+                    myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("name").setValue(user.name);
+                    myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("profile").setValue(user.profile);
                 }
 
             }

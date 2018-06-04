@@ -1,5 +1,8 @@
 package study.group.Utilities;
 
+import android.net.Uri;
+
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +16,9 @@ public class User {
     private ArrayList<Group> requests;
     private ArrayList<Group> groupAdmin;
     private ArrayList<Group> FavoriteCourses;
+    private Uri profileUrl;
 
-    public User(String token, String name) {
+    public User(String token, String name, Uri profileUrl) {
         this.setToken(token);
         this.setName(name);
         this.setJoined(new ArrayList<Group>());
@@ -22,18 +26,21 @@ public class User {
         this.setRequests(new ArrayList<Group>());
         this.setGroupAdmin(new ArrayList<Group>());
         this.setFavoriteCourses(new ArrayList<Group>());
+        this.setProfileUrl(profileUrl);
+
     }
 
-    public User(String token, String name, ArrayList<Group> joined, Map<String, String> interested,
-                ArrayList<Group> requests, ArrayList<Group> groupAdmin, ArrayList<Group> favoriteCourses) {
-        this.setToken(token);
-        this.setName(name);
-        this.setJoined(joined);
-        this.setInterested(interested);
-        this.setRequests(requests);
-        this.setGroupAdmin(groupAdmin);
-        this.setFavoriteCourses(favoriteCourses);
-    }
+//    public User(String token, String name, ArrayList<Group> joined, Map<String, String> interested,
+//                ArrayList<Group> requests, ArrayList<Group> groupAdmin, ArrayList<Group> favoriteCourses, Uri profilePicture) {
+//        this.setToken(token);
+//        this.setName(name);
+//        this.setJoined(joined);
+//        this.setInterested(interested);
+//        this.setRequests(requests);
+//        this.setGroupAdmin(groupAdmin);
+//        this.setFavoriteCourses(favoriteCourses);
+//        this.setProfileUrl(profilePicture);
+//    }
 
     public String getToken() {
         return token;
@@ -89,5 +96,13 @@ public class User {
 
     public void setFavoriteCourses(ArrayList<Group> favoriteCourses) {
         this.FavoriteCourses = favoriteCourses;
+    }
+
+    public Uri getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(Uri profileUrl) {
+        this.profileUrl = profileUrl;
     }
 }

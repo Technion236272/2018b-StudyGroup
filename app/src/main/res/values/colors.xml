@@ -6,4 +6,6 @@
     <color name="tabColor">#7b8d93</color>
     <color name="Red">#ffcc0000</color>
     <color name="textColor">#FFFFFF</color>
+    <color name="sender_chat_color">#6666ff</color>
+    <color name="receiver_chat_color">#eaeae1</color>
 </resources>

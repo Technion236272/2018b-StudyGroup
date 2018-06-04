@@ -15,9 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import study.group.Groups.Admin.GroupAdminActivity;
-import study.group.Groups.Chat;
-import study.group.Groups.Participant.GroupActivity;
+import study.group.Groups.Chat.Chat;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
