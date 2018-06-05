@@ -8,15 +8,14 @@ public class Course implements Comparable<Course> {
     private String id;
     private String name;
     private boolean isFav;
-    public int indexInAdapter, indexInFilteredAdapter;
+    private int technionIndex;
 
-    public Course(String faculty, String id, String name, boolean fav, int idx) {
+    public Course(String faculty, String id, String name, int technionIndex) {
         this.setFaculty(faculty);
         this.setId(id);
         this.setName(name);
-        this.isFav = fav;
-        indexInAdapter = idx;
-        indexInFilteredAdapter = idx;
+        this.isFav = false;
+        this.technionIndex = technionIndex;
     }
 
 
@@ -71,5 +70,9 @@ public class Course implements Comparable<Course> {
                 return 1;
             }
         }
+    }
+
+    public int getTechnionIndex() {
+        return technionIndex;
     }
 }

@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import study.group.Groups.CourseGroups.GroupsInACourseActivity;
 import study.group.R;
@@ -25,29 +26,33 @@ import study.group.Utilities.Course;
 public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecyclerViewAdapter.CourseHolder> {
 
     CourseRecyclerViewAdapter oA;
-    private int favouritesCount, filteredCount;
-    private ArrayList<Course> filteredList;
+    ArrayList<Course> favouriteCourses, otherCourses;
+    TreeMap<String, Course> favouritesMap, othersMap;
 
-    CourseRecyclerViewAdapter(ArrayList<Course> filteredList, int originalFavouritesCount, int filteredCount, CourseRecyclerViewAdapter otherAdapter) {
-        this.filteredList = new ArrayList<>(filteredList);
-        this.favouritesCount = originalFavouritesCount;
-        this.filteredCount = filteredCount;
-        oA= otherAdapter;
+    CourseRecyclerViewAdapter(TreeMap<String, Course> favouritesMap, TreeMap<String, Course> othersMap, CourseRecyclerViewAdapter o) {
+        favouriteCourses = new ArrayList<>(favouritesMap.values());
+        otherCourses = new ArrayList<>(othersMap.values());
+        this.favouritesMap = favouritesMap;
+        this.othersMap = othersMap;
+        oA = o;
     }
-
 
 
     @NonNull
     @Override
     public CourseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_course_item, parent, false);
         return new CourseHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CourseHolder holder, int key) {
-        Course c = filteredList.get(key);
+        @NonNull Course c;
+        if (key < favouriteCourses.size()) {
+            c = favouriteCourses.get(key);
+        } else {
+            c = otherCourses.get(key - favouriteCourses.size());
+        }
 
         String sb = c.getId() + " - " + c.getName();
         holder.courseName.setText(sb);
@@ -57,14 +62,17 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
 
     @Override
     public int getItemCount() {
-        return filteredList.size();
+        return favouriteCourses.size() + otherCourses.size();
     }
 
-    public void filterList(ArrayList<Course> filteredList,int filteredCount) {
-        this.filteredCount = filteredCount;
-        this.filteredList = new ArrayList<>(filteredList);
+    public void filter(TreeMap<String, Course> filteredFavouritesMap, TreeMap<String, Course> filteredOthersMap) {
+        favouritesMap = filteredFavouritesMap;
+        othersMap = filteredOthersMap;
+        favouriteCourses = new ArrayList<>(favouritesMap.values());
+        otherCourses = new ArrayList<>(othersMap.values());
         notifyDataSetChanged();
     }
+
 
     class CourseHolder extends RecyclerView.ViewHolder {
         TextView courseName;
@@ -77,10 +85,17 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-
                     Intent intent = new Intent(itemView.getContext().getApplicationContext(), GroupsInACourseActivity.class);
-                    intent.putExtra("courseId", filteredList.get(position).getId());
-                    intent.putExtra("courseName", filteredList.get(position).getName());
+                    @NonNull String id, name;
+                    if (position < favouriteCourses.size()) {
+                        id = favouriteCourses.get(position).getId();
+                        name = favouriteCourses.get(position).getName();
+                    } else {
+                        id = otherCourses.get(position - favouriteCourses.size()).getId();
+                        name = otherCourses.get(position - favouriteCourses.size()).getName();
+                    }
+                    intent.putExtra("courseId", id);
+                    intent.putExtra("courseName", name);
                     itemView.getContext().startActivity(intent);
                 }
             });
@@ -90,61 +105,88 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
                 @Override
                 public void onClick(View v) {
                     final int position = getAdapterPosition();
+                    @NonNull final String courseID, courseName;
+                    if (position < favouriteCourses.size()) {
+                        courseID = favouriteCourses.get(position).getId();
+                        courseName = favouriteCourses.get(position).getName();
+                    } else {
+                        courseID = otherCourses.get(position - favouriteCourses.size()).getId();
+                        courseName = otherCourses.get(position - favouriteCourses.size()).getName();
+                    }
+                    /*
+                     * The user has clicked on followed course, we need to update the course to unfollowed course.
+                     * Listener for updating the course (un)follow state.
+                     */
                     myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("FavouriteCourses").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            for(DataSnapshot d : dataSnapshot.getChildren()){
-                                if(((String)d.getValue()).equals(filteredList.get(position).getId())){
+
+                            for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                if ((d.getValue()).equals(courseID)) {
                                     d.getRef().removeValue();
-                                    Course c = filteredList.get(position);
+                                    favouriteCourses.remove(position);
+                                    Course c = favouritesMap.remove(courseID);
                                     c.setFav(false);
-                                    if(oA == null){
-                                        if(favouritesCount > 0) {
-                                            favouritesCount--;
-                                        }
-                                        filteredList.remove(position);
-                                        filteredList.add((c.indexInAdapter>favouritesCount)?c.indexInAdapter:favouritesCount,c);
-                                    }else{
-                                        if(favouritesCount>0) {
-                                            favouritesCount--;
-                                        }if(filteredCount>0) {
-                                            filteredCount--;
-                                        }
-                                        filteredList.remove(position);
-                                        filteredList.add((c.indexInFilteredAdapter>filteredCount)?c.indexInFilteredAdapter:filteredCount,c);
-                                        oA.filteredList.remove(c.indexInAdapter);
-                                        oA.filteredList.add((c.indexInAdapter>favouritesCount)?c.indexInAdapter:favouritesCount,c);
-                                    }
+                                    othersMap.put(courseID, c);
+                                    otherCourses = new ArrayList<>(othersMap.values());
                                     CheckBox cc = itemView.findViewById(R.id.favouriteButton);
                                     cc.setChecked(false);
                                     notifyDataSetChanged();
+                                    if (oA != null) {
+                                        updateBaseRecyclerOnUnfollowingCourse();
+                                    }
                                     return;
                                 }
                             }
+                            /*
+                             * The user has clicked on unfollowed course, we need to update the course to followed course.
+                             * Listener for updating the course (un)follow state.
+                             */
                             myRef.child("Users").child(Profile.getCurrentProfile().getId()).
-                                    child("FavouriteCourses").child(filteredList.get(position).getName()).setValue(filteredList.get(position).getId());
-                            Course c = filteredList.get(position);
+                                    child("FavouriteCourses").child(courseName).setValue(courseID);
+                            Course c = othersMap.remove(courseID);
+                            otherCourses.remove(c);
                             c.setFav(true);
-                            if(oA == null){
-
-                                filteredList.remove(position);
-                                filteredList.add((c.indexInAdapter>favouritesCount)?favouritesCount:c.indexInAdapter,c);
-                                favouritesCount++;
-//                                favouritesCount++;
-                            }else{
-
-                                filteredList.remove(position);
-                                filteredList.add((c.indexInFilteredAdapter>filteredCount)?filteredCount:c.indexInFilteredAdapter,c);
-                                oA.filteredList.remove(c.indexInAdapter);
-                                oA.filteredList.add((c.indexInAdapter>favouritesCount)?favouritesCount:c.indexInAdapter,c);
-                                favouritesCount++;
-                                filteredCount++;
-                            }
-
+                            favouritesMap.put(courseID, c);
+                            favouriteCourses = new ArrayList<>(favouritesMap.values());
                             CheckBox cc = itemView.findViewById(R.id.favouriteButton);
                             cc.setChecked(true);
                             notifyDataSetChanged();
+                            if (oA != null) {
+                                updateBaseRecyclerOnFollowingCourse();
+                            }
+                        }
 
+                        /*
+                         * Once the user searches for a course, and updates its unfollow state,
+                         * the course needs to be updated also in the main adapter.
+                         */
+                        private void updateBaseRecyclerOnUnfollowingCourse() {
+                            for (Course unfavCourse : otherCourses) {
+                                if (oA.favouritesMap.containsKey(unfavCourse.getId())) {
+                                    oA.favouritesMap.remove(unfavCourse.getId());
+                                    oA.othersMap.put(unfavCourse.getId(), unfavCourse);
+                                }
+                            }
+                            oA.otherCourses = new ArrayList<>(oA.othersMap.values());
+                            oA.favouriteCourses = new ArrayList<>(oA.favouritesMap.values());
+                            oA.notifyDataSetChanged();
+                        }
+
+                        /*
+                         * Once the user searches for a course, and updates its follow state,
+                         * the course needs to be updated also in the main adapter.
+                         */
+                        private void updateBaseRecyclerOnFollowingCourse() {
+                            for (Course favCourse : favouriteCourses) {
+                                if (!oA.favouritesMap.containsKey(favCourse.getId())) {
+                                    oA.favouritesMap.put(favCourse.getId(), favCourse);
+                                    oA.othersMap.remove(favCourse.getId());
+                                }
+                            }
+                            oA.otherCourses = new ArrayList<>(oA.othersMap.values());
+                            oA.favouriteCourses = new ArrayList<>(oA.favouritesMap.values());
+                            oA.notifyDataSetChanged();
                         }
 
                         @Override
@@ -157,6 +199,8 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
             });
 
         }
+
     }
+
 
 }

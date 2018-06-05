@@ -21,22 +21,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import study.group.R;
 import study.group.Utilities.Course;
 import study.group.Utilities.MyDatabaseUtil;
 
 public class CoursesFragment extends Fragment {
-    private ArrayList<Course> allCoursesList;
-    private static CourseRecyclerViewAdapter adapter;
-    private static String lastQuery = "";
-    private static CourseRecyclerViewAdapter lastAdapter;
+    ArrayList<Course> favouriteCourses, otherCourses;
+    TreeMap<String, Course> favouriteCoursesMap, otherCoursesMap;
+    CourseRecyclerViewAdapter coursesAdapter, searchAdapter;
     private RecyclerView recyclerView;
-    private static int favouritesCount = 0;
-    private RecyclerView favouriteRecyclerView;
+    private String lastQuery = "";
 
     public CoursesFragment() {
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,12 +48,13 @@ public class CoursesFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.course_menu, menu);
-        MenuItem item = menu.findItem(R.id.search_course);
+        inflater.inflate(R.menu.search_main, menu);
+        MenuItem item = menu.findItem(R.id.search_main);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQuery(lastQuery, true);
-        recyclerView.setAdapter(lastAdapter);
+        recyclerView.setAdapter(searchAdapter);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -60,25 +62,35 @@ public class CoursesFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                ArrayList<Course> filteredList = new ArrayList<>();
-                int i = 0;
-                int favouritesCountInFilteredAdapter = 0;
-                for (Course c: allCoursesList) {
+            //    Toast.makeText(getContext(), "Courses", Toast.LENGTH_SHORT).show();
+                TreeMap<String, Course> filteredFavouritesMap = new TreeMap<>();
+                TreeMap<String, Course> filteredOthersMap = new TreeMap<>();
+                for (Map.Entry<String, Course> entry : favouriteCoursesMap.entrySet()) {
+                    Course c = entry.getValue();
                     StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
-                    if (sb.toString().toLowerCase().contains(newText.toLowerCase())) {
-                        if (c.isFav()) {
-                            filteredList.add(0, c);
-                        } else {
-                            filteredList.add(c);
-                        }
-                        c.indexInFilteredAdapter = i++;
+                    if (sb.toString().toLowerCase().contains(newText.toLowerCase()) || c.getFaculty().contains(newText)) {
+                        filteredFavouritesMap.put(c.getId(), c);
+                    }
+                }
+                for (Map.Entry<String, Course> entry : otherCoursesMap.entrySet()) {
+                    Course c = entry.getValue();
+                    StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
+                    if (sb.toString().toLowerCase().contains(newText.toLowerCase()) ||
+                            c.getFaculty().contains(newText)) {
+                        filteredOthersMap.put(c.getId(), c);
                     }
                 }
 
                 lastQuery = newText;
-                lastAdapter.filterList(filteredList,favouritesCountInFilteredAdapter);
-                recyclerView.setAdapter(lastAdapter);
+                searchAdapter.filter(filteredFavouritesMap, filteredOthersMap);
+                recyclerView.setAdapter(searchAdapter);
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                recyclerView.setAdapter(coursesAdapter);
                 return false;
             }
         });
@@ -88,14 +100,20 @@ public class CoursesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
-        allCoursesList =  new ArrayList<>();
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
-
-        final ArrayList<String> temp = new ArrayList<>();
-
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        final ArrayList<String> userFavouriteCourses = new ArrayList<>();
+        favouriteCourses = new ArrayList<>();
+        otherCourses = new ArrayList<>();
+        otherCoursesMap = new TreeMap<>();
+        favouriteCoursesMap = new TreeMap<>();
+        recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        /*
+         * search for the user favourite courses, in order to show them as favourites in the recyclerView.
+         */
         database.child("Users").child(Profile.getCurrentProfile().getId())
                 .child("FavouriteCourses").addValueEventListener(new ValueEventListener() {
             @Override
@@ -103,7 +121,7 @@ public class CoursesFragment extends Fragment {
                 String current;
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
                     current = (String)child.getValue();
-                    temp.add(current);
+                    userFavouriteCourses.add(current);
                 }
             }
 
@@ -112,40 +130,48 @@ public class CoursesFragment extends Fragment {
             }
         });
 
+        /*
+         * Load all the courses from the DB onto a recyclerView. followed courses will be displayed first.
+         */
         database.child("Courses").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                allCoursesList = new ArrayList<>();
-                int i = 0, j = temp.size();
-                recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                favouriteRecyclerView = view.findViewById(R.id.favouriteCoursesRecyclerView);
-                favouriteRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                for(DataSnapshot child : dataSnapshot.getChildren()) {
-                    String faculty = (String)child.child("faculty").getValue();
-                    String id = (String)child.child("id").getValue();
-                    String name = (String)child.child("name").getValue();
+                database.child("Courses").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        int technionIndex = 0;
+                        for (DataSnapshot course : dataSnapshot.getChildren()) {
+                            String faculty = (String) course.child("faculty").getValue();
+                            String id = (String) course.child("id").getValue();
+                            String name = (String) course.child("name").getValue();
+                            Course c = new Course(faculty, id, name, technionIndex++);
+                            if (userFavouriteCourses.contains(id)) {
+                                c.setFav(true);
+                                favouriteCourses.add(c);
+                                favouriteCoursesMap.put(id, c);
+                            } else {
+                                otherCourses.add(c);
+                                otherCoursesMap.put(id, c);
 
-                    if(temp.contains(id)) {
-                        allCoursesList.add(0,new Course(faculty,id,name,true,i++));
-                        favouritesCount++;
-                    } else {
-                        allCoursesList.add(new Course(faculty,id,name,false,i++));
+                            }
+                        }
+                        coursesAdapter = new CourseRecyclerViewAdapter(favouriteCoursesMap, otherCoursesMap, null);
+                        searchAdapter = new CourseRecyclerViewAdapter(favouriteCoursesMap, otherCoursesMap, coursesAdapter);
+                        recyclerView.setAdapter(coursesAdapter);
                     }
-                }
 
-                adapter = new CourseRecyclerViewAdapter(allCoursesList, favouritesCount, favouritesCount, null);
-                lastAdapter = new CourseRecyclerViewAdapter(allCoursesList, favouritesCount, favouritesCount, adapter);
-                recyclerView.setAdapter(adapter);
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
+                    }
+                });
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
         return view;
     }
-
-
 }
