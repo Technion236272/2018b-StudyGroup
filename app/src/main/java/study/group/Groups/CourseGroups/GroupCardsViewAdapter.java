@@ -10,12 +10,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.Profile;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import study.group.Groups.Chat.Chat;
+import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
@@ -24,6 +28,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
 
     private ArrayList<Group> groups;
     private String id;
+    private boolean isJoined = false;
     GroupCardsViewAdapter(ArrayList<Group> groups) {
         this.groups = groups;
     }
@@ -45,7 +50,6 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         MyDatabaseUtil.getDatabase();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference();
-        boolean isJoined = false;
         final Group group = groups.get(i);
         viewHolder.subject.setText(group.getSubject());
         viewHolder.date.setText(group.getDate());
@@ -56,6 +60,24 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         viewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren())
+                        {
+                            if(ds.getValue().toString().equals(group.getGroupID()))
+                            {
+                                isJoined = true;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 if(group.getAdminID().equals(Profile.getCurrentProfile().getId()))
                 {
                     Intent adminGroup = new Intent(v.getContext(), Chat.class);
@@ -71,7 +93,16 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                 }
                 else
                 {
-                    Intent userGroup = new Intent(v.getContext(), Chat.class);
+                    Intent userGroup;
+                    if(isJoined)
+                    {
+                        userGroup = new Intent(v.getContext(), Chat.class);
+                    }
+                    else
+                    {
+                        userGroup = new Intent(v.getContext(), GroupActivity.class);
+                    }
+
                     userGroup.putExtra("groupSubject",group.getSubject());
                     userGroup.putExtra("groupDate",group.getDate());
                     userGroup.putExtra("groupID",group.getGroupID());

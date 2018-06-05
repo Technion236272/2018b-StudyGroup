@@ -108,8 +108,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
             nameText = (TextView) itemView.findViewById(R.id.text_message_name);
-            //TODO
-            //profileImage = (ImageView) itemView.findViewById(R.id.image_message_profile);
+            profileImage = (ImageView) itemView.findViewById(R.id.image_message_profile);
         }
 
         void bind(UserMessage message) {
@@ -121,9 +120,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             nameText.setText(message.getSender().getName());
 
             // Insert the profile image from the URL into the ImageView.
-            //TODO
-            //Picasso.get().load(message.getSender().getProfileUrl()).into(profileImage);
-            //Utils.displayRoundImageFromUrl(myContext, message.getSender().getProfileUrl(), profileImage);
+            Picasso.with(myContext).load(message.getSender().getProfileUrl()).into(profileImage);
+
         }
     }
 }

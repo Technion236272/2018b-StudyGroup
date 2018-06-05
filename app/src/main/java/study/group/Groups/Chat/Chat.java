@@ -1,5 +1,6 @@
 package study.group.Groups.Chat;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -77,6 +78,8 @@ public class Chat extends AppCompatActivity {
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue(message);
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("name").setValue(Profile.getCurrentProfile().getName());
+                String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
+                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("profilePicture").setValue(pc);
                 messageToSend.setText("");
 
             }
@@ -118,7 +121,7 @@ public class Chat extends AppCompatActivity {
     {
 
 
-        if(ds.getChildrenCount() == 4) {
+        if(ds.getChildrenCount() == 5) {
             //TODO: fix things here
 
             HashMap<String, Object> data = (HashMap<String, Object>) ds.getValue();
@@ -128,8 +131,9 @@ public class Chat extends AppCompatActivity {
             String chatMessage;
 
             String userName = (String) data.get("name");
+            Uri profilePic = Uri.parse((String)data.get("profilePicture"));
             User currentUser = new User(userID,userName,
-                    Profile.getCurrentProfile().getProfilePictureUri(30,30));
+                    profilePic);
 
             long time =timeStamp.get("time");
             chatMessage = (String)data.get("Message");
