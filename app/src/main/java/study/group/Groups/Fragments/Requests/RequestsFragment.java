@@ -30,6 +30,7 @@ import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
 
 import android.widget.SearchView;
+import android.widget.Toast;
 
 public class RequestsFragment extends Fragment {
     private GroupInformationAdapter adapter;
@@ -40,7 +41,6 @@ public class RequestsFragment extends Fragment {
     private static GroupInformationAdapter lastAdapter;
 
     public RequestsFragment() {
-        // Required empty public constructor
     }
 
     public static RequestsFragment newInstance() {
@@ -51,13 +51,13 @@ public class RequestsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {}
-        setHasOptionsMenu(true);
+    //    setHasOptionsMenu(true);      --> fucking problem!??  why?!?
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.joined_menu, menu);
-        MenuItem item = menu.findItem(R.id.search_joined);
+        inflater.inflate(R.menu.search_main, menu);
+        MenuItem item = menu.findItem(R.id.search_main);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQuery(lastQuery, true);
         recyclerView.setAdapter(lastAdapter);
@@ -69,6 +69,7 @@ public class RequestsFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+            //    Toast.makeText(getContext(), "Requests", Toast.LENGTH_SHORT).show();
                 ArrayList<Group> filteredList = new ArrayList<>();
                 for (Group g: requests) {
                     if (g.getName().toLowerCase().contains(newText.toLowerCase())) {
@@ -87,6 +88,7 @@ public class RequestsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_requests, container, false);
+
         requests = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.requestsRecyclerView);
@@ -134,7 +136,6 @@ public class RequestsFragment extends Fragment {
         });
         return view;
     }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

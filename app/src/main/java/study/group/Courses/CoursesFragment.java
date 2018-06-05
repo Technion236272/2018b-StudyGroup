@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -47,8 +48,8 @@ public class CoursesFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.course_menu, menu);
-        MenuItem item = menu.findItem(R.id.search_course);
+        inflater.inflate(R.menu.search_main, menu);
+        MenuItem item = menu.findItem(R.id.search_main);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQuery(lastQuery, true);
         recyclerView.setAdapter(lastAdapter);
@@ -60,7 +61,7 @@ public class CoursesFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+            //    Toast.makeText(getContext(), "Courses", Toast.LENGTH_SHORT).show();
                 ArrayList<Course> filteredList = new ArrayList<>();
                 int i = 0;
                 int favouritesCountInFilteredAdapter = 0;

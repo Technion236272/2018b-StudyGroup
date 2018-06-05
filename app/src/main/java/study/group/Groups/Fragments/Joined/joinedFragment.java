@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +31,6 @@ import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
 
-
 public class joinedFragment extends Fragment {
     private GroupInformationAdapter adapter;
     private RecyclerView recyclerView;
@@ -40,7 +40,6 @@ public class joinedFragment extends Fragment {
     private static GroupInformationAdapter lastAdapter;
 
     public joinedFragment() {
-        // Required empty public constructor
     }
 
     public static joinedFragment newInstance() {
@@ -56,8 +55,8 @@ public class joinedFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.joined_menu, menu);
-        MenuItem item = menu.findItem(R.id.search_joined);
+        inflater.inflate(R.menu.search_main, menu);
+        MenuItem item = menu.findItem(R.id.search_main);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQuery(lastQuery, true);
         recyclerView.setAdapter(lastAdapter);
@@ -69,6 +68,7 @@ public class joinedFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+            //    Toast.makeText(getContext(), "Joined", Toast.LENGTH_SHORT).show();
                 ArrayList<Group> filteredList = new ArrayList<>();
                 for (Group g: groups) {
                     if (g.getName().toLowerCase().contains(newText.toLowerCase())) {
@@ -85,9 +85,7 @@ public class joinedFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_joined, container, false);
         groups = new ArrayList<>();
 

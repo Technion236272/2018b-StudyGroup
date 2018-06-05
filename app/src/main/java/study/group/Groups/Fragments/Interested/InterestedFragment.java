@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -38,9 +39,7 @@ public class InterestedFragment extends Fragment {
     private static String lastQuery = "";
     private static GroupInformationAdapter lastAdapter;
 
-
     public InterestedFragment() {
-        // Required empty public constructor
     }
 
     public static InterestedFragment newInstance() {
@@ -56,8 +55,8 @@ public class InterestedFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.interested_menu, menu);
-        MenuItem item = menu.findItem(R.id.search_interested);
+        inflater.inflate(R.menu.search_main, menu);
+        MenuItem item = menu.findItem(R.id.search_main);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQuery(lastQuery, true);
         recyclerView.setAdapter(lastAdapter);
@@ -69,6 +68,7 @@ public class InterestedFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+            //    Toast.makeText(getContext(), "Interested", Toast.LENGTH_SHORT).show();
                 ArrayList<Group> filteredList = new ArrayList<>();
                 for (Group g: allInterestedList) {
                     if (g.getName().toLowerCase().contains(newText.toLowerCase())) {
@@ -87,6 +87,7 @@ public class InterestedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_interested, container, false);
+
         allInterestedList = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.interestedGroupsRecyclerView);
