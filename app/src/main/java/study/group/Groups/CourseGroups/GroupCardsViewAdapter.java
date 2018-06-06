@@ -1,6 +1,8 @@
 package study.group.Groups.CourseGroups;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import study.group.Groups.Chat.Chat;
 import study.group.Groups.Participant.GroupActivity;
@@ -29,6 +32,8 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     private ArrayList<Group> groups;
     private String id;
     private boolean isJoined = false;
+    private Resources resources;
+
     GroupCardsViewAdapter(ArrayList<Group> groups) {
         this.groups = groups;
     }
@@ -37,6 +42,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_group_item, viewGroup, false);
+        resources = v.getResources();
 
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
@@ -53,7 +59,25 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         final Group group = groups.get(i);
         viewHolder.subject.setText(group.getSubject());
         viewHolder.date.setText(group.getDate());
-        viewHolder.userState.setText(R.string.admin);
+
+        String userStatus = getUserStatus(group);
+        viewHolder.userState.setText(userStatus);
+
+        switch (userStatus) {
+            case "Admin":  viewHolder.userState.setBackgroundColor(resources.getColor(R.color.colorPrimary));
+                break;
+            case "Joined": viewHolder.userState.setBackgroundColor(resources.getColor(R.color.colorPrimaryDark));
+                break;
+            case "Requested": viewHolder.userState.setBackgroundColor(resources.getColor(R.color.any_color));
+                break;
+            case "Interested": viewHolder.userState.setBackgroundColor(resources.getColor(R.color.tabColor));
+                break;
+            default: viewHolder.userState.setBackgroundColor(resources.getColor(R.color.receiver_chat_color));
+                break;
+        }
+
+
+
         String sb = String.valueOf(group.getCurrentNumOfPart()) + "/" + String.valueOf(group.getmaxNumOfPart());
         viewHolder.numOfPart.setText(sb);
 
@@ -128,6 +152,31 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+    private String getUserStatus(Group group) {
+        final String userID= Profile.getCurrentProfile().getId();
+
+        if(group.getAdminID().equals(userID)) {
+
+            return "Admin";
+        }
+        if(group.getParticipants() != null) {
+            if(group.getParticipants().containsKey(userID)) {
+                return "Joined";
+            }
+        }
+        if(group.getRequests() != null) {
+            if(group.getRequests().containsKey(userID)) {
+                return "Requested";
+            }
+        }
+        if(group.getInterested() != null) {
+            if(group.getInterested().containsKey(userID)) {
+                return "Interested";
+            }
+        }
+        return "Empty";
+    }
+
     static class GroupViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView subject;
@@ -147,8 +196,5 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         }
     }
 
-    void something() {
-
-    }
 
 }

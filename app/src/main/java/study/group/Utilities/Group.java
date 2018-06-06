@@ -4,7 +4,7 @@ package study.group.Utilities;
 import java.util.HashMap;
 
 public class Group {
- //   protected String faculty;
+    //   protected String faculty;
     private String name;
     private String id;
     private String subject;
@@ -14,13 +14,15 @@ public class Group {
     private int currentNumOfPart;
     private String adminID;
     private String groupID;
-    private HashMap<String,String> Requests, participants;
+    private HashMap<String,String> Requests;
+    private HashMap<String,String> participants;
+    private HashMap<String,String> interested;
 //    protected ArrayList<User> users;
 
     Group() {}
 
     public Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
-                 int currentNumOfPart, String adminID, HashMap<String,String> Requests, HashMap<String,String> participants) {
+                 int currentNumOfPart, String adminID, HashMap<String,String> Requests, HashMap<String,String> participants, HashMap<String,String> interested) {
         //     this.faculty = faculty;
         this.name = id + "-" + subject;
         this.id = id;
@@ -33,12 +35,13 @@ public class Group {
         this.groupID = groupID;
         this.participants = Requests;
         this.Requests = participants;
+        this.interested = interested;
 //        this.users = users;
     }
 
     public Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
                  int currentNumOfPart, String adminID) {
-   //     this.faculty = faculty;
+        //     this.faculty = faculty;
         this.name = id + "-" + subject;
         this.id = id;
         this.subject = subject;
@@ -156,5 +159,13 @@ public class Group {
             return false;
         }
         return other instanceof Group && this.getGroupID().equals(((Group)other).getGroupID());
+    }
+
+    public HashMap<String, String> getInterested() {
+        return interested;
+    }
+
+    public void setInterested(HashMap<String, String> interested) {
+        this.interested = interested;
     }
 }

@@ -36,7 +36,7 @@ public class GroupActivity extends AppCompatActivity {
     public static final String CHANNEL_ID = "my_notification_channel";
     public static final String TEXT_REPLY = "text_reply";
 
-//    static boolean isExist;
+    //    static boolean isExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,9 +146,9 @@ public class GroupActivity extends AppCompatActivity {
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
                             Toast.makeText(currentContext, "Join request has been sent", Toast.LENGTH_SHORT).show();
 
-                     //       String notificationTitle = "StudyGroup - Join request";
-                     //       String notificationContent = userName + " is wish to join " + subject;
-                     //       setNotification(notificationTitle, notificationContent);
+                            //       String notificationTitle = "StudyGroup - Join request";
+                            //       String notificationContent = userName + " is wish to join " + subject;
+                            //       setNotification(notificationTitle, notificationContent);
                         }
                     }
 
@@ -207,11 +207,13 @@ public class GroupActivity extends AppCompatActivity {
                         }
                         if(isExist) {
                             database.child("Users").child(userID).child("interested").child(groupID).removeValue();
+                            database.child("Groups").child(groupID).child("interested").child(userID).removeValue();
                             interestedButton.setText(R.string.Interested);
                             interestedButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
                         } else {
                             database.child("Users").child(userID).child("interested").child(groupID).setValue(subject);
+                            database.child("Groups").child(groupID).child("interested").child(userID).setValue(userName);
                             interestedButton.setText(R.string.uninterested);
                             interestedButton.setBackgroundColor(getResources().getColor(R.color.Red));
                         }
@@ -246,7 +248,7 @@ public class GroupActivity extends AppCompatActivity {
         mBuilder.setContentTitle(title);
         mBuilder.setContentText(content);
 //        mBuilder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-  //      mBuilder.setContentIntent(pendingIntent);
+        //      mBuilder.setContentIntent(pendingIntent);
 
         //      mBuilder.addAction(R.drawable.ic_logo, "Yes", pendingIntent);
 
