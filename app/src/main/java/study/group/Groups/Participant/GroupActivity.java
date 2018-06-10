@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import study.group.Groups.Chat.Chat;
 import study.group.MainActivity;
@@ -137,6 +138,28 @@ public class GroupActivity extends AppCompatActivity {
                         if(isExist) {
                             database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
                             database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
+
+                            String RequestKey;
+                            database.child("Groups").child(groupID).child("Chat").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                                    {
+                                        if(ds.child("Type").getValue().equals("Request")&&
+                                                ds.child("User").equals(Profile.getCurrentProfile().getId()))
+                                        {
+                                            database.child("Groups").child(groupID).child("Chat").child(ds.toString()).removeValue();
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
                             joinRequest.setText(R.string.request_to_join);
                             interestedButton.setVisibility(View.VISIBLE);
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -145,8 +168,20 @@ public class GroupActivity extends AppCompatActivity {
                         } else {
                             interestedButton.setEnabled(true);
                             interestedButton.setVisibility(View.GONE);
+
                             database.child("Users").child(userID).child("Requests").child(groupID).setValue(subject);
                             database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
+
+                            String key = database.child("Groups").child(groupID).child("Chat").push().getKey();
+                            database.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
+                            database.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
+                            database.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
+                            database.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(Profile.getCurrentProfile().getName());
+                            String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
+                            database.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
+                            database.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("Request");
+                            database.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
+
                             joinRequest.setText(R.string.cancel_join_request);
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
                             Toast.makeText(currentContext, "Join request has been sent", Toast.LENGTH_SHORT).show();
@@ -162,6 +197,8 @@ public class GroupActivity extends AppCompatActivity {
 
                     }
                 });
+
+
             }
         });
 

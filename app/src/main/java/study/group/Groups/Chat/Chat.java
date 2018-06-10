@@ -44,6 +44,8 @@ public class Chat extends AppCompatActivity {
         //local variables
         final String groupID = getIntent().getExtras().getString("groupID");
         final String groupName = getIntent().getExtras().getString("groupName");
+        final String adminID = getIntent().getExtras().getString("adminID");
+
 
         setTitle(groupName);
 
@@ -78,12 +80,14 @@ public class Chat extends AppCompatActivity {
                 //getting the content of the message to send
                 //adding the message to the database:
                 //fist we enter the username and the the message
-                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("user").setValue(Profile.getCurrentProfile().getId());
+                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue(message);
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
-                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("name").setValue(Profile.getCurrentProfile().getName());
+                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(Profile.getCurrentProfile().getName());
                 String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
-                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("profilePicture").setValue(pc);
+                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
+                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("Message");
+                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
                 messageToSend.setText("");
 
             }
@@ -127,22 +131,25 @@ public class Chat extends AppCompatActivity {
     {
 
 
-        if(ds.getChildrenCount() == 5) {
+        if(ds.getChildrenCount() == 7) {
 
             HashMap<String, Object> data = (HashMap<String, Object>) ds.getValue();
             HashMap<String,Long> timeStamp = (HashMap<String, Long>)data.get("TimeStamp");
 
-            String userID = (String) data.get("user");
+            String userID = (String) data.get("User");
             String chatMessage;
 
-            String userName = (String) data.get("name");
-            Uri profilePic = Uri.parse((String)data.get("profilePicture"));
+            String userName = (String) data.get("Name");
+            Uri profilePic = Uri.parse((String)data.get("ProfilePicture"));
             User currentUser = new User(userID,userName,
                     profilePic);
 
+            String Type = (String) data.get("Type");
+            String AdminID = (String) data.get("GroupAdminID");
+
             long time =timeStamp.get("time");
             chatMessage = (String)data.get("Message");
-            UserMessage um = new UserMessage(chatMessage,currentUser,time);
+            UserMessage um = new UserMessage(chatMessage,currentUser,time,Type,AdminID);
             messages.add(um);
             mMessageAdapter.notifyDataSetChanged();
         }

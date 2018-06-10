@@ -33,6 +33,7 @@
     <string name="log_out">Log out</string>
     <string name="credits">Credits</string>
     <string name="Send">Send</string>
+    <string name="RequestMessage"> has sent a join request</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="facebook_app_id">248931792334356</string>

@@ -7,6 +7,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import study.group.R;
 public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private static final int VIEW_TYPE_REQUEST = 3;
 
     private Context myContext;
     private List<UserMessage> MessageList;
@@ -38,14 +40,21 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         UserMessage message = (UserMessage) MessageList.get(position);
-
-        if (message.getSender().getToken().equals(Profile.getCurrentProfile().getId())) {
-            // If the current user is the sender of the message
-            return VIEW_TYPE_MESSAGE_SENT;
-        } else {
-            // If some other user sent the message
-            return VIEW_TYPE_MESSAGE_RECEIVED;
+        if(message.getType().equals("Request"))
+        {
+            return VIEW_TYPE_REQUEST;
         }
+        else
+        {
+            if (message.getSender().getToken().equals(Profile.getCurrentProfile().getId())) {
+                // If the current user is the sender of the message
+                return VIEW_TYPE_MESSAGE_SENT;
+            } else {
+                // If some other user sent the message
+                return VIEW_TYPE_MESSAGE_RECEIVED;
+            }
+        }
+
     }
 
     // Inflates the appropriate layout according to the ViewType.
@@ -57,11 +66,24 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.sender_message, parent, false);
             return new SentMessageHolder(view);
-        } else if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
-            view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recieved_message, parent, false);
-            return new ReceivedMessageHolder(view);
         }
+        else
+        {
+            if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.recieved_message, parent, false);
+                return new ReceivedMessageHolder(view);
+            }
+            else
+            {
+                if (viewType == VIEW_TYPE_REQUEST) {
+                    view = LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.request_message, parent, false);
+                    return new RequestMessageHolder(view);
+                }
+            }
+        }
+
 
         return null;
     }
@@ -77,6 +99,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 ((ReceivedMessageHolder) holder).bind(message);
+                break;
+            case VIEW_TYPE_REQUEST:
+                ((RequestMessageHolder) holder).bind(message);
+
         }
     }
 
@@ -125,5 +151,28 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
 
         }
+    }
+
+    private class RequestMessageHolder extends RecyclerView.ViewHolder {
+        TextView messageText;
+        Button acceptButton, rejectButton;
+
+        RequestMessageHolder(View itemView) {
+            super(itemView);
+            messageText = (TextView) itemView.findViewById(R.id.RequestMessage);
+            acceptButton = (Button) itemView.findViewById(R.id.RequestAcceptButton);
+            rejectButton = (Button) itemView.findViewById(R.id.RequestRejectButton);
+        }
+
+        void bind(UserMessage message) {
+            messageText.setText(message.getSender().getName() + " has requested to join a group!");
+            String groupAdmin = message.getAdminID();
+            if(!groupAdmin.equals(Profile.getCurrentProfile().getId()))
+            {
+                acceptButton.setClickable(false);
+                rejectButton.setClickable(false);
+            }
+        }
+        //TODO: set onClick
     }
 }
