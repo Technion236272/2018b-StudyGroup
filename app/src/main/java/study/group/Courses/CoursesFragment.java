@@ -1,5 +1,7 @@
 package study.group.Courses;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,7 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -31,6 +39,9 @@ import study.group.Utilities.MyDatabaseUtil;
 public class CoursesFragment extends Fragment {
     ArrayList<Course> favouriteCourses, otherCourses;
     TreeMap<String, Course> favouriteCoursesMap, otherCoursesMap;
+    TreeMap<String, Course> lastFavouriteCoursesMap, lastOtherCoursesMap;
+    Spinner facultiesSpinner;
+
     CourseRecyclerViewAdapter coursesAdapter, searchAdapter;
     private RecyclerView recyclerView;
     private String lastQuery = "";
@@ -46,6 +57,32 @@ public class CoursesFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    /*
+     * A method for filtering by faculty. The user can choose a faculty from a faculties spinner,
+     * as a result, he will get a list of the chosen faculty courses.
+     */
+    public void filterByFaculty(String faculty) {
+
+        TreeMap<String, Course> filteredFavouritesMap = new TreeMap<>();
+        TreeMap<String, Course> filteredOthersMap = new TreeMap<>();
+        for (Map.Entry<String, Course> entry : favouriteCoursesMap.entrySet()) {
+            Course c = entry.getValue();
+            if (c.getFaculty().contains(faculty)) {
+                filteredFavouritesMap.put(c.getId(), c);
+            }
+        }
+        for (Map.Entry<String, Course> entry : otherCoursesMap.entrySet()) {
+            Course c = entry.getValue();
+            if (c.getFaculty().contains(faculty)) {
+                filteredOthersMap.put(c.getId(), c);
+            }
+        }
+        lastFavouriteCoursesMap = filteredFavouritesMap;
+        lastOtherCoursesMap = filteredOthersMap;
+        searchAdapter.filter(filteredFavouritesMap, filteredOthersMap);
+        recyclerView.setAdapter(searchAdapter);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search_main, menu);
@@ -55,6 +92,7 @@ public class CoursesFragment extends Fragment {
         recyclerView.setAdapter(searchAdapter);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -62,17 +100,16 @@ public class CoursesFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-            //    Toast.makeText(getContext(), "Courses", Toast.LENGTH_SHORT).show();
                 TreeMap<String, Course> filteredFavouritesMap = new TreeMap<>();
                 TreeMap<String, Course> filteredOthersMap = new TreeMap<>();
-                for (Map.Entry<String, Course> entry : favouriteCoursesMap.entrySet()) {
+                for (Map.Entry<String, Course> entry : lastFavouriteCoursesMap.entrySet()) {
                     Course c = entry.getValue();
                     StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
                     if (sb.toString().toLowerCase().contains(newText.toLowerCase()) || c.getFaculty().contains(newText)) {
                         filteredFavouritesMap.put(c.getId(), c);
                     }
                 }
-                for (Map.Entry<String, Course> entry : otherCoursesMap.entrySet()) {
+                for (Map.Entry<String, Course> entry : lastOtherCoursesMap.entrySet()) {
                     Course c = entry.getValue();
                     StringBuilder sb = new StringBuilder(c.getId()).append(" - ").append(c.getName());
                     if (sb.toString().toLowerCase().contains(newText.toLowerCase()) ||
@@ -100,6 +137,7 @@ public class CoursesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
+        final Context currentContext = getContext();
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -108,8 +146,56 @@ public class CoursesFragment extends Fragment {
         otherCourses = new ArrayList<>();
         otherCoursesMap = new TreeMap<>();
         favouriteCoursesMap = new TreeMap<>();
+        facultiesSpinner = view.findViewById(R.id.faculties_spinner);
         recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        final String[] faculties = new String[]{"כל הקורסים", "מדעי המחשב", "הנדסת חשמל", "הנדסת מכונות", "פיזיקה", "מתמטיקה",
+                "ביולוגיה", "כימיה", "הנדסה אזרחית וסביבתית", "הנדסת תעשייה וניהול", "הנדסה כימית", "הנדסה ביורפואית",
+                "הנדסת ביוטכנולוגיה ומזון", "רפואה", "אנרגיה", "ארכיטקטורה ובינוי ערים", "הנדסת אווירונאוטיקה וחלל",
+                "לימודים הוניסטיים ואמנויות", "ננומדעים וננוטכנולוגיה", "חינוך למדע וטכנולוגיה", "חינוך גופני"};
+        final List<String> facultiesList = new ArrayList<>(Arrays.asList(faculties));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(currentContext, android.R.layout.simple_spinner_item, facultiesList) {
+            @Override
+            public boolean isEnabled(int position) {
+                return true;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        facultiesSpinner.setAdapter(adapter);
+        /*
+         * Filter by Faculty Spinner.
+         * Courses will be filtered by the chosen faculty.
+         */
+        facultiesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    lastFavouriteCoursesMap = favouriteCoursesMap;
+                    lastOtherCoursesMap = otherCoursesMap;
+                    recyclerView.setAdapter(coursesAdapter);
+                } else {
+                    filterByFaculty(facultiesList.get(position));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         /*
          * search for the user favourite courses, in order to show them as favourites in the recyclerView.
@@ -155,6 +241,8 @@ public class CoursesFragment extends Fragment {
 
                             }
                         }
+                        lastFavouriteCoursesMap = favouriteCoursesMap;
+                        lastOtherCoursesMap = otherCoursesMap;
                         coursesAdapter = new CourseRecyclerViewAdapter(favouriteCoursesMap, otherCoursesMap, null);
                         searchAdapter = new CourseRecyclerViewAdapter(favouriteCoursesMap, otherCoursesMap, coursesAdapter);
                         recyclerView.setAdapter(coursesAdapter);

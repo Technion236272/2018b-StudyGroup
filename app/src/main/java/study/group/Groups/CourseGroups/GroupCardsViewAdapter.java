@@ -2,7 +2,6 @@ package study.group.Groups.CourseGroups;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -19,10 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import study.group.Groups.Chat.Chat;
-import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
@@ -124,7 +121,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                     }
                     else
                     {
-                        userGroup = new Intent(v.getContext(), GroupActivity.class);
+                        userGroup = new Intent(v.getContext(), Chat.class);
                     }
 
                     userGroup.putExtra("groupSubject",group.getSubject());
@@ -195,6 +192,4 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
 
         }
     }
-
-
 }
