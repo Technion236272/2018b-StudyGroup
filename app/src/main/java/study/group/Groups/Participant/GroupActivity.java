@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import study.group.Groups.Chat.Chat;
 import study.group.MainActivity;
 import study.group.R;
 
@@ -35,7 +36,7 @@ public class GroupActivity extends AppCompatActivity {
     private static final int NOTIFICATION_ID = 101;
     public static final String CHANNEL_ID = "my_notification_channel";
     public static final String TEXT_REPLY = "text_reply";
-
+    final Context currentContext = this;
     //    static boolean isExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +45,9 @@ public class GroupActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        final Context currentContext = this;
-
         final String subject = getIntent().getExtras().getString("groupSubject");
-        String date = getIntent().getExtras().getString("groupDate");
-        String location = getIntent().getExtras().getString("groupLocation");
+        final String date = getIntent().getExtras().getString("groupDate");
+        final String location = getIntent().getExtras().getString("groupLocation");
         final String groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
         final String adminID = getIntent().getExtras().getString("adminID");
@@ -60,6 +59,7 @@ public class GroupActivity extends AppCompatActivity {
         final Button joinRequest = (Button) findViewById(R.id.Request);
         final Button interestedButton = (Button) findViewById(R.id.Interested);
 
+        //In case the user is interested in a coursse
         database.child("Users").child(userID).child("interested").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -88,6 +88,7 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
 
+        //in case the user sends a request to a course
         database.child("Users").child(userID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -117,6 +118,7 @@ public class GroupActivity extends AppCompatActivity {
         TextView locationTV = (TextView)findViewById(R.id.LocationInGroupContent);
         TextView currentNumOfParticipants = (TextView)findViewById(R.id.groupParticipants);
 
+        //The listener of the join requets button
         joinRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,10 +138,13 @@ public class GroupActivity extends AppCompatActivity {
                             database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
                             database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
                             joinRequest.setText(R.string.request_to_join);
+                            interestedButton.setVisibility(View.VISIBLE);
                             joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                             Toast.makeText(currentContext, "Join request canceled", Toast.LENGTH_SHORT).show();
 
                         } else {
+                            interestedButton.setEnabled(true);
+                            interestedButton.setVisibility(View.GONE);
                             database.child("Users").child(userID).child("Requests").child(groupID).setValue(subject);
                             database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
                             joinRequest.setText(R.string.cancel_join_request);
@@ -163,18 +168,40 @@ public class GroupActivity extends AppCompatActivity {
         dateTV.setText(date);
         subjectTV.setText(subject);
         locationTV.setText(location);
-        currentNumOfParticipants.setText(String.valueOf(numOfParticipants) + " Participants");
+        currentNumOfParticipants.setText(String.valueOf(numOfParticipants) + " Participants:");
 
         final ArrayList<String> participants = new ArrayList<>();
 
-        database.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+        //the DB listener of the group participants.
+        database.child("Groups").child(groupID).child("participants").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecyclerView participantsRecycler = (RecyclerView)findViewById(R.id.recyclerPaticipantsGroup);
                 participantsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
+                boolean flag = false;
                 for (DataSnapshot d : dataSnapshot.getChildren()) {
                     participants.add(d.getValue().toString());
+                    if(d.getKey().equals(Profile.getCurrentProfile().getId()))
+                    {
+                        flag = true;
+                        break;
+                    }
                 }
+
+                if(flag == true)
+                {
+                    Intent chatActivity;
+                    chatActivity = new Intent(currentContext, Chat.class);
+                    chatActivity.putExtra("groupSubject",subject);
+                    chatActivity.putExtra("groupDate",date);
+                    chatActivity.putExtra("groupID",groupID);
+                    chatActivity.putExtra("groupLocation",location);
+                    chatActivity.putExtra("numOfParticipants",numOfParticipants);
+                    chatActivity.putExtra("adminID",adminID);
+                    chatActivity.putExtra("groupName",getIntent().getExtras().getString("groupName"));
+                    currentContext.startActivity(chatActivity);
+                }
+
                 GroupParticipantsAdapter participantsAdapter = new GroupParticipantsAdapter(participants);
                 participantsRecycler.setAdapter(participantsAdapter);
             }

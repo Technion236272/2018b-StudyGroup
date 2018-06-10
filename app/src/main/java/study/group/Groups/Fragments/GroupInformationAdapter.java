@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
+import study.group.Groups.Chat.Chat;
 import com.facebook.Profile;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -104,7 +104,16 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
 
                         v.getContext().startActivity(adminGroup);
                     } else {
-                        Intent userGroup = new Intent(v.getContext(), GroupActivity.class);
+                        Intent userGroup;
+                        if(group.getParticipants().keySet().contains(Profile.getCurrentProfile().getId()))
+                        {
+                            userGroup = new Intent(v.getContext(), Chat.class);
+                        }
+                        else
+                        {
+                            userGroup = new Intent(v.getContext(), GroupActivity.class);
+                        }
+
                         userGroup.putExtra("groupSubject", group.getSubject());
                         userGroup.putExtra("groupDate", group.getDate());
                         userGroup.putExtra("groupID", group.getGroupID());

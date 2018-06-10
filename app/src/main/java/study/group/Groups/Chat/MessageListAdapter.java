@@ -112,6 +112,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
 
         void bind(UserMessage message) {
+            Picasso.with(myContext).load(message.getSender().getProfileUrl()).into(profileImage);
+
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
@@ -120,7 +122,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             nameText.setText(message.getSender().getName());
 
             // Insert the profile image from the URL into the ImageView.
-            Picasso.with(myContext).load(message.getSender().getProfileUrl()).into(profileImage);
+
 
         }
     }

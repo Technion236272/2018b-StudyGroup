@@ -64,14 +64,18 @@ public class Chat extends AppCompatActivity {
         lay.setStackFromEnd(true);
         mMessageRecycler.setLayoutManager(lay);
 
-
         Send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //generate a random key for the new message
+                String message = messageToSend.getText().toString();
+                if(message.length() == 0)
+                {
+                    return;
+                }
+
                 String key = dataBase.child("Groups").child(groupID).child("Chat").push().getKey();
                 //getting the content of the message to send
-                String message = messageToSend.getText().toString();
                 //adding the message to the database:
                 //fist we enter the username and the the message
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("user").setValue(Profile.getCurrentProfile().getId());
@@ -114,6 +118,8 @@ public class Chat extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     //a helper function that creates the TextView that holds all of the group chat
@@ -122,7 +128,6 @@ public class Chat extends AppCompatActivity {
 
 
         if(ds.getChildrenCount() == 5) {
-            //TODO: fix things here
 
             HashMap<String, Object> data = (HashMap<String, Object>) ds.getValue();
             HashMap<String,Long> timeStamp = (HashMap<String, Long>)data.get("TimeStamp");

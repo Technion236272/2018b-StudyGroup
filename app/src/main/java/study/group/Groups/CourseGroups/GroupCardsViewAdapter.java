@@ -2,6 +2,7 @@ package study.group.Groups.CourseGroups;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import study.group.Groups.Chat.Chat;
+import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
@@ -80,16 +83,50 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
 
         viewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
+
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot ds : dataSnapshot.getChildren())
                         {
-                            if(ds.getValue().toString().equals(group.getGroupID()))
+                            if(ds.getKey().equals(group.getGroupID()))
                             {
                                 isJoined = true;
                             }
+                        }
+                        if(group.getAdminID().equals(Profile.getCurrentProfile().getId()))
+                        {
+                            Intent adminGroup = new Intent(v.getContext(), Chat.class);
+                            adminGroup.putExtra("groupSubject",group.getSubject());
+                            adminGroup.putExtra("groupDate",group.getDate());
+                            adminGroup.putExtra("groupID",group.getGroupID());
+                            adminGroup.putExtra("groupLocation",group.getLocation());
+                            adminGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
+                            adminGroup.putExtra("adminID",group.getAdminID());
+                            adminGroup.putExtra("groupName",group.getName());
+                            v.getContext().startActivity(adminGroup);
+                        }
+                        else
+                        {
+                            Intent userGroup;
+                            if(isJoined)
+                            {
+                                userGroup = new Intent(v.getContext(), Chat.class);
+                            }
+                            else
+                            {
+                                userGroup = new Intent(v.getContext(), GroupActivity.class);
+                            }
+
+                            userGroup.putExtra("groupSubject",group.getSubject());
+                            userGroup.putExtra("groupDate",group.getDate());
+                            userGroup.putExtra("groupID",group.getGroupID());
+                            userGroup.putExtra("groupLocation",group.getLocation());
+                            userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
+                            userGroup.putExtra("adminID",group.getAdminID());
+                            userGroup.putExtra("groupName",group.getName());
+                            v.getContext().startActivity(userGroup);
                         }
                     }
 
@@ -97,42 +134,10 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
+
                 });
 
-                if(group.getAdminID().equals(Profile.getCurrentProfile().getId()))
-                {
-                    Intent adminGroup = new Intent(v.getContext(), Chat.class);
-                    adminGroup.putExtra("groupSubject",group.getSubject());
-                    adminGroup.putExtra("groupDate",group.getDate());
-                    adminGroup.putExtra("groupID",group.getGroupID());
-                    adminGroup.putExtra("groupLocation",group.getLocation());
-                    adminGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
-                    adminGroup.putExtra("adminID",group.getAdminID());
-                    adminGroup.putExtra("groupName",group.getName());
 
-                    v.getContext().startActivity(adminGroup);
-                }
-                else
-                {
-                    Intent userGroup;
-                    if(isJoined)
-                    {
-                        userGroup = new Intent(v.getContext(), Chat.class);
-                    }
-                    else
-                    {
-                        userGroup = new Intent(v.getContext(), Chat.class);
-                    }
-
-                    userGroup.putExtra("groupSubject",group.getSubject());
-                    userGroup.putExtra("groupDate",group.getDate());
-                    userGroup.putExtra("groupID",group.getGroupID());
-                    userGroup.putExtra("groupLocation",group.getLocation());
-                    userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
-                    userGroup.putExtra("adminID",group.getAdminID());
-                    userGroup.putExtra("groupName",group.getName());
-                    v.getContext().startActivity(userGroup);
-                }
 
 
             }
@@ -192,4 +197,6 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
 
         }
     }
+
+
 }
