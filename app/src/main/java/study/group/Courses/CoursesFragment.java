@@ -62,7 +62,6 @@ public class CoursesFragment extends Fragment {
      * as a result, he will get a list of the chosen faculty courses.
      */
     public void filterByFaculty(String faculty) {
-
         TreeMap<String, Course> filteredFavouritesMap = new TreeMap<>();
         TreeMap<String, Course> filteredOthersMap = new TreeMap<>();
         for (Map.Entry<String, Course> entry : favouriteCoursesMap.entrySet()) {
@@ -87,9 +86,15 @@ public class CoursesFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search_main, menu);
         MenuItem item = menu.findItem(R.id.search_main);
-        SearchView searchView = (SearchView) item.getActionView();
-        searchView.setQuery(lastQuery, true);
-        recyclerView.setAdapter(searchAdapter);
+        final SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setQuery(lastQuery, true);
+                recyclerView.setAdapter(searchAdapter);
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 
@@ -127,6 +132,7 @@ public class CoursesFragment extends Fragment {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
+                coursesAdapter.filter(lastFavouriteCoursesMap,lastOtherCoursesMap);
                 recyclerView.setAdapter(coursesAdapter);
                 return false;
             }
