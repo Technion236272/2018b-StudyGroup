@@ -34,6 +34,8 @@ public class GroupsInACourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups_in_acourse);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         final String courseId = getIntent().getExtras().getString("courseId");
         final String courseName = getIntent().getExtras().getString("courseName");
         setTitle(courseId + " - " + courseName);
@@ -117,6 +119,12 @@ public class GroupsInACourseActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
 }

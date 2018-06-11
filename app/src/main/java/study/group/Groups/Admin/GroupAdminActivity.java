@@ -38,6 +38,8 @@ public class GroupAdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_admin);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         final Context currentContext = this;
 
@@ -215,5 +217,11 @@ public class GroupAdminActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 }

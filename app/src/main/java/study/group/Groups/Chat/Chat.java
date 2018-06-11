@@ -41,6 +41,8 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //local variables
         final String groupID = getIntent().getExtras().getString("groupID");
         final String groupName = getIntent().getExtras().getString("groupName");
@@ -156,5 +158,10 @@ public class Chat extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
 
 }

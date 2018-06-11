@@ -47,7 +47,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Groups.CourseGroups.GroupsInACourseActivity" />
+
         <activity android:name=".Groups.CreateGroup" />
+
         <activity android:name=".Groups.Participant.GroupActivity" />
         <activity android:name=".Groups.Admin.GroupAdminActivity" />
         <activity android:name=".Groups.Chat.Chat"></activity>

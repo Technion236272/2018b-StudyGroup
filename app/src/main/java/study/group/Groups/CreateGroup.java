@@ -48,6 +48,7 @@ public class CreateGroup extends AppCompatActivity {
         setContentView(R.layout.activity_create_group);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         groupSubject = findViewById(R.id.groupSubject);
         Location = findViewById(R.id.Location);
@@ -251,5 +252,10 @@ public class CreateGroup extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
 
 }

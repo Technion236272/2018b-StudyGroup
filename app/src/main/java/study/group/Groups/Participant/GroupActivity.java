@@ -45,6 +45,7 @@ public class GroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final String subject = getIntent().getExtras().getString("groupSubject");
         final String date = getIntent().getExtras().getString("groupDate");
@@ -334,6 +335,12 @@ public class GroupActivity extends AppCompatActivity {
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);     // TODO : check it out
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
 }

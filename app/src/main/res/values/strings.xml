@@ -63,4 +63,9 @@
     <string name="notification_wish_to_join"> is wish to join </string>
     <string name="credits_to">Credits to:</string>
     <string name="free_pik">http://www.freepik.com</string>
+
+    <string name="edit_group_details">Edit group details</string>
+    <string name="delete_group">Delete group</string>
+    <string name="leave_the_group">Leave group</string>
+
 </resources>

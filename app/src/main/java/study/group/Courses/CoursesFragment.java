@@ -165,11 +165,11 @@ public class CoursesFragment extends Fragment {
                                         @NonNull ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
-                if (position == 0) {
-                    tv.setTextColor(Color.GRAY);
-                } else {
-                    tv.setTextColor(Color.BLACK);
-                }
+//                if (position == 0) {
+//                    tv.setTextColor(Color.GRAY);
+//                } else {
+//                    tv.setTextColor(Color.BLACK);
+//                }
                 return view;
             }
         };
