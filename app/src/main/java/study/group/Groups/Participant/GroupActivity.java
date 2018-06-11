@@ -27,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import study.group.Groups.Chat.Chat;
 import study.group.MainActivity;
@@ -208,7 +210,7 @@ public class GroupActivity extends AppCompatActivity {
         locationTV.setText(location);
         currentNumOfParticipants.setText(String.valueOf(numOfParticipants) + " Participants:");
 
-        final ArrayList<String> participants = new ArrayList<>();
+        final Set<String> participants = new HashSet<>();
 
         //the DB listener of the group participants.
         database.child("Groups").child(groupID).child("participants").addValueEventListener(new ValueEventListener() {
@@ -226,7 +228,7 @@ public class GroupActivity extends AppCompatActivity {
                     }
                 }
 
-                if(flag == true)
+                if(flag)
                 {
                     Intent chatActivity;
                     chatActivity = new Intent(currentContext, Chat.class);
@@ -240,7 +242,7 @@ public class GroupActivity extends AppCompatActivity {
                     currentContext.startActivity(chatActivity);
                 }
 
-                GroupParticipantsAdapter participantsAdapter = new GroupParticipantsAdapter(participants);
+                GroupParticipantsAdapter participantsAdapter = new GroupParticipantsAdapter(new ArrayList<>(participants));
                 participantsRecycler.setAdapter(participantsAdapter);
             }
 
