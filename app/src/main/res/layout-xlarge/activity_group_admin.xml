@@ -37,6 +37,19 @@
             app:layout_constraintTop_toBottomOf="@+id/subjectAdminEdit" />
 
         <TextView
+            android:id="@+id/timeAdmin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/Time"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
+
+        <TextView
             android:id="@+id/locationAdmin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +60,7 @@
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
+            app:layout_constraintTop_toBottomOf="@+id/timeAdminEdit" />
 
         <Button
             android:id="@+id/deleteAdmin"
@@ -89,6 +102,20 @@
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dateAdmin" />
+
+        <EditText
+            android:id="@+id/timeAdminEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/Time"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeAdmin" />
 
         <EditText
             android:id="@+id/locationAdminEdit"

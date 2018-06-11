@@ -36,6 +36,19 @@
         android:layout_marginLeft="8dp" />
 
     <TextView
+        android:id="@+id/timeAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/Time"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit"
+        android:layout_marginLeft="8dp" />
+
+    <TextView
         android:id="@+id/locationAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,7 +58,7 @@
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit"
+        app:layout_constraintTop_toBottomOf="@+id/timeAdminEdit"
         android:layout_marginLeft="8dp" />
 
     <Button
@@ -84,6 +97,19 @@
         android:text="@string/Date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateAdmin"
+        android:layout_marginLeft="8dp" />
+
+    <EditText
+        android:id="@+id/timeAdminEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/Time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeAdmin"
         android:layout_marginLeft="8dp" />
 
     <EditText

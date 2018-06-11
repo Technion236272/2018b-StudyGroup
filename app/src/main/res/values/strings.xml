@@ -7,6 +7,7 @@
     <string name="Subject">Subject:</string>
     <string name="Location">Meeting Location:</string>
     <string name="Date">Date:</string>
+    <string name="Time">Time:</string>
     <string name="DateAndTime">YYYY/MM/DD HH:MM</string>
     <string name="CreateGroup">Create Group</string>
     <string name="subjectError">Please enter subject!</string>
@@ -15,6 +16,8 @@
     <string name="dayError">Please select day</string>
     <string name="monthError">Please select month</string>
     <string name="yearError">Please select year</string>
+    <string name="dateError">Please pick a date</string>
+    <string name="timeError">Please pick time</string>
     <string name="locationError">Please enter location!</string>
     <string name="cancel_request">Cancel Request</string>
     <string name="leave_group">Leave Group</string>
@@ -68,5 +71,9 @@
     <string name="edit_group_details">Edit group details</string>
     <string name="delete_group">Delete group</string>
     <string name="leave_the_group">Leave group</string>
+    <string name="pick_the_time">Pick time:</string>
+    <string name="pick_the_date">Pick date:</string>
+    <string name="click_choose_time">Click to choose time</string>
+    <string name="click_choose_date">Click to choose a date</string>
 
 </resources>

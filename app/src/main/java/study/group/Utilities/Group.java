@@ -9,6 +9,7 @@ public class Group {
     private String id;
     private String subject;
     private String date;
+    private String time;
     private String location;
     private int maxNumOfPart;
     private int currentNumOfPart;
@@ -40,7 +41,7 @@ public class Group {
     }
 
     public Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
-                 int currentNumOfPart, String adminID) {
+                 int currentNumOfPart, String adminID, String time) {
         //     this.faculty = faculty;
         this.name = id + "-" + subject;
         this.id = id;
@@ -51,6 +52,7 @@ public class Group {
         this.currentNumOfPart = currentNumOfPart;
         this.adminID = adminID;
         this.groupID = groupID;
+        this.time = time;
         this.participants = new HashMap<>();
         this.Requests = new HashMap<>();
 //        this.users = users;
@@ -136,6 +138,21 @@ public class Group {
 //        this.users = users;
 //    }
 
+    public HashMap<String, String> getInterested() {
+        return interested;
+    }
+
+    public void setInterested(HashMap<String, String> interested) {
+        this.interested = interested;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public HashMap<String,String> getRequests() {
         return Requests;
@@ -161,11 +178,4 @@ public class Group {
         return other instanceof Group && this.getGroupID().equals(((Group)other).getGroupID());
     }
 
-    public HashMap<String, String> getInterested() {
-        return interested;
-    }
-
-    public void setInterested(HashMap<String, String> interested) {
-        this.interested = interested;
-    }
 }
