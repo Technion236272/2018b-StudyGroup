@@ -58,6 +58,7 @@
     <string name="Interested">Interested</string>
     <string name="request_declined">Request declined!</string>
     <string name="request_accepted">Request accepted!</string>
+    <string name="request_group_full">Group is already full!</string>
 
     <string name="notification_join_title">StudyGroup - Join request</string>
     <string name="notification_wish_to_join"> is wish to join </string>

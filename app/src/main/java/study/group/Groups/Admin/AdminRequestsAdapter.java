@@ -74,7 +74,7 @@ class AdminRequestsAdapter extends RecyclerView.Adapter<AdminRequestsAdapter.adm
                     database.child("Groups").child(groupID).child("participants")
                             .child(user.getToken()).setValue(user.getName());
                     database.child("Groups").child(groupID).child("currentNumOfPart").setValue(part);
-               //     EditText subject = itemView.findViewById(R.id.subjectAdminEdit);
+
                     database.child("Users").child(user.getToken()).child("Joined").child(groupID)
                             .setValue("");
                     requests.remove(getAdapterPosition());

@@ -10,13 +10,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import study.group.R;
+import study.group.Utilities.Group;
+import study.group.Utilities.User;
 
 public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
@@ -156,6 +164,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private class RequestMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText;
         Button acceptButton, rejectButton;
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
         RequestMessageHolder(View itemView) {
             super(itemView);
@@ -164,15 +173,101 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             rejectButton = (Button) itemView.findViewById(R.id.RequestRejectButton);
         }
 
-        void bind(UserMessage message) {
+        void bind(final UserMessage message) {
             messageText.setText(message.getSender().getName() + " has requested to join a group!");
             String groupAdmin = message.getAdminID();
+            final User user = message.getSender();
+            final String groupID = message.getGroupID();
+
             if(!groupAdmin.equals(Profile.getCurrentProfile().getId()))
             {
                 acceptButton.setClickable(false);
                 rejectButton.setClickable(false);
             }
+            else
+            {
+                acceptButton.setClickable(true);
+                rejectButton.setClickable(true);
+            }
+
+            final long[] currentParticipants = {0};
+            final long[] maxParticipants = {0};
+            database.child("Groups").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                    {
+                        if(ds.child("groupID").getValue().equals(groupID))
+                        {
+                            currentParticipants[0] = (long) ds.child("currentNumOfPart").getValue();
+                            maxParticipants[0] = (long) ds.child("maxNumOfPart").getValue();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //checking ig the group is already full
+                    if(currentParticipants[0] == maxParticipants[0])
+                    {
+                        Toast.makeText(myContext, R.string.request_group_full, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    database.child("Users").child(user.getToken()).
+                            child("Requests").child(groupID).removeValue();
+                    database.child("Users").child(user.getToken()).
+                            child("interested").child(groupID).removeValue();
+                    database.child("Groups").child(groupID).child("Requests").child(user.getToken()).removeValue();
+                    database.child("Groups").child(groupID).child("participants")
+                            .child(user.getToken()).setValue(user.getName());
+                    database.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentParticipants[0]+1);
+                    database.child("Users").child(user.getToken()).child("Joined").child(groupID)
+                            .setValue("");
+                    deleteRequest(user.getToken(),groupID);
+                    notifyDataSetChanged();
+                }
+            });
+
+            rejectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    database.child("Users").child(user.getToken()).child("Requests").child(groupID).removeValue();
+                    database.child("Groups").child(groupID).child("Requests").child(user.getToken()).removeValue();
+                    deleteRequest(user.getToken(),groupID);
+                    notifyDataSetChanged();
+                }
+            });
+
         }
-        //TODO: set onClick
+
+        void deleteRequest (final String senderID, final String groupID)
+        {
+            database.child("Groups").child(groupID).child("Chat").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                    {
+                        if(ds.child("User").getValue().equals(senderID) && ds.child("Type").getValue().equals("Request"))
+                        {
+                            ds.getRef().removeValue();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
 }

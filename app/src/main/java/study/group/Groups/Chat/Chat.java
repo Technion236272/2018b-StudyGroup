@@ -41,8 +41,6 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         //local variables
         final String groupID = getIntent().getExtras().getString("groupID");
         final String groupName = getIntent().getExtras().getString("groupName");
@@ -111,7 +109,27 @@ public class Chat extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount() == 7) {
 
+                    HashMap<String, Object> data = (HashMap<String, Object>) dataSnapshot.getValue();
+                    HashMap<String,Long> timeStamp = (HashMap<String, Long>)data.get("TimeStamp");
+
+                    String userID = (String) data.get("User");
+                    String chatMessage;
+                    String groupID = getIntent().getExtras().getString("groupID");
+                    String userName = (String) data.get("Name");
+                    Uri profilePic = Uri.parse((String)data.get("ProfilePicture"));
+                    User currentUser = new User(userID,userName,
+                            profilePic);
+                    String Type = (String) data.get("Type");
+                    String AdminID = (String) data.get("GroupAdminID");
+                    long time =timeStamp.get("time");
+                    chatMessage = (String)data.get("Message");
+
+                    UserMessage um = new UserMessage(chatMessage,currentUser,time,Type,AdminID,groupID);
+                    messages.remove(um);
+                    mMessageAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -140,28 +158,22 @@ public class Chat extends AppCompatActivity {
 
             String userID = (String) data.get("User");
             String chatMessage;
-
+            String groupID = getIntent().getExtras().getString("groupID");
             String userName = (String) data.get("Name");
             Uri profilePic = Uri.parse((String)data.get("ProfilePicture"));
             User currentUser = new User(userID,userName,
                     profilePic);
-
             String Type = (String) data.get("Type");
             String AdminID = (String) data.get("GroupAdminID");
-
             long time =timeStamp.get("time");
             chatMessage = (String)data.get("Message");
-            UserMessage um = new UserMessage(chatMessage,currentUser,time,Type,AdminID);
+
+            UserMessage um = new UserMessage(chatMessage,currentUser,time,Type,AdminID,groupID);
             messages.add(um);
             mMessageAdapter.notifyDataSetChanged();
         }
 
     }
 
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
 
 }
