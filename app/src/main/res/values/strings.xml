@@ -71,6 +71,8 @@
     <string name="edit_group_details">Edit group details</string>
     <string name="group_details">Group details</string>
     <string name="delete_group">Delete group</string>
+    <string name="pass_admin">Pass administraship</string>
+    <string name="make_poll">Make a poll</string>
     <string name="leave_the_group">Leave group</string>
     <string name="pick_the_time">Pick time:</string>
     <string name="pick_the_date">Pick date:</string>

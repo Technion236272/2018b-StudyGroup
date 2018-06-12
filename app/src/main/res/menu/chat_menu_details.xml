@@ -5,8 +5,7 @@
         android:id="@+id/group_details"
         android:orderInCategory="101"
         android:title="@string/group_details"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/leave_group_chat"

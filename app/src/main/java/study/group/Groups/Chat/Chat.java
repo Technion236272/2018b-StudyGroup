@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
-import com.facebook.login.LoginManager;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,12 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import study.group.Groups.Admin.GroupAdminActivity;
-import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
-import study.group.Utilities.Credits;
 import study.group.Utilities.User;
 
 public class Chat extends AppCompatActivity {
@@ -171,9 +167,9 @@ public class Chat extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(adminID.equals(Profile.getCurrentProfile().getId())) {
-            getMenuInflater().inflate(R.menu.group_admin, menu);
+            getMenuInflater().inflate(R.menu.chat_menu_edit_details, menu);
         } else {
-            getMenuInflater().inflate(R.menu.chat_menu, menu);
+            getMenuInflater().inflate(R.menu.chat_menu_details, menu);
         }
         return true;
     }

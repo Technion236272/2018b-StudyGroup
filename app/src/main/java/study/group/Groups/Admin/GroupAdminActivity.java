@@ -1,20 +1,19 @@
 package study.group.Groups.Admin;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +31,10 @@ import study.group.Utilities.User;
 
 public class GroupAdminActivity extends AppCompatActivity {
 
+    private DatabaseReference database;
+    private String groupID;
+    private String adminID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,16 +43,15 @@ public class GroupAdminActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        final Context currentContext = this;
+        database = FirebaseDatabase.getInstance().getReference();
 
         String subject = getIntent().getExtras().getString("groupSubject");
         String date = getIntent().getExtras().getString("groupDate");
         String time = getIntent().getExtras().getString("groupTime");
         String location = getIntent().getExtras().getString("groupLocation");
-        final String groupID = getIntent().getExtras().getString("groupID");
+        groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
-        final String adminID = getIntent().getExtras().getString("adminID");
+        adminID = getIntent().getExtras().getString("adminID");
         final String groupName = getIntent().getExtras().getString("groupName");
 
         final Set<String> participants = new HashSet<>();
@@ -131,73 +133,13 @@ public class GroupAdminActivity extends AppCompatActivity {
             }
         });
 
-        Button deleteGroup = findViewById(R.id.deleteAdmin);
-        deleteGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentContext);
-                alertDialog.setTitle(R.string.AreYouSure);
-                alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        database.child("Groups").child(groupID).child("participants")
-                                .addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot participant : dataSnapshot.getChildren()) {
-                                            if (participant.getKey().equals(adminID)) {
-                                                database.child("Users").child(participant.getKey()).child("myGroups").child(groupID).removeValue();
-                                            }
-                                            database.child("Users").child(participant.getKey()).child("Joined").child(groupID).removeValue();
-                                            //database.child("Groups").child(groupID).child("participants").child(participant.getKey()).removeValue();
-
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-
-                        database.child("Groups").child(groupID).child("Requests")
-                                .addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for(DataSnapshot child : dataSnapshot.getChildren())
-                                        {
-                                            String currentUser = child.getKey();
-                                            database.child("Users").child(currentUser).child("Requests").child(groupID).removeValue();
-                                            //database.child("Groups").child(groupID).child("Requests").child(currentUser).removeValue();
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                        database.child("Groups").child(groupID).removeValue();
-                        finish();
-                    }
-                }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).show();
-            }
-        });
-
         subjectET.setText(subject);
         dateET.setText(date);
         timeET.setText(time);
         locationET.setText(location);
         currentNumOfParticipants.setText(numOfParticipants.toString() + " Participants");
         final RecyclerView requestsRecycler = findViewById(R.id.requestAdminRecycler);
-        requestsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
-
+        requestsRecycler.setLayoutManager(new LinearLayoutManager(GroupAdminActivity.this));
 
         database.child("Groups").child(groupID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -222,7 +164,7 @@ public class GroupAdminActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecyclerView participantsRecycler = findViewById(R.id.recyclerPaticipantsGroup);
-                participantsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
+                participantsRecycler.setLayoutManager(new LinearLayoutManager(GroupAdminActivity.this));
                 for (DataSnapshot d : dataSnapshot.getChildren())
                 {
                     participants.add(d.getValue().toString());
@@ -237,6 +179,73 @@ public class GroupAdminActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.group_admin, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.pass_administraship) {
+            Toast.makeText(this, "Passing administraship will be available soon", Toast.LENGTH_LONG).show();
+        } else if(id == R.id.make_poll) {
+            Toast.makeText(this, "Making a poll will be available soon", Toast.LENGTH_LONG).show();
+        } else if(id == R.id.delete_group) {
+     //       Toast.makeText(this, "Deleting the group will be available soon", Toast.LENGTH_LONG).show();
+            deleteTheGroup();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteTheGroup() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(GroupAdminActivity.this);
+        alertDialog.setTitle(R.string.AreYouSure);
+        alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                database.child("Groups").child(groupID).child("participants")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot participant : dataSnapshot.getChildren()) {
+                                    if (participant.getKey().equals(adminID)) {
+                                        database.child("Users").child(participant.getKey()).child("myGroups").child(groupID).removeValue();
+                                        }
+                                        database.child("Users").child(participant.getKey()).child("Joined").child(groupID).removeValue();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+
+                database.child("Groups").child(groupID).child("Requests")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                                    String currentUser = child.getKey();
+                                    database.child("Users").child(currentUser).child("Requests").child(groupID).removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                }
+                        });
+                database.child("Groups").child(groupID).removeValue();
+                finish();
+                }
+        }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
     }
 
     @Override
