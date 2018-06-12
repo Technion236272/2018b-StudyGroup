@@ -1,5 +1,7 @@
 package study.group.Groups.Admin;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -10,9 +12,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -23,9 +29,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import study.group.Groups.CreateGroup;
 import study.group.R;
 import study.group.Utilities.User;
 
@@ -60,8 +68,8 @@ public class GroupAdminActivity extends AppCompatActivity {
         setTitle(groupName);
 
         final EditText subjectET = findViewById(R.id.subjectAdminEdit);
-        final EditText dateET = findViewById(R.id.dateAdminEdit);
-        final EditText timeET = findViewById(R.id.timeAdminEdit);
+        final Button dateET = findViewById(R.id.dateAdminEdit);
+        final Button timeET = findViewById(R.id.timeAdminEdit);
         final EditText locationET = findViewById(R.id.locationAdminEdit);
         TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
 
@@ -82,39 +90,76 @@ public class GroupAdminActivity extends AppCompatActivity {
             }
         });
 
-        dateET.addTextChangedListener(new TextWatcher() {
+        dateET.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            public void onClick(View v) {
+                Calendar cal  = Calendar.getInstance();
+                DatePickerDialog mDatePicker = new DatePickerDialog(GroupAdminActivity.this, android.app.AlertDialog.THEME_HOLO_DARK
+                        , new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String text = String.format("%02d", dayOfMonth) + "/" + String.format("%02d", month+1) + "/" + year;
+                        database.child("Groups").child(groupID).child("date").setValue(text);
+                        dateET.setText(text);
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
+                mDatePicker.show();
             }
-
+        });
+        // need to notify something, not changing immediately   /////////////////////////////////////////////////////////////////////////////////////
+        timeET.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onClick(View v) {
+                Calendar cal  = Calendar.getInstance();
+                final int currentHour = (cal.get(Calendar.HOUR_OF_DAY) + 3) % 24;
+                final int currentMinute = cal.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker = new TimePickerDialog(GroupAdminActivity.this, android.app.AlertDialog.THEME_HOLO_DARK
+                        , new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String text = String.format("%02d", selectedHour) + ":" + String.format("%02d", selectedMinute);
+                        database.child("Groups").child(groupID).child("time").setValue(text);
+                        timeET.setText(text);
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                database.child("Groups").child(groupID).child("date").setValue(dateET.getText().toString());
+                    }
+                }, currentHour, currentMinute, true);
+                mTimePicker.show();
             }
         });
 
-        timeET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//        dateET.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                database.child("Groups").child(groupID).child("date").setValue(dateET.getText().toString());
+//            }
+//        });
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                database.child("Groups").child(groupID).child("time").setValue(timeET.getText().toString());
-            }
-        });
+//        timeET.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                database.child("Groups").child(groupID).child("time").setValue(timeET.getText().toString());
+//            }
+//        });
 
         locationET.addTextChangedListener(new TextWatcher() {
             @Override

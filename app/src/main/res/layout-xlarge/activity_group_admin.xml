@@ -76,7 +76,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/subjectAdmin" />
 
-        <EditText
+        <Button
             android:id="@+id/dateAdminEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,13 +84,12 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="4dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:text="@string/Date"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dateAdmin" />
 
-        <EditText
+        <Button
             android:id="@+id/timeAdminEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,7 +97,6 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="4dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:text="@string/Time"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"

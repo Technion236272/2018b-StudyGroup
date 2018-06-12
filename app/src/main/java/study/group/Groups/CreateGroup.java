@@ -111,76 +111,6 @@ public class CreateGroup extends AppCompatActivity {
         };
         numOfParticipants.setAdapter(adapter);
 
-//        String[] daysArr = new String[]{"Day","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19"
-//                ,"20","21","22","23","24","25","26","27","28","29","30","31"};
-//        final ArrayList<String> dayList = new ArrayList<>(Arrays.asList(daysArr));
-//        ArrayAdapter<String> daysAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, dayList ){
-//            @Override
-//            public boolean isEnabled(int position){
-//                return position != 0;
-//            }
-//            @Override
-//            public View getDropDownView(int position, View convertView,
-//                                        @NonNull ViewGroup parent) {
-//                View view = super.getDropDownView(position, convertView, parent);
-//                TextView tv = (TextView) view;
-//                if(position == 0){
-//                    tv.setTextColor(Color.GRAY);
-//                }
-//                else {
-//                    tv.setTextColor(Color.BLACK);
-//                }
-//                return view;
-//            }
-//        };
-//        day.setAdapter(daysAdapter);
-//
-//        String[] monthArr = new String[]{"Month","1","2","3","4","5","6","7","8","9","10","11","12"};
-//        final ArrayList<String> monthList = new ArrayList<>(Arrays.asList(monthArr));
-//        ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, monthList){
-//            @Override
-//            public boolean isEnabled(int position){
-//                return position != 0;
-//            }
-//            @Override
-//            public View getDropDownView(int position, View convertView,
-//                                        @NonNull ViewGroup parent) {
-//                View view = super.getDropDownView(position, convertView, parent);
-//                TextView tv = (TextView) view;
-//                if(position == 0){
-//                    tv.setTextColor(Color.GRAY);
-//                }
-//                else {
-//                    tv.setTextColor(Color.BLACK);
-//                }
-//                return view;
-//            }
-//        };
-//        month.setAdapter(monthAdapter);
-//
-//        String[] yearsArr = new String[]{"Year","2018","2019"};
-//        final ArrayList<String> yearList = new ArrayList<>(Arrays.asList(yearsArr));
-//        ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, yearList){
-//            @Override
-//            public boolean isEnabled(int position){
-//                return position != 0;
-//            }
-//            @Override
-//            public View getDropDownView(int position, View convertView,
-//                                        @NonNull ViewGroup parent) {
-//                View view = super.getDropDownView(position, convertView, parent);
-//                TextView tv = (TextView) view;
-//                if(position == 0){
-//                    tv.setTextColor(Color.GRAY);
-//                }
-//                else {
-//                    tv.setTextColor(Color.BLACK);
-//                }
-//                return view;
-//            }
-//        };
-//        year.setAdapter(yearAdapter);
-
         Calendar cal  = Calendar.getInstance();
         final int currentDay = cal.get(Calendar.DAY_OF_MONTH);
         final int currentMonth = cal.get(Calendar.MONTH);
@@ -200,7 +130,7 @@ public class CreateGroup extends AppCompatActivity {
                         CreateGroup.this.day = dayOfMonth;
                         CreateGroup.this.month = month;
                         CreateGroup.this.year = year;
-                        String text = String.format("%02d", dayOfMonth) + "/" + String.format("%02d", month) + "/" + year;
+                        String text = String.format("%02d", dayOfMonth) + "/" + String.format("%02d", month+1) + "/" + year;
                         mDisplayDate.setText(text);
                     }
                 }, currentYear, currentMonth, currentDay);
@@ -250,36 +180,6 @@ public class CreateGroup extends AppCompatActivity {
             }).show();
             return;
         }
-//
-////        if(day.getSelectedItemPosition() == 0) {
-////            alertDialog.setTitle(R.string.dayError);
-////            alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
-////                public void onClick(DialogInterface dialog, int id) {
-////
-////                }
-////            }).show();
-////            return;
-////        }
-////
-////        if(month.getSelectedItemPosition() == 0) {
-////            alertDialog.setTitle(R.string.monthError);
-////            alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
-////                public void onClick(DialogInterface dialog, int id) {
-////
-////                }
-////            }).show();
-////            return;
-////        }
-////
-////        if(year.getSelectedItemPosition() == 0) {
-////            alertDialog.setTitle(R.string.yearError);
-////            alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
-////                public void onClick(DialogInterface dialog, int id) {
-////
-////                }
-////            }).show();
-////            return;
-////        }
 
         if(!dateFlag) {
             alertDialog.setTitle(R.string.dateError);
