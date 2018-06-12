@@ -106,6 +106,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                             adminGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
                             adminGroup.putExtra("adminID",group.getAdminID());
                             adminGroup.putExtra("groupName",group.getName());
+                            adminGroup.putExtra("groupCurrentParticipants",group.getCurrentNumOfPart());
                             v.getContext().startActivity(adminGroup);
                         }
                         else
@@ -128,6 +129,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                             userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
                             userGroup.putExtra("adminID",group.getAdminID());
                             userGroup.putExtra("groupName",group.getName());
+                            userGroup.putExtra("groupCurrentParticipants",group.getCurrentNumOfPart());
                             v.getContext().startActivity(userGroup);
                         }
                     }

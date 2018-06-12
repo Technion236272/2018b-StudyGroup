@@ -1,7 +1,9 @@
 package study.group.Groups.Chat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +52,7 @@ public class Chat extends AppCompatActivity {
     private String time;
     private String location;
     private Integer numOfParticipants;
+    private Integer currentNumOfParticipants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,7 @@ public class Chat extends AppCompatActivity {
         date = getIntent().getExtras().getString("groupDate");
         time = getIntent().getExtras().getString("groupTime");
         location = getIntent().getExtras().getString("groupLocation");
+        currentNumOfParticipants = getIntent().getExtras().getInt("groupCurrentParticipants");
         numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
 
         setTitle(groupName);
@@ -190,8 +194,44 @@ public class Chat extends AppCompatActivity {
             startActivity(intent);      // ADD FLAGS TO THE INTENT
         } else if(id == R.id.group_details) {
             Toast.makeText(this, "Details will be available soon", Toast.LENGTH_LONG).show();
-        } else if(id == R.id.leave_group_admin || id == R.id.leave_group_chat) {
-            Toast.makeText(this, "Leaving will be available soon", Toast.LENGTH_LONG).show();
+        } else if(id == R.id.leave_group_chat) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle(R.string.leaving_the_group);
+            alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dataBase.child("Groups").child(groupID).child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
+                    dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
+
+                    --currentNumOfParticipants;
+                    dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
+                    finish();
+                }
+            }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            }).show();
+        } else if(id == R.id.leave_group_admin) {
+            if(currentNumOfParticipants == 1) {
+                // delete the group
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle(R.string.only_member_delete_group);
+                alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dataBase.child("Groups").child(groupID).removeValue();
+                        dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
+                        dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
+                        finish();
+                    }
+                }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+            } else {
+                // pass the administraship to someone else
+                Toast.makeText(this, "Passing administraship and leaving will be available soon", Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

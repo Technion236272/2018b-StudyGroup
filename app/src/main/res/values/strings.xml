@@ -58,6 +58,8 @@
     <string name="Yes">Yes</string>
     <string name="No">No</string>
     <string name="AreYouSure">Are you sure you want to delete the group?</string>
+    <string name="leaving_the_group">Are you sure you want to leave the group?</string>
+    <string name="only_member_delete_group">You are the only group member. Do you wish to delete the group?</string>
     <string name="Interested">Interested</string>
     <string name="request_declined">Request declined!</string>
     <string name="request_accepted">Request accepted!</string>
