@@ -100,6 +100,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                             Intent adminGroup = new Intent(v.getContext(), Chat.class);
                             adminGroup.putExtra("groupSubject",group.getSubject());
                             adminGroup.putExtra("groupDate",group.getDate());
+                            adminGroup.putExtra("groupTime",group.getTime());
                             adminGroup.putExtra("groupID",group.getGroupID());
                             adminGroup.putExtra("groupLocation",group.getLocation());
                             adminGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
@@ -121,6 +122,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
 
                             userGroup.putExtra("groupSubject",group.getSubject());
                             userGroup.putExtra("groupDate",group.getDate());
+                            userGroup.putExtra("groupTime",group.getTime());
                             userGroup.putExtra("groupID",group.getGroupID());
                             userGroup.putExtra("groupLocation",group.getLocation());
                             userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());

@@ -36,6 +36,19 @@
         app:layout_constraintTop_toBottomOf="@+id/subjectAdminEdit" />
 
     <TextView
+        android:id="@+id/timeAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Time"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
+
+    <TextView
         android:id="@+id/locationAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,15 +59,17 @@
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/timeAdminEdit" />
 
     <Button
         android:id="@+id/deleteAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="24dp"
         android:background="?attr/colorError"
         android:text="@string/DeleteGroup"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,6 +100,19 @@
         android:text="@string/Date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateAdmin" />
+
+    <EditText
+        android:id="@+id/timeAdminEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/Time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeAdmin" />
 
     <EditText
         android:id="@+id/locationAdminEdit"

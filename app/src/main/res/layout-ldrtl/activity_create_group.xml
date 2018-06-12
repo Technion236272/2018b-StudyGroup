@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/monthSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/timeDisplay" />
 
     <Button
         android:id="@+id/CreateGroup"
@@ -55,32 +55,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NumOfParticipants" />
 
-    <Spinner
-        android:id="@+id/yearsSpinner"
-        android:layout_width="104dp"
-        android:layout_height="44dp"
+    <TextView
+        android:id="@+id/dateDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="@+id/Location"
+        android:hint="@string/click_choose_date"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView1"
         app:layout_constraintTop_toBottomOf="@+id/Location" />
 
-    <Spinner
-        android:id="@+id/monthSpinner"
-        android:layout_width="89dp"
-        android:layout_height="44dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/yearsSpinner"
+        android:text="@string/pick_the_date"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Location" />
 
-    <Spinner
-        android:id="@+id/daySpinner"
-        android:layout_width="85dp"
-        android:layout_height="44dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+    <TextView
+        android:id="@+id/timeDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/monthSpinner"
-        app:layout_constraintTop_toBottomOf="@+id/Location" />
+        android:hint="@string/click_choose_time"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/dateDisplay" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/pick_the_time"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
 </android.support.constraint.ConstraintLayout>

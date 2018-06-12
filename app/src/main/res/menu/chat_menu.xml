@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/group_details"
+        android:orderInCategory="101"
+        android:title="@string/group_details"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/leave_group_chat"
+        android:orderInCategory="101"
+        android:title="@string/leave_the_group"
+        app:showAsAction="never" />
+
+</menu>

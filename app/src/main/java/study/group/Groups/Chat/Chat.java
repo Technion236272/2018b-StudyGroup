@@ -1,19 +1,22 @@
 package study.group.Groups.Chat;
 
-import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +28,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import study.group.Groups.Admin.GroupAdminActivity;
+import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
+import study.group.Utilities.Credits;
 import study.group.Utilities.User;
 
 public class Chat extends AppCompatActivity {
@@ -35,26 +41,36 @@ public class Chat extends AppCompatActivity {
     private Button Send;
     private DatabaseReference dataBase;
     private LinearLayoutManager lay;
-    private Context myContext = this;
+
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
     private ArrayList<UserMessage> messages;
+
+    private String adminID;
+    private String groupID;
+    private String groupName;
+    private String subject;
+    private String date;
+    private String time;
+    private String location;
+    private Integer numOfParticipants;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        findViewById(R.id.chat_action_bar).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(myContext, "Join request canceled", Toast.LENGTH_SHORT).show();
-            }
-        });
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final String groupID = getIntent().getExtras().getString("groupID");
-        final String groupName = getIntent().getExtras().getString("groupName");
-        final String adminID = getIntent().getExtras().getString("adminID");
-
+        groupID = getIntent().getExtras().getString("groupID");
+        groupName = getIntent().getExtras().getString("groupName");
+        adminID = getIntent().getExtras().getString("adminID");
+        subject = getIntent().getExtras().getString("groupSubject");
+        date = getIntent().getExtras().getString("groupDate");
+        time = getIntent().getExtras().getString("groupTime");
+        location = getIntent().getExtras().getString("groupLocation");
+        numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
 
         setTitle(groupName);
 
@@ -80,8 +96,7 @@ public class Chat extends AppCompatActivity {
             public void onClick(View v) {
                 //generate a random key for the new message
                 String message = messageToSend.getText().toString();
-                if(message.length() == 0)
-                {
+                if(message.length() == 0) {
                     return;
                 }
 
@@ -119,7 +134,6 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getChildrenCount() == 7) {
-
                     HashMap<String, Object> data = (HashMap<String, Object>) dataSnapshot.getValue();
                     HashMap<String,Long> timeStamp = (HashMap<String, Long>)data.get("TimeStamp");
 
@@ -128,8 +142,7 @@ public class Chat extends AppCompatActivity {
                     String groupID = getIntent().getExtras().getString("groupID");
                     String userName = (String) data.get("Name");
                     Uri profilePic = Uri.parse((String)data.get("ProfilePicture"));
-                    User currentUser = new User(userID,userName,
-                            profilePic);
+                    User currentUser = new User(userID,userName, profilePic);
                     String Type = (String) data.get("Type");
                     String AdminID = (String) data.get("GroupAdminID");
                     long time =timeStamp.get("time");
@@ -155,13 +168,41 @@ public class Chat extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(adminID.equals(Profile.getCurrentProfile().getId())) {
+            getMenuInflater().inflate(R.menu.group_admin, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.chat_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.edit_group_details) {
+            Intent intent = new Intent(this, GroupAdminActivity.class);
+            intent.putExtra("groupSubject",subject);
+            intent.putExtra("groupDate",date);
+            intent.putExtra("groupTime",time);
+            intent.putExtra("groupID",groupID);
+            intent.putExtra("groupLocation",location);
+            intent.putExtra("numOfParticipants",numOfParticipants);
+            intent.putExtra("adminID",adminID);
+            intent.putExtra("groupName",groupName);
+            startActivity(intent);      // ADD FLAGS TO THE INTENT
+        } else if(id == R.id.group_details) {
+            Toast.makeText(this, "Details will be available soon", Toast.LENGTH_LONG).show();
+        } else if(id == R.id.leave_group_admin || id == R.id.leave_group_chat) {
+            Toast.makeText(this, "Leaving will be available soon", Toast.LENGTH_LONG).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     //a helper function that creates the TextView that holds all of the group chat
-    private void append_chat_conversation(DataSnapshot ds)
-    {
-
-
+    private void append_chat_conversation(DataSnapshot ds) {
         if(ds.getChildrenCount() == 7) {
-
             HashMap<String, Object> data = (HashMap<String, Object>) ds.getValue();
             HashMap<String,Long> timeStamp = (HashMap<String, Long>)data.get("TimeStamp");
 
@@ -182,6 +223,12 @@ public class Chat extends AppCompatActivity {
             mMessageAdapter.notifyDataSetChanged();
         }
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
 

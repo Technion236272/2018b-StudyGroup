@@ -51,6 +51,7 @@ public class GroupActivity extends AppCompatActivity {
 
         final String subject = getIntent().getExtras().getString("groupSubject");
         final String date = getIntent().getExtras().getString("groupDate");
+        final String time = getIntent().getExtras().getString("groupTime");
         final String location = getIntent().getExtras().getString("groupLocation");
         final String groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
@@ -121,6 +122,7 @@ public class GroupActivity extends AppCompatActivity {
 
         TextView subjectTV = (TextView)findViewById(R.id.SubjectInGroupContent);
         TextView dateTV = (TextView)findViewById(R.id.DateInGroupContent);
+        TextView timeTV = (TextView)findViewById(R.id.timeInGroupContent);
         TextView locationTV = (TextView)findViewById(R.id.LocationInGroupContent);
         TextView currentNumOfParticipants = (TextView)findViewById(R.id.groupParticipants);
 
@@ -208,6 +210,7 @@ public class GroupActivity extends AppCompatActivity {
         });
 
         dateTV.setText(date);
+        timeTV.setText(time);
         subjectTV.setText(subject);
         locationTV.setText(location);
         currentNumOfParticipants.setText(String.valueOf(numOfParticipants) + " Participants:");
@@ -236,6 +239,7 @@ public class GroupActivity extends AppCompatActivity {
                     chatActivity = new Intent(currentContext, Chat.class);
                     chatActivity.putExtra("groupSubject",subject);
                     chatActivity.putExtra("groupDate",date);
+                    chatActivity.putExtra("groupTime",time);
                     chatActivity.putExtra("groupID",groupID);
                     chatActivity.putExtra("groupLocation",location);
                     chatActivity.putExtra("numOfParticipants",numOfParticipants);

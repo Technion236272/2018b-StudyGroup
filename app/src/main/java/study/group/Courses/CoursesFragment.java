@@ -156,9 +156,9 @@ public class CoursesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.allCoursesRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         final String[] faculties = new String[]{"כל הקורסים", "מדעי המחשב", "הנדסת חשמל", "הנדסת מכונות", "פיזיקה", "מתמטיקה",
-                "ביולוגיה", "כימיה", "הנדסה אזרחית וסביבתית", "הנדסת תעשייה וניהול", "הנדסה כימית", "הנדסה ביורפואית",
-                "הנדסת ביוטכנולוגיה ומזון", "רפואה", "אנרגיה", "ארכיטקטורה ובינוי ערים", "הנדסת אווירונאוטיקה וחלל",
-                "לימודים הוניסטיים ואמנויות", "ננומדעים וננוטכנולוגיה", "חינוך למדע וטכנולוגיה", "חינוך גופני"};
+                "ביולוגיה", "כימיה", "הנדסה אזרחית וסביבתית", "הנדסת תעשיה וניהול", "הנדסה כימית", "הנדסה ביורפואית",
+                "הנדסת ביוטכנולוגיה ומזון", "רפואה", "אנרגיה", "ארכיטקטורה ובינוי ערים", "הנדסת אוירונוטיקה וחלל",
+                "לימודים הומניסטיים ואמנויות", "ננומדעים וננוטכנולוגיה", "חינוך למדע וטכנולוגיה", "חינוך גופני"};
         final List<String> facultiesList = new ArrayList<>(Arrays.asList(faculties));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(currentContext, android.R.layout.simple_spinner_item, facultiesList) {
             @Override

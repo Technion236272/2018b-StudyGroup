@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+<item
+    android:id="@+id/edit_group_details"
+    android:orderInCategory="100"
+    android:title="@string/edit_group_details"
+    app:showAsAction="never" />
+
+<item
+    android:id="@+id/leave_group_admin"
+    android:orderInCategory="100"
+    android:title="@string/leave_the_group"
+    app:showAsAction="never" />
+</menu>

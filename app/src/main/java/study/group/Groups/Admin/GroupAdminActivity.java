@@ -45,6 +45,7 @@ public class GroupAdminActivity extends AppCompatActivity {
 
         String subject = getIntent().getExtras().getString("groupSubject");
         String date = getIntent().getExtras().getString("groupDate");
+        String time = getIntent().getExtras().getString("groupTime");
         String location = getIntent().getExtras().getString("groupLocation");
         final String groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
@@ -58,6 +59,7 @@ public class GroupAdminActivity extends AppCompatActivity {
 
         final EditText subjectET = findViewById(R.id.subjectAdminEdit);
         final EditText dateET = findViewById(R.id.dateAdminEdit);
+        final EditText timeET = findViewById(R.id.timeAdminEdit);
         final EditText locationET = findViewById(R.id.locationAdminEdit);
         TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
 
@@ -92,6 +94,23 @@ public class GroupAdminActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 database.child("Groups").child(groupID).child("date").setValue(dateET.getText().toString());
+            }
+        });
+
+        timeET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                database.child("Groups").child(groupID).child("time").setValue(timeET.getText().toString());
             }
         });
 
@@ -173,6 +192,7 @@ public class GroupAdminActivity extends AppCompatActivity {
 
         subjectET.setText(subject);
         dateET.setText(date);
+        timeET.setText(time);
         locationET.setText(location);
         currentNumOfParticipants.setText(numOfParticipants.toString() + " Participants");
         final RecyclerView requestsRecycler = findViewById(R.id.requestAdminRecycler);
