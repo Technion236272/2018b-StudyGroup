@@ -69,6 +69,7 @@
     <string name="free_pik">http://www.freepik.com</string>
 
     <string name="edit_group_details">Edit group details</string>
+    <string name="group_details">Group details</string>
     <string name="delete_group">Delete group</string>
     <string name="leave_the_group">Leave group</string>
     <string name="pick_the_time">Pick time:</string>
