@@ -8,19 +8,23 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:741512559700:android:68b97a811a1887a0",
+        "mobilesdk_app_id": "1:741512559700:android:12683558e49af5f4",
         "android_client_info": {
-          "package_name": "com.example.studygroup"
+          "package_name": "study.group"
         }
       },
       "oauth_client": [
         {
-          "client_id": "741512559700-9g1b2v578c3sfv8r7c94l4ksohe95hm4.apps.googleusercontent.com",
+          "client_id": "741512559700-fqtsvalv770gvgbi6tm6n981bc989hii.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.studygroup",
+            "package_name": "study.group",
             "certificate_hash": "7a756ad573957c38979af7b8dd11aef3ba9240e6"
           }
+        },
+        {
+          "client_id": "741512559700-tl5p4di2pfcji8v3p4h27de4r81t75m2.apps.googleusercontent.com",
+          "client_type": 3
         },
         {
           "client_id": "741512559700-pj9usgj6qolq8dpb40j580u3t207rfmm.apps.googleusercontent.com",
@@ -44,45 +48,10 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "741512559700-pj9usgj6qolq8dpb40j580u3t207rfmm.apps.googleusercontent.com",
+              "client_id": "741512559700-tl5p4di2pfcji8v3p4h27de4r81t75m2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:741512559700:android:12683558e49af5f4",
-        "android_client_info": {
-          "package_name": "study.group"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "741512559700-pj9usgj6qolq8dpb40j580u3t207rfmm.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "741512559700-pj9usgj6qolq8dpb40j580u3t207rfmm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCxGq7ptDLmIuhfBxavEuPTZuibuckdA5Q"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

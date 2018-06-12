@@ -1,6 +1,8 @@
 package study.group.Groups.Chat;
 
+import android.content.Context;
 import android.net.Uri;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.firebase.database.ChildEventListener;
@@ -32,7 +35,7 @@ public class Chat extends AppCompatActivity {
     private Button Send;
     private DatabaseReference dataBase;
     private LinearLayoutManager lay;
-
+    private Context myContext = this;
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
     private ArrayList<UserMessage> messages;
@@ -41,7 +44,13 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        //local variables
+        findViewById(R.id.chat_action_bar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(myContext, "Join request canceled", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         final String groupID = getIntent().getExtras().getString("groupID");
         final String groupName = getIntent().getExtras().getString("groupName");
         final String adminID = getIntent().getExtras().getString("adminID");

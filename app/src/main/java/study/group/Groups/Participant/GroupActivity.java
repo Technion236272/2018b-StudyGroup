@@ -105,9 +105,11 @@ public class GroupActivity extends AppCompatActivity {
                 if (isExist) {
                     joinRequest.setText(R.string.cancel_request);
                     joinRequest.setBackgroundColor(getResources().getColor(R.color.Red));
+                    interestedButton.setVisibility(View.GONE);
                 } else {
                     joinRequest.setText(R.string.request_to_join);
                     joinRequest.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    interestedButton.setVisibility(View.VISIBLE);
                 }
             }
 
