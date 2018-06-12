@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -29,9 +30,6 @@ import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
 
-import android.widget.SearchView;
-import android.widget.Toast;
-
 public class RequestsFragment extends Fragment {
     private GroupInformationAdapter adapter;
     private RecyclerView recyclerView;
@@ -43,10 +41,6 @@ public class RequestsFragment extends Fragment {
     public RequestsFragment() {
     }
 
-    public static RequestsFragment newInstance() {
-        return new RequestsFragment();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +50,8 @@ public class RequestsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_main, menu);
-        MenuItem item = menu.findItem(R.id.search_main);
+        inflater.inflate(R.menu.groups_menu, menu);
+        MenuItem item = menu.findItem(R.id.groups_menu);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQuery(lastQuery, true);
         recyclerView.setAdapter(lastAdapter);

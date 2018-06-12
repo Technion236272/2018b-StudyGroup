@@ -1,6 +1,5 @@
-package study.group.Groups.Fragments.Joined;
+package study.group.Groups.Fragments.GroupFragment;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -31,32 +29,43 @@ import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
 
-public class joinedFragment extends Fragment {
-    private GroupInformationAdapter adapter;
-    private RecyclerView recyclerView;
-    private ArrayList<Group> groups;
-
+public class GroupFragment extends Fragment {
     private static String lastQuery = "";
     private static GroupInformationAdapter lastAdapter;
+    private String type;
+    private GroupInformationAdapter adapter;
+    private RecyclerView recyclerView;
+    private ArrayList<Group> allRelevantGroups;
+    private int recyclerViewId, layoutId;
 
-    public joinedFragment() {
+    public GroupFragment() {
     }
 
-    public static joinedFragment newInstance() {
-        return new joinedFragment();
+    public void setType(String t) {
+        this.type = t;
+    }
+
+    public void setRecyclerView(int id) {
+        this.recyclerViewId = id;
+    }
+
+    public void setLayout(int id) {
+        this.layoutId = id;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {}
+        if (getArguments() != null) {
+        }
         setHasOptionsMenu(true);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_main, menu);
-        MenuItem item = menu.findItem(R.id.search_main);
+        inflater.inflate(R.menu.groups_menu, menu);
+        MenuItem item = menu.findItem(R.id.groups_menu);
+        item.setVisible(true);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQuery(lastQuery, true);
         recyclerView.setAdapter(lastAdapter);
@@ -68,9 +77,8 @@ public class joinedFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-            //    Toast.makeText(getContext(), "Joined", Toast.LENGTH_SHORT).show();
                 ArrayList<Group> filteredList = new ArrayList<>();
-                for (Group g: groups) {
+                for (Group g : allRelevantGroups) {
                     if (g.getName().toLowerCase().contains(newText.toLowerCase())) {
                         filteredList.add(g);
                     }
@@ -81,47 +89,44 @@ public class joinedFragment extends Fragment {
                 return false;
             }
         });
-        super.onCreateOptionsMenu(menu, inflater);
+//        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_joined, container, false);
-        groups = new ArrayList<>();
+        final View view = inflater.inflate(layoutId, container, false);
 
-        recyclerView = view.findViewById(R.id.joinedGroupsRecyclerView);
+        allRelevantGroups = new ArrayList<>();
+
+        recyclerView = view.findViewById(recyclerViewId);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
 
-   //     final ArrayList<String> temp = new ArrayList<>();
-
         FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = mDataBase.getReference();
 
-
-        myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
+        myRef.child("Users").child(Profile.getCurrentProfile().getId()).child(type).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                groups = new ArrayList<>();
-                final Set<Group> tmpJoined = new HashSet<>();
+                allRelevantGroups = new ArrayList<>();
                 final ArrayList<String> tempArray = new ArrayList<>();
-//                final ArrayList<Study.Study.Study.Study.Study.Group> newJoined = new ArrayList<>();
-                for(DataSnapshot d : dataSnapshot.getChildren()){
+                final Set<Group> tempRelevantGroups = new HashSet<>();
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
                     tempArray.add(d.getKey());
                 }
                 myRef.child("Groups").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot child : dataSnapshot.getChildren()) {
-                            if(tempArray.contains(child.getKey())) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            if (tempArray.contains(child.getKey())) {
                                 Group g = child.getValue(Group.class);
-                                tmpJoined.add(g);
-                                groups.add(g);
+                                tempRelevantGroups.add(g);
+                                allRelevantGroups.add(g);
                             }
                         }
-                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
-                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
+                        adapter = new GroupInformationAdapter(new ArrayList<>(tempRelevantGroups), recyclerViewId);
+                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tempRelevantGroups), recyclerViewId);
                         recyclerView.setAdapter(adapter);
                     }
 
@@ -136,11 +141,7 @@ public class joinedFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        return view;
-    }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        return view;
     }
 }

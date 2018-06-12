@@ -1,7 +1,6 @@
 package study.group.Courses;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import study.group.Groups.Fragments.GroupsFragment;
 import study.group.R;
 import study.group.Utilities.Course;
 import study.group.Utilities.MyDatabaseUtil;
@@ -41,10 +40,10 @@ public class CoursesFragment extends Fragment {
     TreeMap<String, Course> favouriteCoursesMap, otherCoursesMap;
     TreeMap<String, Course> lastFavouriteCoursesMap, lastOtherCoursesMap;
     Spinner facultiesSpinner;
-
     CourseRecyclerViewAdapter coursesAdapter, searchAdapter;
     private RecyclerView recyclerView;
     private String lastQuery = "";
+    private GroupsFragment groupsFragment;
 
     public CoursesFragment() {
     }
@@ -55,6 +54,11 @@ public class CoursesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) { }
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     /*
@@ -86,6 +90,8 @@ public class CoursesFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search_main, menu);
         MenuItem item = menu.findItem(R.id.search_main);
+        MenuItem item2 = menu.findItem(R.id.groups_menu);
+        item2.setVisible(false);
         final SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +143,7 @@ public class CoursesFragment extends Fragment {
                 return false;
             }
         });
+//
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -144,6 +151,8 @@ public class CoursesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
         final Context currentContext = getContext();
+
+        //SearchView s = view.findvi(R.menu.menu_main);
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -169,14 +178,7 @@ public class CoursesFragment extends Fragment {
             @Override
             public View getDropDownView(int position, View convertView,
                                         @NonNull ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-//                if (position == 0) {
-//                    tv.setTextColor(Color.GRAY);
-//                } else {
-//                    tv.setTextColor(Color.BLACK);
-//                }
-                return view;
+                return super.getDropDownView(position, convertView, parent);
             }
         };
         facultiesSpinner.setAdapter(adapter);
@@ -268,4 +270,9 @@ public class CoursesFragment extends Fragment {
 
         return view;
     }
+
+    public void setGroupsFragment(GroupsFragment groupsFragment) {
+        this.groupsFragment = groupsFragment;
+    }
+
 }

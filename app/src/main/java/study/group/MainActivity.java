@@ -28,15 +28,17 @@ import study.group.Courses.CoursesFragment;
 import study.group.Groups.Fragments.GroupsFragment;
 import study.group.Utilities.Credits;
 import study.group.Utilities.MyDatabaseUtil;
-import study.group.Utilities.User;
 
 public class MainActivity extends AppCompatActivity {
-
+    GroupsFragment gf;
+    CoursesFragment cf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        gf = new GroupsFragment();
+        cf = new CoursesFragment();
+        cf.setGroupsFragment(gf);
         insertUserInfoToDatabase();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -125,17 +127,16 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new GroupsFragment();
-                case 1:
-                    return new CoursesFragment();
+                    return gf;
                 default:
-                    return new GroupsFragment();
+                    return cf;
+
             }
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 2 total pages.
             return 2;
         }
     }

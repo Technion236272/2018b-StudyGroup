@@ -10,8 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import study.group.Groups.Fragments.GroupFragment.GroupFragment;
 import study.group.Groups.Fragments.Interested.InterestedFragment;
-import study.group.Groups.Fragments.Joined.joinedFragment;
+import study.group.Groups.Fragments.Joined.JoinedFragment;
 import study.group.Groups.Fragments.Requests.RequestsFragment;
 import study.group.R;
 
@@ -25,13 +26,9 @@ import study.group.R;
  * create an instance of this fragment.
  */
 public class GroupsFragment extends Fragment {
-
+    public GroupFragment interested, joined, requests;
     public GroupsFragment() {
-        // Required empty public constructor
     }
-//    public static GroupsFragment newInstance() {
-//        return new GroupsFragment();
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +47,6 @@ public class GroupsFragment extends Fragment {
         return view;
     }
 
-
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         SectionsPagerAdapter(FragmentManager fm) {
@@ -61,24 +57,38 @@ public class GroupsFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return joinedFragment.newInstance();
+                    return new JoinedFragment();
+//                    joined = new GroupFragment();
+//                    joined.setType("Joined");
+//                    joined.setLayout(R.layout.fragment_joined);
+//                    joined.setRecyclerView(R.id.joinedGroupsRecyclerView);
+//                    return joined;
                 case 1:
-                    return InterestedFragment.newInstance();
+                    return new InterestedFragment();
+//                    interested = new GroupFragment();
+//                    interested.setType("interested");
+//                    interested.setLayout(R.layout.fragment_interested);
+//                    interested.setRecyclerView(R.id.interestedGroupsRecyclerView);
+//                    return interested;
                 default:
-                    return RequestsFragment.newInstance();
-            }
+                    return new RequestsFragment();
+//                    requests = new GroupFragment();
+//                    requests.setType("Requests");
+//                    requests.setLayout(R.layout.fragment_requests);
+//                    requests.setRecyclerView(R.id.requestsRecyclerView);
+//                    return requests;
 
+            }
         }
 
         @Override
         public int getCount() {
-            // Show 4 total pages.
+            // Show 3 total pages.
             return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-
             switch (position) {
                 case 0:
                     return "Joined";
@@ -87,8 +97,6 @@ public class GroupsFragment extends Fragment {
                 default:
                     return "Requests";
             }
-
-
         }
     }
     /**

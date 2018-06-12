@@ -54,9 +54,6 @@
         <activity android:name=".Groups.Admin.GroupAdminActivity" />
         <activity android:name=".Groups.Chat.Chat" />
         <activity android:name=".Utilities.Credits" />
-        <activity android:name=".Main2Activity">
-
-        </activity>
     </application>
 
 </manifest>

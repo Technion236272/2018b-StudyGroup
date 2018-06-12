@@ -1,4 +1,4 @@
-package study.group.Groups.Fragments.Interested;
+package study.group.Groups.Fragments.Joined;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,21 +30,22 @@ import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
 
-public class InterestedFragment extends Fragment {
+public class JoinedFragment extends Fragment {
     private GroupInformationAdapter adapter;
     private RecyclerView recyclerView;
-    private ArrayList<Group> allInterestedList;
+    private ArrayList<Group> groups;
 
     private static String lastQuery = "";
     private static GroupInformationAdapter lastAdapter;
 
-    public InterestedFragment() {
+    public JoinedFragment() {
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) { }
+        if (getArguments() != null) {}
         setHasOptionsMenu(true);
     }
 
@@ -63,8 +64,9 @@ public class InterestedFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+            //    Toast.makeText(getContext(), "Joined", Toast.LENGTH_SHORT).show();
                 ArrayList<Group> filteredList = new ArrayList<>();
-                for (Group g: allInterestedList) {
+                for (Group g: groups) {
                     if (g.getName().toLowerCase().contains(newText.toLowerCase())) {
                         filteredList.add(g);
                     }
@@ -80,24 +82,27 @@ public class InterestedFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_interested, container, false);
+        final View view = inflater.inflate(R.layout.fragment_joined, container, false);
+        groups = new ArrayList<>();
 
-        allInterestedList = new ArrayList<>();
-
-        recyclerView = view.findViewById(R.id.interestedGroupsRecyclerView);
+        recyclerView = view.findViewById(R.id.joinedGroupsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
 
+   //     final ArrayList<String> temp = new ArrayList<>();
+
         FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = mDataBase.getReference();
 
-        myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("interested").addValueEventListener(new ValueEventListener() {
+
+        myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                allInterestedList = new ArrayList<>();
+                groups = new ArrayList<>();
+                final Set<Group> tmpJoined = new HashSet<>();
                 final ArrayList<String> tempArray = new ArrayList<>();
-                final Set<Group> tmpInterested = new HashSet<>();
+//                final ArrayList<Study.Study.Study.Study.Study.Group> newJoined = new ArrayList<>();
                 for(DataSnapshot d : dataSnapshot.getChildren()){
                     tempArray.add(d.getKey());
                 }
@@ -107,12 +112,12 @@ public class InterestedFragment extends Fragment {
                         for(DataSnapshot child : dataSnapshot.getChildren()) {
                             if(tempArray.contains(child.getKey())) {
                                 Group g = child.getValue(Group.class);
-                                tmpInterested.add(g);
-                                allInterestedList.add(g);
+                                tmpJoined.add(g);
+                                groups.add(g);
                             }
                         }
-                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested), R.id.interestedGroupsRecyclerView);
-                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested), R.id.interestedGroupsRecyclerView);
+                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
+                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
                         recyclerView.setAdapter(adapter);
                     }
 
@@ -127,10 +132,8 @@ public class InterestedFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
         return view;
     }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
