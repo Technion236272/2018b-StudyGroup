@@ -88,6 +88,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        isJoined = false;
                         for (DataSnapshot ds : dataSnapshot.getChildren())
                         {
                             if(ds.getKey().equals(group.getGroupID()))
@@ -129,6 +130,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                             userGroup.putExtra("numOfParticipants",group.getCurrentNumOfPart());
                             userGroup.putExtra("adminID",group.getAdminID());
                             userGroup.putExtra("groupName",group.getName());
+                            userGroup.putExtra("maxNumOfPart",group.getmaxNumOfPart());
                             userGroup.putExtra("groupCurrentParticipants",group.getCurrentNumOfPart());
                             v.getContext().startActivity(userGroup);
                         }

@@ -57,6 +57,8 @@ public class GroupActivity extends AppCompatActivity {
         final String groupID = getIntent().getExtras().getString("groupID");
         final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
         final String adminID = getIntent().getExtras().getString("adminID");
+        final Integer groupMaxParticipants = getIntent().getExtras().getInt("maxNumOfPart");
+
 
         setTitle(subject);
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -170,6 +172,11 @@ public class GroupActivity extends AppCompatActivity {
         joinRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    if(groupMaxParticipants == numOfParticipants)
+                    {
+                        Toast.makeText(currentContext, "Group already full!", Toast.LENGTH_SHORT).show();
+                    }
+
                     interestedButton.setEnabled(true);
                     interestedButton.setVisibility(View.GONE);
 
