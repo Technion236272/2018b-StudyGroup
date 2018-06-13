@@ -38,9 +38,6 @@ import study.group.Utilities.Group;
 public class CreateGroup extends AppCompatActivity {
     private EditText groupSubject;
     private EditText Location;
-//    private Spinner day;
-//    private Spinner month;
-//    private Spinner year;
     private Spinner numOfParticipants;
     private Button createButton;
     private DatabaseReference myRef;
@@ -71,9 +68,6 @@ public class CreateGroup extends AppCompatActivity {
 
         groupSubject = findViewById(R.id.groupSubject);
         Location = findViewById(R.id.Location);
-//        day = findViewById(R.id.daySpinner);
-//        month = findViewById(R.id.monthSpinner);
-//        year = findViewById(R.id.yearsSpinner);
         numOfParticipants = findViewById(R.id.NumOfParticipants);
         createButton = findViewById(R.id.CreateGroup);
 
@@ -128,9 +122,9 @@ public class CreateGroup extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         dateFlag = true;
                         CreateGroup.this.day = dayOfMonth;
-                        CreateGroup.this.month = month;
+                        CreateGroup.this.month = month + 1;
                         CreateGroup.this.year = year;
-                        String text = String.format("%02d", dayOfMonth) + "/" + String.format("%02d", month+1) + "/" + year;
+                        String text = String.format("%02d", dayOfMonth) + "/" + String.format("%02d", CreateGroup.this.month) + "/" + year;
                         mDisplayDate.setText(text);
                     }
                 }, currentYear, currentMonth, currentDay);
@@ -191,10 +185,17 @@ public class CreateGroup extends AppCompatActivity {
             return;
         }
         String date = String.format("%02d", day) + "/" + String.format("%02d", month) + "/" + String.valueOf(year);
-        Date currentDate = new Date();
-        SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
-        Date strDate = sdf1.parse(date);
-        if(currentDate.after(strDate)) {
+
+
+        Calendar cal  = Calendar.getInstance();
+        final int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+        final int currentMonth = cal.get(Calendar.MONTH) + 1;
+        final int currentYear = cal.get(Calendar.YEAR);
+        final int currentHour = (cal.get(Calendar.HOUR_OF_DAY) + 3) % 24;
+        final int currentMinute = cal.get(Calendar.MINUTE);
+
+        if((year < currentYear) || (month < currentMonth && year <= currentYear) ||
+                (day < currentDay && month <= currentMonth && year <= currentYear)) {
             alertDialog.setTitle(R.string.irrelevant_date);
             alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -206,6 +207,17 @@ public class CreateGroup extends AppCompatActivity {
 
         if(!timeFlag) {
             alertDialog.setTitle(R.string.timeError);
+            alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            }).show();
+            return;
+        }
+
+        if((hour < currentHour && day <= currentDay && month <= currentMonth && year <= currentYear) ||
+                (minute < currentMinute && hour <= currentHour && day <= currentDay && month <= currentMonth && year <= currentYear)) {
+            alertDialog.setTitle(R.string.irrelevant_time);
             alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
 

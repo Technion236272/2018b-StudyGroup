@@ -23,6 +23,7 @@
     <string name="leave_group">Leave Group</string>
     <string name="request_to_join">Join Request</string>
     <string name="irrelevant_date">Sorry, this date has already passed, please enter a new one!</string>
+    <string name="irrelevant_time">Sorry, that time has already passed, please enter a new one!</string>
     <string name="favorite">favorite</string>
     <string name="JoinGroup">Join Group!</string>
     <string name="DeleteGroup">Delete Group!</string>
