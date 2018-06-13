@@ -2,7 +2,6 @@ package study.group.Groups.CourseGroups;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import study.group.Groups.Chat.Chat;
 import study.group.Groups.Participant.GroupActivity;
@@ -30,7 +29,6 @@ import study.group.Utilities.MyDatabaseUtil;
 public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAdapter.GroupViewHolder> {
 
     private ArrayList<Group> groups;
-    private String id;
     private boolean isJoined = false;
     private Resources resources;
 
@@ -89,16 +87,23 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         isJoined = false;
-                        for (DataSnapshot ds : dataSnapshot.getChildren())
-                        {
-                            if(ds.getKey().equals(group.getGroupID()))
-                            {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            if(ds.getKey().equals(group.getGroupID())) {
                                 isJoined = true;
                             }
                         }
-                        if(group.getAdminID().equals(Profile.getCurrentProfile().getId()))
-                        {
+                        String nextAdmin = group.getAdminID();
+                        if(group.getParticipants().size() > 1) {
+                            for(Map.Entry<String, String> user : group.getParticipants().entrySet()) {
+                                if(!user.getKey().equals(group.getAdminID())) {
+                                    nextAdmin = user.getKey();
+                                    break;
+                                }
+                            }
+                        }
+                        if(group.getAdminID().equals(Profile.getCurrentProfile().getId())) {
                             Intent adminGroup = new Intent(v.getContext(), Chat.class);
+                            adminGroup.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             adminGroup.putExtra("groupSubject",group.getSubject());
                             adminGroup.putExtra("groupDate",group.getDate());
                             adminGroup.putExtra("groupTime",group.getTime());
@@ -108,20 +113,16 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                             adminGroup.putExtra("adminID",group.getAdminID());
                             adminGroup.putExtra("groupName",group.getName());
                             adminGroup.putExtra("groupCurrentParticipants",group.getCurrentNumOfPart());
+                            adminGroup.putExtra("nextAdmin", nextAdmin);
                             v.getContext().startActivity(adminGroup);
-                        }
-                        else
-                        {
+                        } else {
                             Intent userGroup;
-                            if(isJoined)
-                            {
+                            if(isJoined) {
                                 userGroup = new Intent(v.getContext(), Chat.class);
-                            }
-                            else
-                            {
+                            } else {
                                 userGroup = new Intent(v.getContext(), GroupActivity.class);
                             }
-
+                            userGroup.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             userGroup.putExtra("groupSubject",group.getSubject());
                             userGroup.putExtra("groupDate",group.getDate());
                             userGroup.putExtra("groupTime",group.getTime());
@@ -132,6 +133,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                             userGroup.putExtra("groupName",group.getName());
                             userGroup.putExtra("maxNumOfPart",group.getmaxNumOfPart());
                             userGroup.putExtra("groupCurrentParticipants",group.getCurrentNumOfPart());
+                            userGroup.putExtra("nextAdmin", nextAdmin);
                             v.getContext().startActivity(userGroup);
                         }
                     }

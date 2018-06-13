@@ -233,6 +233,7 @@ public class GroupActivity extends AppCompatActivity {
                 {
                     Intent chatActivity;
                     chatActivity = new Intent(currentContext, Chat.class);
+                    chatActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     chatActivity.putExtra("groupSubject",subject);
                     chatActivity.putExtra("groupDate",date);
                     chatActivity.putExtra("groupTime",time);

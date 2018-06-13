@@ -45,6 +45,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupsInACourseActivity.this, CreateGroup.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("courseId", courseId);
                 intent.putExtra("courseName", courseName);
                 startActivity(intent);

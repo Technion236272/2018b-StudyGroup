@@ -29,12 +29,13 @@ import java.util.Date;
 import java.util.HashMap;
 
 import study.group.Groups.Admin.GroupAdminActivity;
+import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
 import study.group.Utilities.User;
 
 public class Chat extends AppCompatActivity {
 
-    private TextView Messages;
+ //   private TextView Messages;
     private EditText messageToSend;
     private Button Send;
     private DatabaseReference dataBase;
@@ -204,7 +205,10 @@ public class Chat extends AppCompatActivity {
 
                     --currentNumOfParticipants;
                     dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
-                    finish();
+//                    Intent intent1 = new Intent(Chat.this, GroupActivity.class);
+//                    intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent1);
+//                    Chat.this.finish();
                 }
             }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                 @Override
@@ -230,7 +234,17 @@ public class Chat extends AppCompatActivity {
                 }).show();
             } else {
                 // pass the administraship to someone else
-                Toast.makeText(this, "Passing administraship and leaving will be available soon", Toast.LENGTH_LONG).show();
+                String nextAdmin = getIntent().getExtras().getString("nextAdmin");
+                dataBase.child("Groups").child(groupID).child("adminID").setValue(nextAdmin);
+                dataBase.child("Users").child(nextAdmin).child("myGroups").child(groupID).setValue(subject);
+                dataBase.child("Users").child(nextAdmin).child("Joined").child(groupID).setValue(subject);
+                dataBase.child("Groups").child(groupID).child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
+                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
+                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
+                --currentNumOfParticipants;
+                dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
+                // Sending a notification to the new Admin
+                // User: X , you are the new admin of : YY group
             }
         }
         return super.onOptionsItemSelected(item);
@@ -247,8 +261,7 @@ public class Chat extends AppCompatActivity {
             String groupID = getIntent().getExtras().getString("groupID");
             String userName = (String) data.get("Name");
             Uri profilePic = Uri.parse((String)data.get("ProfilePicture"));
-            User currentUser = new User(userID,userName,
-                    profilePic);
+            User currentUser = new User(userID,userName, profilePic);
             String Type = (String) data.get("Type");
             String AdminID = (String) data.get("GroupAdminID");
             long time =timeStamp.get("time");

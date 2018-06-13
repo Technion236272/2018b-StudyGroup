@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import study.group.Groups.Admin.GroupAdminActivity;
 import study.group.Groups.Participant.GroupActivity;
@@ -100,6 +101,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             isJoined = false;
+                            participants.setText(group.getCurrentNumOfPart()+ "/" + group.getmaxNumOfPart());
                             for (DataSnapshot ds : dataSnapshot.getChildren())
                             {
                                 if(ds.getKey().equals(group.getGroupID()))
@@ -109,7 +111,21 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
                             }
 
                             if (group.getAdminID().equals(Profile.getCurrentProfile().getId())) {
-                                Intent adminGroup = new Intent(v.getContext(), GroupAdminActivity.class);
+                                Intent adminGroup = new Intent(v.getContext(), Chat.class);
+                                adminGroup.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                Boolean nextAdminFlag = false;
+                                if(group.getParticipants().size() > 1) {
+                                    for(Map.Entry<String, String> user : group.getParticipants().entrySet()) {
+                                        if(!user.getKey().equals(group.getAdminID())) {
+                                            adminGroup.putExtra("nextAdmin", user.getKey());
+                                            nextAdminFlag = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if(!nextAdminFlag) {
+                                    adminGroup.putExtra("nextAdmin", group.getAdminID());
+                                }
                                 adminGroup.putExtra("groupSubject", group.getSubject());
                                 adminGroup.putExtra("groupDate", group.getDate());
                                 adminGroup.putExtra("groupTime", group.getTime());
@@ -130,7 +146,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
                                 {
                                     userGroup = new Intent(v.getContext(), GroupActivity.class);
                                 }
-
+                                userGroup.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 userGroup.putExtra("groupSubject", group.getSubject());
                                 userGroup.putExtra("groupDate", group.getDate());
                                 userGroup.putExtra("groupTime", group.getTime());
