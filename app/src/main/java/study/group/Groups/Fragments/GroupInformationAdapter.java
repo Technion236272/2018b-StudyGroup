@@ -11,8 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import study.group.Groups.Chat.Chat;
 import com.facebook.Profile;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -30,6 +33,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
 
     private ArrayList<Group> data;
     private int fragment;
+    boolean isJoined;
 
     public GroupInformationAdapter(ArrayList<Group> data, int fragment) {
         this.fragment = fragment;
@@ -90,41 +94,60 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
              */
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    Group group = data.get(getAdapterPosition());
-                    if (group.getAdminID().equals(Profile.getCurrentProfile().getId())) {
-                        Intent adminGroup = new Intent(v.getContext(), GroupAdminActivity.class);
-                        adminGroup.putExtra("groupSubject", group.getSubject());
-                        adminGroup.putExtra("groupDate", group.getDate());
-                        adminGroup.putExtra("groupTime", group.getTime());
-                        adminGroup.putExtra("groupID", group.getGroupID());
-                        adminGroup.putExtra("groupLocation", group.getLocation());
-                        adminGroup.putExtra("numOfParticipants", group.getCurrentNumOfPart());
-                        adminGroup.putExtra("adminID", group.getAdminID());
-                        adminGroup.putExtra("groupName", group.getName());
+                public void onClick(final View v) {
+                    final Group group = data.get(getAdapterPosition());
+                    myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            isJoined = false;
+                            for (DataSnapshot ds : dataSnapshot.getChildren())
+                            {
+                                if(ds.getKey().equals(group.getGroupID()))
+                                {
+                                    isJoined = true;
+                                }
+                            }
 
-                        v.getContext().startActivity(adminGroup);
-                    } else {
-                        Intent userGroup;
-                        if(group.getParticipants().keySet().contains(Profile.getCurrentProfile().getId()))
-                        {
-                            userGroup = new Intent(v.getContext(), Chat.class);
-                        }
-                        else
-                        {
-                            userGroup = new Intent(v.getContext(), GroupActivity.class);
+                            if (group.getAdminID().equals(Profile.getCurrentProfile().getId())) {
+                                Intent adminGroup = new Intent(v.getContext(), GroupAdminActivity.class);
+                                adminGroup.putExtra("groupSubject", group.getSubject());
+                                adminGroup.putExtra("groupDate", group.getDate());
+                                adminGroup.putExtra("groupTime", group.getTime());
+                                adminGroup.putExtra("groupID", group.getGroupID());
+                                adminGroup.putExtra("groupLocation", group.getLocation());
+                                adminGroup.putExtra("numOfParticipants", group.getCurrentNumOfPart());
+                                adminGroup.putExtra("adminID", group.getAdminID());
+                                adminGroup.putExtra("groupName", group.getName());
+
+                                v.getContext().startActivity(adminGroup);
+                            } else {
+                                Intent userGroup;
+                                if(isJoined)
+                                {
+                                    userGroup = new Intent(v.getContext(), Chat.class);
+                                }
+                                else
+                                {
+                                    userGroup = new Intent(v.getContext(), GroupActivity.class);
+                                }
+
+                                userGroup.putExtra("groupSubject", group.getSubject());
+                                userGroup.putExtra("groupDate", group.getDate());
+                                userGroup.putExtra("groupTime", group.getTime());
+                                userGroup.putExtra("groupID", group.getGroupID());
+                                userGroup.putExtra("groupLocation", group.getLocation());
+                                userGroup.putExtra("numOfParticipants", group.getCurrentNumOfPart());
+                                userGroup.putExtra("adminID", group.getAdminID());
+                                userGroup.putExtra("groupName", group.getName());
+                                v.getContext().startActivity(userGroup);
+                            }
                         }
 
-                        userGroup.putExtra("groupSubject", group.getSubject());
-                        userGroup.putExtra("groupDate", group.getDate());
-                        userGroup.putExtra("groupTime", group.getTime());
-                        userGroup.putExtra("groupID", group.getGroupID());
-                        userGroup.putExtra("groupLocation", group.getLocation());
-                        userGroup.putExtra("numOfParticipants", group.getCurrentNumOfPart());
-                        userGroup.putExtra("adminID", group.getAdminID());
-                        userGroup.putExtra("groupName", group.getName());
-                        v.getContext().startActivity(userGroup);
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
             });

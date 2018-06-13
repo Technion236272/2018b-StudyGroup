@@ -68,6 +68,11 @@ public class GroupActivity extends AppCompatActivity {
         final Button cancelRequest = (Button) findViewById(R.id.cancelRequest);
         final Button interestedButton = (Button) findViewById(R.id.Interested);
 
+        //if a group is full a user cant send a request
+        if(groupMaxParticipants == numOfParticipants)
+        {
+            joinRequest.setVisibility(View.GONE);
+        }
         //In case the user is interested in a coursse
         database.child("Users").child(userID).child("interested").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -172,11 +177,6 @@ public class GroupActivity extends AppCompatActivity {
         joinRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if(groupMaxParticipants == numOfParticipants)
-                    {
-                        Toast.makeText(currentContext, "Group already full!", Toast.LENGTH_SHORT).show();
-                    }
-
                     interestedButton.setEnabled(true);
                     interestedButton.setVisibility(View.GONE);
 
