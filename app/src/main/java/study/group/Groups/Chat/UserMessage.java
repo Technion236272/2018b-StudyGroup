@@ -47,7 +47,10 @@ class UserMessage {
     @Override
     public boolean equals(Object m)
     {
-        return ((UserMessage)m).getSender().getToken().equals(sender.getToken()) &&
+        if(m == null){
+            return false;
+        }
+        return m instanceof UserMessage && ((UserMessage)m).getSender().getToken().equals(sender.getToken()) &&
                                                 (((UserMessage)m).getTime() == getTime());
     }
 }
