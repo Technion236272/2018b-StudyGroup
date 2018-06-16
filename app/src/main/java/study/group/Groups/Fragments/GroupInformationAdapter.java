@@ -131,7 +131,8 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
                                 adminGroup.putExtra("groupTime", group.getTime());
                                 adminGroup.putExtra("groupID", group.getGroupID());
                                 adminGroup.putExtra("groupLocation", group.getLocation());
-                                adminGroup.putExtra("numOfParticipants", group.getCurrentNumOfPart());
+                                adminGroup.putExtra("numOfParticipants", group.getmaxNumOfPart());
+                                adminGroup.putExtra("groupCurrentParticipants", group.getCurrentNumOfPart());
                                 adminGroup.putExtra("adminID", group.getAdminID());
                                 adminGroup.putExtra("groupName", group.getName());
 

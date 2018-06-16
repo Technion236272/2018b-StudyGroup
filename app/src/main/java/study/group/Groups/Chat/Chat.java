@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -29,7 +28,6 @@ import java.util.Date;
 import java.util.HashMap;
 
 import study.group.Groups.Admin.GroupAdminActivity;
-import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
 import study.group.Utilities.User;
 
@@ -52,7 +50,7 @@ public class Chat extends AppCompatActivity {
     private String date;
     private String time;
     private String location;
-    private Integer numOfParticipants;
+    private Integer maxNumOfParticipants;
     private Integer currentNumOfParticipants;
 
     @Override
@@ -71,7 +69,7 @@ public class Chat extends AppCompatActivity {
         time = getIntent().getExtras().getString("groupTime");
         location = getIntent().getExtras().getString("groupLocation");
         currentNumOfParticipants = getIntent().getExtras().getInt("groupCurrentParticipants");
-        numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
+        maxNumOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
 
         setTitle(groupName);
 
@@ -189,7 +187,8 @@ public class Chat extends AppCompatActivity {
             intent.putExtra("groupTime",time);
             intent.putExtra("groupID",groupID);
             intent.putExtra("groupLocation",location);
-            intent.putExtra("numOfParticipants",numOfParticipants);
+            intent.putExtra("maxNumOfParticipants", maxNumOfParticipants);
+            intent.putExtra("numOfParticipants", currentNumOfParticipants);
             intent.putExtra("adminID",adminID);
             intent.putExtra("groupName",groupName);
             startActivity(intent);      // ADD FLAGS TO THE INTENT
@@ -205,6 +204,7 @@ public class Chat extends AppCompatActivity {
 
                     --currentNumOfParticipants;
                     dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
+                    finish();
 //                    Intent intent1 = new Intent(Chat.this, GroupActivity.class);
 //                    intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                    startActivity(intent1);

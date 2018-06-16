@@ -228,6 +228,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     database.child("Groups").child(groupID).child("Requests").child(user.getToken()).removeValue();
                     database.child("Groups").child(groupID).child("participants")
                             .child(user.getToken()).setValue(user.getName());
+
+
+
                     database.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentParticipants[0]+1);
                     database.child("Users").child(user.getToken()).child("Joined").child(groupID)
                             .setValue("");

@@ -133,7 +133,7 @@ public class GroupActivity extends AppCompatActivity {
         TextView dateTV = (TextView)findViewById(R.id.DateInGroupContent);
         TextView timeTV = (TextView)findViewById(R.id.timeInGroupContent);
         TextView locationTV = (TextView)findViewById(R.id.LocationInGroupContent);
-        TextView currentNumOfParticipants = (TextView)findViewById(R.id.groupParticipants);
+        final TextView currentNumOfParticipants = (TextView)findViewById(R.id.groupParticipants);
 
         //The listener of the join requets button
         cancelRequest.setOnClickListener(new View.OnClickListener() {
@@ -241,8 +241,10 @@ public class GroupActivity extends AppCompatActivity {
                     chatActivity.putExtra("groupLocation",location);
                     chatActivity.putExtra("numOfParticipants",numOfParticipants);
                     chatActivity.putExtra("adminID",adminID);
+                    chatActivity.putExtra("groupCurrentParticipants",numOfParticipants);
                     chatActivity.putExtra("groupName",getIntent().getExtras().getString("groupName"));
                     currentContext.startActivity(chatActivity);
+                    finish();
                 }
 
                 GroupParticipantsAdapter participantsAdapter = new GroupParticipantsAdapter(new ArrayList<>(participants));

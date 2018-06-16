@@ -205,7 +205,7 @@ public class GroupAdminActivity extends AppCompatActivity {
             }
         });
 
-        database.child("Groups").child(groupID).child("Participants").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child("Groups").child(groupID).child("participants").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecyclerView participantsRecycler = findViewById(R.id.recyclerPaticipantsGroup);
