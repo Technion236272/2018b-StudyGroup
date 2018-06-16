@@ -81,5 +81,6 @@
     <string name="pick_the_date">Pick date:</string>
     <string name="click_choose_time">Click to choose time</string>
     <string name="click_choose_date">Click to choose a date</string>
+    <string name="loading">Loading ...</string>
 
 </resources>
