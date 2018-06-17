@@ -1,26 +1,40 @@
 package study.group.Groups.CourseGroups;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import study.group.Groups.Chat.Chat;
+import study.group.Groups.CreateGroup;
 import study.group.Groups.Participant.GroupActivity;
 import study.group.R;
 import study.group.Utilities.Group;
@@ -31,6 +45,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     private ArrayList<Group> groups;
     private boolean isJoined = false;
     private Resources resources;
+    private Context context;
 
     GroupCardsViewAdapter(ArrayList<Group> groups) {
         this.groups = groups;
@@ -41,6 +56,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_group_item, viewGroup, false);
         resources = v.getResources();
+        context = v.getContext();
 
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
@@ -57,6 +73,18 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         final Group group = groups.get(i);
         viewHolder.subject.setText(group.getSubject());
         viewHolder.date.setText(group.getDate());
+
+        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        StorageReference fileReference = mStorageRef.child(group.getGroupID());
+        fileReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if(task.isSuccessful()) {
+                    String downloadURL = task.getResult().toString();
+                    Picasso.with(context).load(downloadURL).into(viewHolder.groupPhoto);
+                }
+            }
+        });
 
         String userStatus = getUserStatus(group);
         viewHolder.userState.setText(userStatus);
@@ -193,6 +221,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         TextView date;
         TextView userState;
         TextView numOfPart;
+        ImageView groupPhoto;
         // group picture
 
         GroupViewHolder(final View itemView) {
@@ -202,7 +231,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
             date = itemView.findViewById(R.id.groupDateCardView);
             userState = itemView.findViewById(R.id.userStateInGroupCardView);
             numOfPart = itemView.findViewById(R.id.groupNumberOfParticipantsCardView);
-
+            groupPhoto = itemView.findViewById(R.id.groupPhotoCardView);
         }
     }
 

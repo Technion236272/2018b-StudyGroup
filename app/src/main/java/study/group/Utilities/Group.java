@@ -1,6 +1,8 @@
 package study.group.Utilities;
 
 
+import android.net.Uri;
+
 import java.util.HashMap;
 
 public class Group {
@@ -15,6 +17,7 @@ public class Group {
     private int currentNumOfPart;
     private String adminID;
     private String groupID;
+    private String image;
     private HashMap<String,String> Requests;
     private HashMap<String,String> participants;
     private HashMap<String,String> interested;
@@ -41,7 +44,7 @@ public class Group {
     }
 
     public Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
-                 int currentNumOfPart, String adminID, String time) {
+                 int currentNumOfPart, String adminID, String time, String image) {
         //     this.faculty = faculty;
         this.name = id + "-" + subject;
         this.id = id;
@@ -53,8 +56,10 @@ public class Group {
         this.adminID = adminID;
         this.groupID = groupID;
         this.time = time;
+        this.image = image;
         this.participants = new HashMap<>();
         this.Requests = new HashMap<>();
+        this.interested = new HashMap<>();
 //        this.users = users;
     }
 
@@ -178,4 +183,11 @@ public class Group {
         return other instanceof Group && this.getGroupID().equals(((Group)other).getGroupID());
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
