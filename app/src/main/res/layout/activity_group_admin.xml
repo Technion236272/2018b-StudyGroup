@@ -135,30 +135,5 @@
         app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit"
         android:layout_marginLeft="8dp" />
 
-    <TextView
-        android:id="@+id/requestsAdmin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/Requests"
-        android:textSize="18sp"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerPaticipantsGroup"
-        android:layout_marginLeft="8dp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/requestAdminRecycler"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/requestsAdmin" />
 </android.support.constraint.ConstraintLayout>
 </ScrollView>

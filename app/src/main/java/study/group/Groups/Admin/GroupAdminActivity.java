@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,12 +59,11 @@ public class GroupAdminActivity extends AppCompatActivity {
         String time = getIntent().getExtras().getString("groupTime");
         String location = getIntent().getExtras().getString("groupLocation");
         groupID = getIntent().getExtras().getString("groupID");
-        final Integer numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
+        final int numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
         adminID = getIntent().getExtras().getString("adminID");
         final String groupName = getIntent().getExtras().getString("groupName");
 
-        final Set<String> participants = new HashSet<>();
-        final Set<User> requests = new HashSet<>();
+        final Set<Pair<String,String>> participants = new HashSet<>();
 
         setTitle(groupName);
 
@@ -71,7 +71,7 @@ public class GroupAdminActivity extends AppCompatActivity {
         final Button dateET = findViewById(R.id.dateAdminEdit);
         final Button timeET = findViewById(R.id.timeAdminEdit);
         final EditText locationET = findViewById(R.id.locationAdminEdit);
-        TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
+        final TextView currentNumOfParticipants = findViewById(R.id.participantsAdmin);
 
         subjectET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -127,40 +127,6 @@ public class GroupAdminActivity extends AppCompatActivity {
             }
         });
 
-//        dateET.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                database.child("Groups").child(groupID).child("date").setValue(dateET.getText().toString());
-//            }
-//        });
-
-//        timeET.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                database.child("Groups").child(groupID).child("time").setValue(timeET.getText().toString());
-//            }
-//        });
-
         locationET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -182,21 +148,13 @@ public class GroupAdminActivity extends AppCompatActivity {
         dateET.setText(date);
         timeET.setText(time);
         locationET.setText(location);
-        currentNumOfParticipants.setText(numOfParticipants.toString() + " Participants");
-        final RecyclerView requestsRecycler = findViewById(R.id.requestAdminRecycler);
-        requestsRecycler.setLayoutManager(new LinearLayoutManager(GroupAdminActivity.this));
 
-        database.child("Groups").child(groupID).child("Requests").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot d : dataSnapshot.getChildren())
-                {
-                    User userToAdd = new User(d.getKey().toString(),d.getValue().toString(), Profile.getCurrentProfile().getProfilePictureUri(30,30));
-                    requests.add(userToAdd);
-                }
-                AdminRequestsAdapter requestsAdapter = new AdminRequestsAdapter(new ArrayList<User>(requests), groupID, numOfParticipants);
-                requestsRecycler.setAdapter(requestsAdapter);
-
+                currentNumOfParticipants.setText(dataSnapshot.getValue() + " Participants:");
+                //TODO: potential Bug
+                //numOfParticipants = (long)dataSnapshot.getValue();
             }
 
             @Override
@@ -209,13 +167,17 @@ public class GroupAdminActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecyclerView participantsRecycler = findViewById(R.id.recyclerPaticipantsGroup);
+                participants.clear();
                 participantsRecycler.setLayoutManager(new LinearLayoutManager(GroupAdminActivity.this));
                 for (DataSnapshot d : dataSnapshot.getChildren())
                 {
-                    participants.add(d.getValue().toString());
+                    if(!d.getKey().equals(Profile.getCurrentProfile().getId()))
+                    {
+                        participants.add(new Pair<>(d.getKey(), (String) d.getValue()));
+                    }
                 }
 
-                AdminParticipantsAdapter participantAdapter = new AdminParticipantsAdapter(new ArrayList<String>(participants));
+                AdminParticipantsAdapter participantAdapter = new AdminParticipantsAdapter(new ArrayList<>(participants),groupID,numOfParticipants);
                 participantsRecycler.setAdapter(participantAdapter);
             }
 
