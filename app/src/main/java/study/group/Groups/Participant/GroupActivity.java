@@ -74,7 +74,7 @@ public class GroupActivity extends AppCompatActivity {
             joinRequest.setVisibility(View.GONE);
         }
         //In case the user is interested in a coursse
-        database.child("Users").child(userID).child("interested").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child("Users").child(userID).child("interested").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean isExist = false;
@@ -182,6 +182,9 @@ public class GroupActivity extends AppCompatActivity {
 
                     database.child("Users").child(userID).child("Requests").child(groupID).setValue(subject);
                     database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
+                    database.child("Users").child(userID).
+                        child("interested").child(groupID).removeValue();
+                    database.child("Groups").child(groupID).child("interested").child(userID).removeValue();
 
                     String key = database.child("Groups").child(groupID).child("Chat").push().getKey();
                     database.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
