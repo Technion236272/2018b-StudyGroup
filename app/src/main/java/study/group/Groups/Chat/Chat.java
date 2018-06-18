@@ -1,5 +1,6 @@
 package study.group.Groups.Chat;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +44,6 @@ public class Chat extends AppCompatActivity {
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
     private ArrayList<UserMessage> messages;
-
     private String adminID;
     private String groupID;
     private String groupName;
@@ -57,10 +58,10 @@ public class Chat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        final Context myContext = this;
         groupID = getIntent().getExtras().getString("groupID");
         groupName = getIntent().getExtras().getString("groupName");
         adminID = getIntent().getExtras().getString("adminID");
@@ -164,6 +165,30 @@ public class Chat extends AppCompatActivity {
             }
         });
 
+        dataBase.child("Groups").child(groupID).child("participants").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean flag = false;
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    if(d.getKey().equals(Profile.getCurrentProfile().getId()))
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+
+                if(flag == false)
+                {
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 
@@ -201,7 +226,6 @@ public class Chat extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int id) {
                     dataBase.child("Groups").child(groupID).child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
                     dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
-
                     --currentNumOfParticipants;
                     dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
                     finish();
