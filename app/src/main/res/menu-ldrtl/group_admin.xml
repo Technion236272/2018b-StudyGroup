@@ -5,19 +5,19 @@
     <item
         android:id="@+id/pass_administraship"
         android:orderInCategory="101"
-        android:title="@string/pass_admin"
+        android:title="@string/pass_admin_rtl"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/make_poll"
         android:orderInCategory="101"
-        android:title="@string/make_poll"
+        android:title="@string/make_poll_rtl"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/delete_group"
         android:orderInCategory="101"
-        android:title="@string/delete_group"
+        android:title="@string/delete_group_rtl"
         app:showAsAction="never" />
 
 </menu>

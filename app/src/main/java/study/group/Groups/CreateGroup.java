@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -83,6 +84,7 @@ public class CreateGroup extends AppCompatActivity {
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private String finalExc;
+    private ProgressBar mProgressBar;
 
 
     @Override
@@ -97,6 +99,7 @@ public class CreateGroup extends AppCompatActivity {
         Location = findViewById(R.id.Location);
         numOfParticipants = findViewById(R.id.NumOfParticipants);
         createButton = findViewById(R.id.CreateGroup);
+        mProgressBar = findViewById(R.id.imageProgress);
 
         mButtonChooseImage = findViewById(R.id.chooseImage);
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
@@ -214,7 +217,48 @@ public class CreateGroup extends AppCompatActivity {
         }
     }
 
+
     public void openAlertDialog(View view) throws ParseException {
+
+        final String key = myRef.child("Groups").push().getKey();
+        StorageReference fileReference = mStorageRef.child(key);
+        if (mImageUri != null) {
+            finalExc = getFileExtension(mImageUri);
+            mUploadTask = fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressBar.setProgress(0);
+                                }
+                            }, 500);
+                            Uri img = taskSnapshot.getDownloadUrl();
+                            mImageUri = img;
+                            myRef.child("Groups").child(key).child("image").setValue(img.toString());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CreateGroup.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            mProgressBar.setProgress((int) progress);
+                        }
+                    });
+
+        }
+        if(mImageUri == null) {
+            mImageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0.png");
+        }
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         final String subject = groupSubject.getText().toString();
         if(subject.length()==0) {
@@ -296,52 +340,16 @@ public class CreateGroup extends AppCompatActivity {
             return;
         }
 
-        final String key = myRef.child("Groups").push().getKey();
-        StorageReference fileReference = mStorageRef.child(key);
-        if (mImageUri != null) {
-            finalExc = getFileExtension(mImageUri);
-            mUploadTask = fileReference.putFile(mImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                            Handler handler = new Handler();
-//                            handler.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                         //           mProgressBar.setProgress(0);
-//                                }
-//                            }, 500);
-//                            String uploadId = mDatabaseRef.push().getKey();
-//                            mDatabaseRef.child(uploadId).setValue(taskSnapshot.getDownloadUrl());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(CreateGroup.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        }
-                    });
-
-        }
-        if(mImageUri == null) {
-            mImageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0.png");
-        }
         final Integer numOfPart = Integer.parseInt((numOfParticipants.getSelectedItem().toString()));
         final Integer current = 1;
         final String time = String.format("%02d", hour) + ":" + String.format("%02d", minute);
 
-        fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                myRef.child("Groups").child(key).child("image").setValue(uri.toString());
-            }
-        });
+//        fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+//                myRef.child("Groups").child(key).child("image").setValue(uri.toString());
+//            }
+//        });
 
         Group newGroup = new Group(key,courseId, subject, date, location, numOfPart, current,
                 Profile.getCurrentProfile().getId(), time, mImageUri.toString());

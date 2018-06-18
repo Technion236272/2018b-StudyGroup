@@ -5,12 +5,12 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 <item
     android:id="@+id/edit_group_details"
     android:orderInCategory="100"
-    android:title="@string/edit_group_details"
+    android:title="@string/edit_group_details_rtl"
     app:showAsAction="never" />
 
 <item
     android:id="@+id/leave_group_admin"
     android:orderInCategory="100"
-    android:title="@string/leave_the_group"
+    android:title="@string/leave_the_group_rtl"
     app:showAsAction="never" />
 </menu>

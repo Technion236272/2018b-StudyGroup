@@ -4,18 +4,18 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/action_settings_rtl"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/credits"
         android:orderInCategory="100"
-        android:title="@string/credits"
+        android:title="@string/credits_rtl"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/log_out"
         android:orderInCategory="100"
-        android:title="@string/log_out"
+        android:title="@string/log_out_rtl"
         app:showAsAction="never" />
 </menu>
