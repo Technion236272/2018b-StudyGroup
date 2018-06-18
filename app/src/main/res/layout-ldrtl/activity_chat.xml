@@ -5,7 +5,7 @@
     android:id="@+id/chat_action_bar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/chat_background"
+    android:background="@drawable/chat_background"
     tools:context="study.group.Groups.Chat.Chat">
 
 
@@ -13,29 +13,28 @@
         android:id="@+id/sendBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/Send"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/messageToSend" />
+        app:layout_constraintEnd_toStartOf="@+id/messageToSend"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/messageToSend"
-        android:layout_width="0dp"
+        android:layout_width="286dp"
         android:layout_height="45dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginStart="0dp"
-        android:background="@android:color/background_light"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/chat_box"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="@string/enter_message"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:inputType="textPersonName"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_weight="1" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/messagesRecycler"
