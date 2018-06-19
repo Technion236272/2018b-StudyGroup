@@ -255,9 +255,9 @@ public class CreateGroup extends AppCompatActivity {
                     });
 
         }
-        if(mImageUri == null) {
-            mImageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0.png");
-        }
+//        if(mImageUri == null) {
+//            mImageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0.png");
+//        }
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         final String subject = groupSubject.getText().toString();

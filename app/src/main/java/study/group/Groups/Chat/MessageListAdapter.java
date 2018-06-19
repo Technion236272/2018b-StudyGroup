@@ -159,7 +159,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             Picasso.with(myContext)
                     .load(message.getSender().getProfileUrl())
                     .fit()
-                    .transform(transformation).into(profileImage);
+                    .transform(transformation)
+                    .into(profileImage);
 
             messageText.setText(message.getMessage());
 
@@ -176,18 +177,21 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private class RequestMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText;
+        TextView messageTextUser;
         Button acceptButton, rejectButton;
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
         RequestMessageHolder(View itemView) {
             super(itemView);
             messageText = (TextView) itemView.findViewById(R.id.RequestMessage);
+            messageTextUser = (TextView) itemView.findViewById(R.id.RequestMessageUserName);
             acceptButton = (Button) itemView.findViewById(R.id.RequestAcceptButton);
             rejectButton = (Button) itemView.findViewById(R.id.RequestRejectButton);
         }
 
         void bind(final UserMessage message) {
-            messageText.setText(message.getSender().getName() + " has requested to join a group!");
+            messageTextUser.setText(message.getSender().getName());
+            messageText.setText(R.string.join_request_string);
             String groupAdmin = message.getAdminID();
             final User user = message.getSender();
             final String groupID = message.getGroupID();

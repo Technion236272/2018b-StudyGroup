@@ -19,13 +19,13 @@
             android:id="@+id/groupPhotoInfo"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:contentDescription="@string/group_picture"
-            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+            app:srcCompat="@drawable/studygroup1" />
 
         <TextView
             android:id="@+id/groupSubjectInfo"

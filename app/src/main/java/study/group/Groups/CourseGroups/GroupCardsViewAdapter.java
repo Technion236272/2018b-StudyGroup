@@ -28,7 +28,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -46,6 +48,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
     private boolean isJoined = false;
     private Resources resources;
     private Context context;
+    private Transformation transformation;
 
     GroupCardsViewAdapter(ArrayList<Group> groups) {
         this.groups = groups;
@@ -74,6 +77,11 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         viewHolder.subject.setText(group.getSubject());
         viewHolder.date.setText(group.getDate());
 
+        transformation = new RoundedTransformationBuilder()
+                .cornerRadiusDp(30)
+                .oval(false)
+                .build();
+
         StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         StorageReference fileReference = mStorageRef.child(group.getGroupID());
         fileReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -81,7 +89,11 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
             public void onComplete(@NonNull Task<Uri> task) {
                 if(task.isSuccessful()) {
                     String downloadURL = task.getResult().toString();
-                    Picasso.with(context).load(downloadURL).into(viewHolder.groupPhoto);
+                    Picasso.with(context)
+                            .load(downloadURL)
+                            .fit()
+                            .transform(transformation)
+                            .into(viewHolder.groupPhoto);
                 }
             }
         });

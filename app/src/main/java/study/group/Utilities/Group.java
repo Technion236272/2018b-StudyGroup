@@ -28,7 +28,7 @@ public class Group {
     public Group(String groupID, String id, String subject, String date, String location, int maxNumOfPart,
                  int currentNumOfPart, String adminID, HashMap<String,String> Requests, HashMap<String,String> participants, HashMap<String,String> interested) {
         //     this.faculty = faculty;
-        this.name = id + "-" + subject;
+        this.name = id + " - " + subject;
         this.id = id;
         this.subject = subject;
         this.date = date;

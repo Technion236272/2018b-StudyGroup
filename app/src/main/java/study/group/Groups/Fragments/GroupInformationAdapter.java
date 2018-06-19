@@ -24,7 +24,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -46,6 +48,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
     private int fragment;
     boolean isJoined;
     private Context context;
+    private Transformation transformation;
 
     public GroupInformationAdapter(ArrayList<Group> data, int fragment) {
         this.fragment = fragment;
@@ -57,6 +60,12 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
     public InfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_information_item, parent, false);
         context = view.getContext();
+
+        transformation = new RoundedTransformationBuilder()
+                .cornerRadiusDp(30)
+                .oval(false)
+                .build();
+
         return new InfoHolder(view);
     }
 
@@ -76,7 +85,11 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
             public void onComplete(@NonNull Task<Uri> task) {
                 if(task.isSuccessful()) {
                     String downloadURL = task.getResult().toString();
-                    Picasso.with(context).load(downloadURL).into(holder.groupPhoto);
+                    Picasso.with(context)
+                            .load(downloadURL)
+                            .fit()
+                            .transform(transformation)
+                            .into(holder.groupPhoto);
                 }
             }
         });

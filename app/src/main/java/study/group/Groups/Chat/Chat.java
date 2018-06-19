@@ -145,7 +145,7 @@ public class Chat extends AppCompatActivity {
                     User currentUser = new User(userID,userName, profilePic);
                     String Type = (String) data.get("Type");
                     String AdminID = (String) data.get("GroupAdminID");
-                    long time =timeStamp.get("time");
+                    long time = timeStamp.get("time");
                     chatMessage = (String)data.get("Message");
 
                     UserMessage um = new UserMessage(chatMessage,currentUser,time,Type,AdminID,groupID);
@@ -288,10 +288,10 @@ public class Chat extends AppCompatActivity {
             User currentUser = new User(userID,userName, profilePic);
             String Type = (String) data.get("Type");
             String AdminID = (String) data.get("GroupAdminID");
-            long time =timeStamp.get("time");
+            long time = timeStamp.get("time");
             chatMessage = (String)data.get("Message");
 
-            UserMessage um = new UserMessage(chatMessage,currentUser,time,Type,AdminID,groupID);
+            UserMessage um = new UserMessage(chatMessage, currentUser, time, Type, AdminID, groupID);
             messages.add(um);
             mMessageAdapter.notifyDataSetChanged();
         }
