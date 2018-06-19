@@ -5,7 +5,7 @@
     android:id="@+id/chat_action_bar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/chat_background"
+    android:background="@drawable/chat_background"
     tools:context="study.group.Groups.Chat.Chat">
 
 

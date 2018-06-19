@@ -2,6 +2,7 @@ package study.group.Groups.Chat;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -18,7 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private Context myContext;
     private List<UserMessage> MessageList;
+    private Transformation transformation;
 
     public MessageListAdapter(Context context, List<UserMessage> messageList) {
         myContext = context;
@@ -69,6 +73,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
+
+        transformation = new RoundedTransformationBuilder()
+                .cornerRadiusDp(30)
+                .oval(false)
+                .build();
 
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext())
@@ -146,7 +155,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
 
         void bind(UserMessage message) {
-            Picasso.with(myContext).load(message.getSender().getProfileUrl()).into(profileImage);
+
+            Picasso.with(myContext)
+                    .load(message.getSender().getProfileUrl())
+                    .fit()
+                    .transform(transformation).into(profileImage);
 
             messageText.setText(message.getMessage());
 

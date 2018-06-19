@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#0e4166</color>
-    <color name="colorPrimaryDark">#303f9f</color>
+    <color name="colorPrimaryDark">#072638</color>
     <color name="colorAccent">#FF4081</color>
     <color name="tabColor">#7b8d93</color>
     <color name="Red">#ffcc0000</color>
     <color name="textColor">#ffffff</color>
     <color name="any_color">#3a47ff</color>
-    <color name="sender_chat_color">#6666ff</color>
-    <color name="receiver_chat_color">#eaeae1</color>
+    <color name="sender_chat_color">#0e4166</color>
+    <color name="receiver_chat_color">#818182</color>
     <color name="chat_background">#e3e3e3</color>
 </resources>
