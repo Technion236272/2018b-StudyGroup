@@ -34,8 +34,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -49,7 +55,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import study.group.R;
 import study.group.Utilities.Group;
@@ -85,7 +93,7 @@ public class CreateGroup extends AppCompatActivity {
     private DatabaseReference mDatabaseRef;
     private String finalExc;
     private ProgressBar mProgressBar;
-
+    private FirebaseFirestore mFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +102,7 @@ public class CreateGroup extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        mFirestore = FirebaseFirestore.getInstance();
         groupSubject = findViewById(R.id.groupSubject);
         Location = findViewById(R.id.Location);
         numOfParticipants = findViewById(R.id.NumOfParticipants);
@@ -255,9 +263,9 @@ public class CreateGroup extends AppCompatActivity {
                     });
 
         }
-//        if(mImageUri == null) {
-//            mImageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0.png");
-//        }
+        if(mImageUri == null) {
+            mImageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0.png");
+        }
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         final String subject = groupSubject.getText().toString();
@@ -359,7 +367,31 @@ public class CreateGroup extends AppCompatActivity {
                 .setValue(Profile.getCurrentProfile().getFirstName() + " " + Profile.getCurrentProfile().getLastName());
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(key).setValue(subject);
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(key).setValue(subject);
+        final Map<String, Object> notification = new HashMap<>();
+        String newGroupCreated = "Hi, "+subject+ "was created at " + courseName;
+        notification.put("Notification", newGroupCreated);
+        notification.put("Type","New Group");
+        notification.put("Admin",Profile.getCurrentProfile().getFirstName());
+        myRef.child("Courses").child(courseId).child("Followers").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot d:dataSnapshot.getChildren()){
+                    if(!d.getKey().equals(FirebaseAuth.getInstance().getUid())){
+                        mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(CreateGroup.this,"Notification Sent",Toast.LENGTH_SHORT);
+                            }
+                        });
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         finish();
     }
 
@@ -368,5 +400,4 @@ public class CreateGroup extends AppCompatActivity {
         finish();
         return true;
     }
-
 }

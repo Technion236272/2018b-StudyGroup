@@ -18,12 +18,18 @@ import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import study.group.Courses.CoursesFragment;
 import study.group.Groups.Fragments.GroupsFragment;
@@ -33,10 +39,13 @@ import study.group.Utilities.MyDatabaseUtil;
 public class MainActivity extends AppCompatActivity {
     GroupsFragment gf;
     CoursesFragment cf;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
         gf = new GroupsFragment();
         cf = new CoursesFragment();
         cf.setGroupsFragment(gf);
@@ -72,8 +81,21 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, Credits.class);
             startActivity(intent);
         } else {
-            LoginManager.getInstance().logOut();
-            finish();
+            String userId = mAuth.getUid();
+
+            Map<String,Object> m = new HashMap<>();
+            m.put("token_id", FieldValue.delete());
+
+            FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+            mFirestore.collection("Users").document(userId).update(m).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    LoginManager.getInstance().logOut();
+                    mAuth.signOut();
+                    finish();
+                }
+            });
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -103,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-              dialog.cancel();
+                dialog.cancel();
 
             }
         });
