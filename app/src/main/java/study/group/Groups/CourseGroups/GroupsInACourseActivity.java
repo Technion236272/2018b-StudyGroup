@@ -1,8 +1,10 @@
 package study.group.Groups.CourseGroups;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,6 +68,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
         myRef.child("Groups").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 MyDatabaseUtil my1 = new MyDatabaseUtil();
           //      int i = 0;
                 groups.clear();
@@ -119,7 +122,6 @@ public class GroupsInACourseActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override
@@ -127,6 +129,18 @@ public class GroupsInACourseActivity extends AppCompatActivity {
         finish();
         return true;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+
+        super.onStop();
+    }
+
 
 }
 

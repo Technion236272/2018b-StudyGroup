@@ -1,21 +1,30 @@
 package study.group.Groups.Fragments;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import study.group.Groups.Chat.Chat;
 import com.facebook.Profile;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -32,9 +41,11 @@ import study.group.Utilities.MyDatabaseUtil;
  */
 public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformationAdapter.InfoHolder> {
 
+
     private ArrayList<Group> data;
     private int fragment;
     boolean isJoined;
+    private Context context;
 
     public GroupInformationAdapter(ArrayList<Group> data, int fragment) {
         this.fragment = fragment;
@@ -45,17 +56,30 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
     @Override
     public InfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_information_item, parent, false);
+        context = view.getContext();
         return new InfoHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull InfoHolder holder, int key) {
+    public void onBindViewHolder(@NonNull final InfoHolder holder, int key) {
         Group group = data.get(key);
         holder.subject.setText(group.getSubject());
         holder.idAndName.setText(group.getId());
         holder.date.setText(group.getDate());
         String sb = String.valueOf(group.getCurrentNumOfPart()) + "/" + String.valueOf(group.getmaxNumOfPart());
         holder.participants.setText(sb);
+
+        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+        StorageReference fileReference = mStorageRef.child(group.getGroupID());
+        fileReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if(task.isSuccessful()) {
+                    String downloadURL = task.getResult().toString();
+                    Picasso.with(context).load(downloadURL).into(holder.groupPhoto);
+                }
+            }
+        });
     }
 
     @Override
@@ -75,6 +99,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
         TextView date;
         TextView participants;
         Button interestedButton;
+        ImageView groupPhoto;
 
         InfoHolder(final View itemView) {
             super(itemView);
@@ -83,6 +108,8 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
             idAndName = itemView.findViewById(R.id.groupIdAndName);
             date = itemView.findViewById(R.id.groupMeetingDate);
             participants = itemView.findViewById(R.id.groupNumberOfParticipantsInfo);
+            groupPhoto = itemView.findViewById(R.id.groupPhotoInfo);
+
 
             MyDatabaseUtil my = new MyDatabaseUtil();
             MyDatabaseUtil.getDatabase();
@@ -170,4 +197,8 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
             });
         }
     }
+
+
+
+
 }
