@@ -62,7 +62,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timeAdminEdit" />
 
-        <Button
+        <EditText
             android:id="@+id/subjectAdminEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,7 +70,9 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:ems="10"
+            android:inputType="textPersonName"
             android:text="@string/Name"
+            android:hint="@string/Subject"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/subjectAdmin" />
 
@@ -86,7 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dateAdmin" />
 
-        <EditText
+        <Button
             android:id="@+id/timeAdminEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,7 +96,6 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:text="@string/Time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timeAdmin" />
@@ -109,6 +110,7 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:text="@string/Location"
+            android:hint="@string/Location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/locationAdmin" />
 

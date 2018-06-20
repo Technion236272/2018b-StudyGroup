@@ -70,6 +70,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/Name"
+        android:hint="@string/Subject"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subjectAdmin"
         android:layout_marginLeft="8dp" />
@@ -107,6 +108,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/Location"
+        android:hint="@string/Location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationAdmin"
         android:layout_marginLeft="8dp" />

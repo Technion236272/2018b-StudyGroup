@@ -66,8 +66,7 @@ public class GroupAdminActivity extends AppCompatActivity {
         final Set<Pair<String,String>> participants = new HashSet<>();
 
         setTitle(groupName);
-
-        final EditText subjectET = findViewById(R.id.subjectAdminEdit);
+        final EditText subjectET = (EditText) findViewById(R.id.subjectAdminEdit);
         final Button dateET = findViewById(R.id.dateAdminEdit);
         final Button timeET = findViewById(R.id.timeAdminEdit);
         final EditText locationET = findViewById(R.id.locationAdminEdit);
