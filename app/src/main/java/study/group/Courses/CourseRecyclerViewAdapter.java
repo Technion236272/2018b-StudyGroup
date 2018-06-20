@@ -125,7 +125,7 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
                             for (DataSnapshot d : dataSnapshot.getChildren()) {
                                 if ((d.getValue()).equals(courseID)) {
                                     d.getRef().removeValue();
-                                    myRef.child("Courses").child(courseID).child("Followers").child(FirebaseAuth.getInstance().getUid()).getRef().removeValue();
+                                    myRef.child("Courses").child(courseID).child("Followers").child(Profile.getCurrentProfile().getId()).getRef().removeValue();
                                     favouriteCourses.remove(position);
                                     Course c = favouritesMap.remove(courseID);
                                     c.setFav(false);
@@ -146,7 +146,7 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
                              */
                             myRef.child("Users").child(Profile.getCurrentProfile().getId()).
                                     child("FavouriteCourses").child(courseName).setValue(courseID);
-                            myRef.child("Courses").child(courseID).child("Followers").child(FirebaseAuth.getInstance().getUid()).setValue("");
+                            myRef.child("Courses").child(courseID).child("Followers").child(Profile.getCurrentProfile().getId()).setValue("");
                             Course c = othersMap.remove(courseID);
                             otherCourses.remove(c);
                             c.setFav(true);

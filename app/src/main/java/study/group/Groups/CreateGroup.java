@@ -352,13 +352,6 @@ public class CreateGroup extends AppCompatActivity {
         final Integer current = 1;
         final String time = String.format("%02d", hour) + ":" + String.format("%02d", minute);
 
-//        fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                myRef.child("Groups").child(key).child("image").setValue(uri.toString());
-//            }
-//        });
-
         Group newGroup = new Group(key,courseId, subject, date, location, numOfPart, current,
                 Profile.getCurrentProfile().getId(), time, mImageUri.toString());
 
@@ -368,7 +361,7 @@ public class CreateGroup extends AppCompatActivity {
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(key).setValue(subject);
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(key).setValue(subject);
         final Map<String, Object> notification = new HashMap<>();
-        String newGroupCreated = "Hi, "+subject+ "was created at " + courseName;
+        String newGroupCreated = "Hi, "+subject+ " was created at " + courseName + "  Open up and join the group";
         notification.put("Notification", newGroupCreated);
         notification.put("Type","New Group");
         notification.put("Admin",Profile.getCurrentProfile().getFirstName());
@@ -376,7 +369,7 @@ public class CreateGroup extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot d:dataSnapshot.getChildren()){
-                    if(!d.getKey().equals(FirebaseAuth.getInstance().getUid())){
+                    if(!d.getKey().equals(Profile.getCurrentProfile().getId())){
                         mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {

@@ -19,24 +19,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import study.group.Groups.Chat.Chat;
+import study.group.Groups.CreateGroup;
 import study.group.MainActivity;
 import study.group.R;
 
 public class GroupActivity extends AppCompatActivity {
-
+    private FirebaseFirestore mFirestore;
     private static final int NOTIFICATION_ID = 101;
     public static final String CHANNEL_ID = "my_notification_channel";
     public static final String TEXT_REPLY = "text_reply";
@@ -46,7 +52,7 @@ public class GroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
-
+        mFirestore = FirebaseFirestore.getInstance();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -198,11 +204,40 @@ public class GroupActivity extends AppCompatActivity {
 
                     joinRequest.setVisibility(View.GONE);
                     cancelRequest.setVisibility(View.VISIBLE);
-                    Toast.makeText(currentContext, "Join request has been sent", Toast.LENGTH_SHORT).show();
 
-                    //       String notificationTitle = "StudyGroup - Join request";
-                    //       String notificationContent = userName + " is wish to join " + subject;
-                    //       setNotification(notificationTitle, notificationContent);
+                Toast.makeText(currentContext, "Join request has been sent", Toast.LENGTH_SHORT).show();
+
+                final Map<String, Object> notification = new HashMap<>();
+                String newJoinRequest = "Hi, "+ userName +" "+Profile.getCurrentProfile().getLastName() +" wants to join "+subject;
+                notification.put("Notification", newJoinRequest);
+                notification.put("Type","Join Request");
+                notification.put("Sender", userName + Profile.getCurrentProfile().getLastName());
+
+                mFirestore.collection("Users/"+adminID+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+
+                    }
+                });
+//                database.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        for(DataSnapshot d:dataSnapshot.getChildren()){
+//                            if(!d.getKey().equals(FirebaseAuth.getInstance().getUid())){
+//                               ;
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
+
+                           String notificationTitle = "StudyGroup - Join request";
+                           String notificationContent = userName + " is wish to join " + subject;
+                           setNotification(notificationTitle, notificationContent);
             }
         });
 

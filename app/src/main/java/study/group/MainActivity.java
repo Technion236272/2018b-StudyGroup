@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             m.put("token_id", FieldValue.delete());
 
             FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-            mFirestore.collection("Users").document(userId).update(m).addOnSuccessListener(new OnSuccessListener<Void>() {
+            mFirestore.collection("Users").document(Profile.getCurrentProfile().getId()).update(m).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     LoginManager.getInstance().logOut();

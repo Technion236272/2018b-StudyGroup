@@ -221,21 +221,21 @@ public class GroupAdminActivity extends AppCompatActivity {
                                 for (DataSnapshot participant : dataSnapshot.getChildren()) {
                                     if (participant.getKey().equals(adminID)) {
                                         database.child("Users").child(participant.getKey()).child("myGroups").child(groupID).removeValue();
-                                        }
-                                        database.child("Users").child(participant.getKey()).child("Joined").child(groupID).removeValue();
                                     }
+                                    database.child("Users").child(participant.getKey()).child("Joined").child(groupID).removeValue();
                                 }
+                            }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
 
                 database.child("Groups").child(groupID).child("Requests")
                         .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
                                     String currentUser = child.getKey();
                                     database.child("Users").child(currentUser).child("Requests").child(groupID).removeValue();
                                 }
@@ -243,11 +243,11 @@ public class GroupAdminActivity extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                }
+                            }
                         });
                 database.child("Groups").child(groupID).removeValue();
                 finish();
-                }
+            }
         }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

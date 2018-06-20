@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             final HashMap<String,Object> userData = new HashMap<>();
             String token_id = FirebaseInstanceId.getInstance().getToken();
             userData.put("token_id", token_id);
-            mFirestore.collection("Users").document(currentUser.getUid()).update(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            mFirestore.collection("Users").document(Profile.getCurrentProfile().getId()).update(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                             String token_id = FirebaseInstanceId.getInstance().getToken();
                             userData.put("token_id", token_id);
 
-                            mFirestore.collection("Users").document(user.getUid()).set(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            mFirestore.collection("Users").document(Profile.getCurrentProfile().getId()).set(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);

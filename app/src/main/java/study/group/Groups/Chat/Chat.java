@@ -18,18 +18,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import study.group.Groups.Admin.GroupAdminActivity;
+import study.group.Groups.CreateGroup;
 import study.group.R;
 import study.group.Utilities.User;
 
@@ -53,11 +58,12 @@ public class Chat extends AppCompatActivity {
     private String location;
     private Integer maxNumOfParticipants;
     private Integer currentNumOfParticipants;
-
+    private FirebaseFirestore mFirestore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        mFirestore = FirebaseFirestore.getInstance();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -177,7 +183,7 @@ public class Chat extends AppCompatActivity {
                     }
                 }
 
-                if(flag == false)
+                if(!flag)
                 {
                     finish();
                 }
@@ -294,6 +300,33 @@ public class Chat extends AppCompatActivity {
             UserMessage um = new UserMessage(chatMessage, currentUser, time, Type, AdminID, groupID);
             messages.add(um);
             mMessageAdapter.notifyDataSetChanged();
+
+            final Map<String, Object> notification = new HashMap<>();
+            String newMessage = "New Message From: "+userName + Profile.getCurrentProfile().getLastName() + " in " + subject;
+            notification.put("Notification", newMessage);
+            notification.put("Type","New Message");
+            notification.put("Sender",Profile.getCurrentProfile().getFirstName());
+            dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot d:dataSnapshot.getChildren()){
+                        if(!d.getKey().equals(Profile.getCurrentProfile().getId())){
+                            mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
         }
 
     }
@@ -303,6 +336,4 @@ public class Chat extends AppCompatActivity {
         finish();
         return true;
     }
-
-
 }
