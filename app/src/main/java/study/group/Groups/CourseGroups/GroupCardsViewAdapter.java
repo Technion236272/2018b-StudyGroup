@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -102,15 +103,15 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         viewHolder.userState.setText(userStatus);
 
         switch (userStatus) {
-            case "Admin":  viewHolder.userState.setBackgroundColor(resources.getColor(R.color.colorPrimary));
+            case "Admin":  viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.admin_bubble));
                 break;
-            case "Joined": viewHolder.userState.setBackgroundColor(resources.getColor(R.color.colorPrimaryDark));
+            case "Joined": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.join_bubble));
                 break;
-            case "Requested": viewHolder.userState.setBackgroundColor(resources.getColor(R.color.any_color));
+            case "Requested": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.request_bubble));
                 break;
-            case "Interested": viewHolder.userState.setBackgroundColor(resources.getColor(R.color.tabColor));
+            case "Interested": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.interested_bubble));
                 break;
-            default: viewHolder.userState.setBackgroundColor(resources.getColor(R.color.receiver_chat_color));
+            default: viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.empty_bubble));
                 break;
         }
 
