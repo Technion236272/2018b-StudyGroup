@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,7 +48,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -67,6 +70,7 @@ public class CreateGroup extends AppCompatActivity {
     private EditText Location;
     private Spinner numOfParticipants;
     private Button createButton;
+    private ImageView imageIcon;
     private DatabaseReference myRef;
 
     private int year;
@@ -107,8 +111,7 @@ public class CreateGroup extends AppCompatActivity {
         Location = findViewById(R.id.Location);
         numOfParticipants = findViewById(R.id.NumOfParticipants);
         createButton = findViewById(R.id.CreateGroup);
-        mProgressBar = findViewById(R.id.imageProgress);
-
+        imageIcon = findViewById(R.id.imageIcon);
         mButtonChooseImage = findViewById(R.id.chooseImage);
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
@@ -222,6 +225,19 @@ public class CreateGroup extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             mImageUri = data.getData();
+//            mButtonChooseImage.setText("Image uploaded");
+//            mButtonChooseImage.setBackgroundColor(getResources().getColor(R.color.browser_actions_title_color));
+
+            Transformation transformation = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(30)
+                    .oval(false)
+                    .build();
+
+            Picasso.with(CreateGroup.this)
+                    .load(mImageUri)
+                    .fit()
+                    .transform(transformation)
+                    .into(imageIcon);
         }
     }
 
@@ -236,16 +252,10 @@ public class CreateGroup extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mProgressBar.setProgress(0);
-                                }
-                            }, 500);
                             Uri img = taskSnapshot.getDownloadUrl();
                             mImageUri = img;
                             myRef.child("Groups").child(key).child("image").setValue(img.toString());
+                            mButtonChooseImage.setText("Image uploaded");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -257,14 +267,9 @@ public class CreateGroup extends AppCompatActivity {
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                            mProgressBar.setProgress((int) progress);
                         }
                     });
 
-        }
-        if(mImageUri == null) {
-            mImageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0.png");
         }
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);

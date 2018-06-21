@@ -103,15 +103,15 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         viewHolder.userState.setText(userStatus);
 
         switch (userStatus) {
-            case "Admin":  viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.admin_bubble));
+            case "Admin":  viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_admin_bubble));
                 break;
-            case "Joined": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.join_bubble));
+            case "Joined": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_join_bubble));
                 break;
-            case "Requested": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.request_bubble));
+            case "Requested": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_request_bubble));
                 break;
-            case "Interested": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.interested_bubble));
+            case "Interested": viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_interested_bubble));
                 break;
-            default: viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.empty_bubble));
+            default: viewHolder.userState.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_empty_bubble));
                 break;
         }
 

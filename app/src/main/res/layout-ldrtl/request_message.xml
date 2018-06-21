@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="20dp"
-    android:background="@drawable/request_back">
+    android:background="@drawable/ic_request_back"
+    android:layout_marginStart="20dp">
 
     <TextView
         android:id="@+id/RequestMessageUserName"
@@ -26,7 +27,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/request_button_reject"
+        android:background="@drawable/ic_request_button_reject"
         android:text="@string/Reject"
         android:textColor="@color/textColor"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,7 +44,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/request_button_accept"
+        android:background="@drawable/ic_request_button_accept"
         android:text="@string/Accept"
         android:textColor="@color/textColor"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -8,132 +8,156 @@
 
     <EditText
         android:id="@+id/groupSubject"
-        android:layout_width="500dp"
-        android:layout_height="70dp"
+        android:layout_width="450dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginStart="100dp"
         android:layout_marginTop="70dp"
         android:ems="10"
         android:hint="@string/Subject"
         android:inputType="textPersonName"
         android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/subjectIcon"
+        app:layout_constraintTop_toBottomOf="@+id/chooseImage" />
 
     <EditText
         android:id="@+id/Location"
-        android:layout_width="500dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="80dp"
+        android:layout_width="450dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="70dp"
         android:ems="10"
         android:hint="@string/Location"
+
         android:inputType="textPersonName"
         android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/locationIcon"
         app:layout_constraintTop_toBottomOf="@+id/groupSubject" />
 
     <Spinner
         android:id="@+id/NumOfParticipants"
-        android:layout_width="500dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeDisplay" />
+        android:layout_width="450dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintStart_toEndOf="@+id/numberOfParticipantsIcon"
+        app:layout_constraintTop_toBottomOf="@+id/dateDisplay" />
 
     <Button
         android:id="@+id/CreateGroup"
-        android:layout_width="310dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="80dp"
+        android:layout_width="291dp"
+        android:layout_height="76dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="120dp"
         android:background="@color/colorPrimary"
         android:onClick="openAlertDialog"
         android:text="@string/CreateGroup"
         android:textColor="@color/textColor"
-        android:textSize="32sp"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.477"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chooseImage" />
+        app:layout_constraintTop_toBottomOf="@+id/NumOfParticipants" />
 
     <TextView
         android:id="@+id/dateDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="82dp"
         android:hint="@string/click_choose_date"
-        android:textSize="34sp"
-        app:layout_constraintStart_toEndOf="@+id/pickDate"
-        app:layout_constraintTop_toBottomOf="@+id/Location" />
-
-    <TextView
-        android:id="@+id/pickDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="150dp"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="80dp"
-        android:text="@string/pick_the_date"
-        android:textColor="@android:color/black"
-        android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toStartOf="@+id/timeDisplay"
+        app:layout_constraintStart_toEndOf="@+id/dateAndTimeIcon"
         app:layout_constraintTop_toBottomOf="@+id/Location" />
 
     <TextView
         android:id="@+id/timeDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="82dp"
         android:hint="@string/click_choose_time"
-        android:textSize="34sp"
-        app:layout_constraintStart_toEndOf="@+id/pickTime"
-        app:layout_constraintTop_toBottomOf="@+id/dateDisplay" />
-
-    <TextView
-        android:id="@+id/pickTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="150dp"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="80dp"
-        android:text="@string/pick_the_time"
-        android:textColor="@android:color/black"
-        android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pickDate" />
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/dateDisplay"
+        app:layout_constraintTop_toBottomOf="@+id/Location" />
 
     <Button
         android:id="@+id/chooseImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="70dp"
-        android:text="Choose Group Image"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NumOfParticipants" />
+        android:layout_width="450dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="85dp"
+        android:background="@color/chat_background"
+        android:text="@string/choose_group_image"
+        android:textSize="36sp"
+        app:layout_constraintStart_toEndOf="@+id/imageIcon"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/optional"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="335dp"
-        android:layout_marginLeft="110dp"
-        android:layout_marginStart="110dp"
-        android:text="*Optional"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <View
+        android:id="@+id/subjectIcon"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/ic_share_megaphone_2"
+        app:layout_constraintEnd_toStartOf="@+id/groupSubject"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chooseImage" />
+
+    <View
+        android:id="@+id/locationIcon"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/ic_location_pin_4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subjectIcon" />
+
+    <View
+        android:id="@+id/dateAndTimeIcon"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/ic_calendar_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationIcon" />
+
+    <View
+        android:id="@+id/numberOfParticipantsIcon"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/ic_user_add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateAndTimeIcon" />
+
+    <ImageView
+        android:id="@+id/imageIcon"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="80dp"
+        android:contentDescription="@string/group_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/studygroup1" />
 
 </android.support.constraint.ConstraintLayout>

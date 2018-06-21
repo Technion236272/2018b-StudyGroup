@@ -81,8 +81,8 @@
     <string name="leave_the_group">Leave group</string>
     <string name="pick_the_time">Pick time:</string>
     <string name="pick_the_date">Pick date:</string>
-    <string name="click_choose_time">Click to choose time</string>
-    <string name="click_choose_date">Click to choose a date</string>
+    <string name="click_choose_time">Pick time</string>
+    <string name="click_choose_date">Pick date</string>
     <string name="loading">Loading ..</string>
 
     <!-- RTL support -->
@@ -96,5 +96,9 @@
     <string name="credits_rtl">Credits\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>
     <string name="action_settings_rtl">Settings\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>
     <string name="join_request_string">has requested to join the group!</string>
+    <string name="optional">*Optional</string>
+    <string name="nova_credits">https://www.webalys.com/nova</string>
+    <string name="group_image">Group image</string>
+    <string name="choose_group_image">Choose Group Image</string>
 
 </resources>

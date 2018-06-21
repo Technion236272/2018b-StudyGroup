@@ -351,7 +351,7 @@ public class GroupActivity extends AppCompatActivity {
 
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
-        mBuilder.setSmallIcon(R.drawable.ic_logo);
+        mBuilder.setSmallIcon(R.drawable.ic_white_logo);
         mBuilder.setAutoCancel(true);
         mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         mBuilder.setWhen(System.currentTimeMillis());
