@@ -52,7 +52,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="38dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/ic_blue_butten"
         android:onClick="openAlertDialog"
         android:text="@string/CreateGroup"
         android:textColor="@color/textColor"
@@ -94,7 +94,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="45dp"
-        android:background="@color/chat_background"
+        android:background="@drawable/ic_image_bubble"
         android:text="@string/choose_group_image"
         app:layout_constraintStart_toEndOf="@+id/imageIcon"
         app:layout_constraintTop_toTopOf="parent" />

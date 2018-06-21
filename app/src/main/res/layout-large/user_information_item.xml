@@ -5,9 +5,13 @@
     android:layout_height="wrap_content">
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="390dp"
         android:layout_height="1px"
-        android:background="@color/browser_actions_text_color" />
+        android:layout_marginLeft="80dp"
+        android:layout_marginStart="80dp"
+        android:background="@color/browser_actions_text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,8 +20,8 @@
 
         <ImageView
             android:id="@+id/groupPhotoInfo"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -38,7 +42,7 @@
             android:layout_toRightOf="@+id/groupPhotoInfo"
             android:layout_toStartOf="@+id/groupMeetingDate"
             android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:textSize="26sp" />
 
         <TextView
             android:id="@+id/groupIdAndName"
@@ -46,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/groupSubjectInfo"
             android:layout_toEndOf="@+id/groupPhotoInfo"
-            android:layout_toRightOf="@+id/groupPhotoInfo" />
+            android:layout_toRightOf="@+id/groupPhotoInfo"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/groupMeetingDate"
@@ -58,7 +63,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:gravity="end" />
+            android:gravity="end"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/groupNumberOfParticipantsInfo"
@@ -68,7 +74,8 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/groupMeetingDate"
             android:layout_marginTop="4dp"
-            android:gravity="end" />
+            android:gravity="end"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
