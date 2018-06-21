@@ -35,6 +35,9 @@ public class InterestedFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<Group> allInterestedList;
 
+    FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
+    final DatabaseReference myRef = mDataBase.getReference();
+
     private static String lastQuery = "";
     private static GroupInformationAdapter lastAdapter;
 
@@ -44,12 +47,38 @@ public class InterestedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        myRef.child("Groups").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                    Group g = child.getValue(Group.class);
+                    for (Group group : allInterestedList) {
+                        if(group.getGroupID().equals(g.getGroupID()))
+                        {
+                            allInterestedList.remove(group);
+                            allInterestedList.add(g);
+                        }
+                    }
+                }
+                adapter = new GroupInformationAdapter(new ArrayList<>(allInterestedList), R.id.interestedGroupsRecyclerView);
+                lastAdapter = new GroupInformationAdapter(new ArrayList<>(allInterestedList), R.id.interestedGroupsRecyclerView);
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         if (getArguments() != null) { }
         setHasOptionsMenu(true);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
         inflater.inflate(R.menu.groups_menu, menu);
         MenuItem item = menu.findItem(R.id.groups_menu);
         SearchView searchView = (SearchView) item.getActionView();
@@ -88,9 +117,6 @@ public class InterestedFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MyDatabaseUtil my = new MyDatabaseUtil();
         MyDatabaseUtil.getDatabase();
-
-        FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = mDataBase.getReference();
 
         myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("interested").addValueEventListener(new ValueEventListener() {
             @Override

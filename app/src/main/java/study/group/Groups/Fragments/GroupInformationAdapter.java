@@ -49,6 +49,8 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
     boolean isJoined;
     private Context context;
     private Transformation transformation;
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    final DatabaseReference myRef = database.getReference();
 
     public GroupInformationAdapter(ArrayList<Group> data, int fragment) {
         this.fragment = fragment;
@@ -71,7 +73,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
 
     @Override
     public void onBindViewHolder(@NonNull final InfoHolder holder, int key) {
-        Group group = data.get(key);
+        final Group group = data.get(key);
         holder.subject.setText(group.getSubject());
         holder.idAndName.setText(group.getId());
         holder.date.setText(group.getDate());

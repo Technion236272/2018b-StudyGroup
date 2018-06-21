@@ -35,6 +35,9 @@ public class JoinedFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<Group> groups;
 
+    FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = mDataBase.getReference();
+
     private static String lastQuery = "";
     private static GroupInformationAdapter lastAdapter;
 
@@ -45,6 +48,58 @@ public class JoinedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myRef.child("Groups").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Group> tempGroups = new ArrayList<>();
+                for(DataSnapshot child : dataSnapshot.getChildren()) {
+                    String groupID = (String)child.child("groupID").getValue();
+                    String id = (String)child.child("id").getValue();
+                    String subject = (String)child.child("subject").getValue();
+                    String date = (String)child.child("date").getValue();
+                    String location = (String)child.child("location").getValue();
+                    Integer maxNumOfPart = Integer.parseInt(child.child("maxNumOfPart").getValue().toString());
+                    Integer currentNumOfPart = Integer.parseInt(child.child("currentNumOfPart").getValue().toString());
+                    String adminID = (String)child.child("adminID").getValue();
+                    String time = (String)child.child("time").getValue();
+                    String image = (String)child.child("image").getValue();
+                    Group g = new Group(groupID, id, subject, date, location, maxNumOfPart, currentNumOfPart, adminID, time, image);
+
+                    for (Group group : groups) {
+                        if(group.getGroupID().equals(g.getGroupID()))
+                        {
+                            tempGroups.add(g);
+                        }
+                    }
+                }
+
+                for (Group group : groups) {
+                    boolean flag = false;
+                    for(Group g : tempGroups)
+                    {
+                        if(g.getGroupID().equals(group.getGroupID()))
+                        {
+                            flag = true;
+                        }
+                    }
+
+                    if(flag == false)
+                    {
+                        tempGroups.add(group);
+                    }
+                }
+                groups.clear();
+                groups.addAll(tempGroups);
+                adapter = new GroupInformationAdapter(new ArrayList<>(groups), R.id.interestedGroupsRecyclerView);
+                lastAdapter = new GroupInformationAdapter(new ArrayList<>(groups), R.id.interestedGroupsRecyclerView);
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         if (getArguments() != null) {}
         setHasOptionsMenu(true);
     }

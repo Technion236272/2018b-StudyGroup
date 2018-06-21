@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -171,6 +172,18 @@ public class Chat extends AppCompatActivity {
             }
         });
 
+        dataBase.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentNumOfParticipants = Integer.parseInt(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         dataBase.child("Groups").child(groupID).child("participants").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -235,10 +248,6 @@ public class Chat extends AppCompatActivity {
                     --currentNumOfParticipants;
                     dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
                     finish();
-//                    Intent intent1 = new Intent(Chat.this, GroupActivity.class);
-//                    intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(intent1);
-//                    Chat.this.finish();
                 }
             }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                 @Override
@@ -264,10 +273,27 @@ public class Chat extends AppCompatActivity {
                 }).show();
             } else {
                 // pass the administraship to someone else
-                String nextAdmin = getIntent().getExtras().getString("nextAdmin");
-                dataBase.child("Groups").child(groupID).child("adminID").setValue(nextAdmin);
-                dataBase.child("Users").child(nextAdmin).child("myGroups").child(groupID).setValue(subject);
-                dataBase.child("Users").child(nextAdmin).child("Joined").child(groupID).setValue(subject);
+                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren())
+                        {
+                            if(!ds.getValue().equals(Profile.getCurrentProfile().getId()))
+                            {
+                                String nextAdmin = ds.getKey();
+                                dataBase.child("Groups").child(groupID).child("adminID").setValue(nextAdmin);
+                                dataBase.child("Users").child(nextAdmin).child("myGroups").child(groupID).setValue(subject);
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 dataBase.child("Groups").child(groupID).child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
                 dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
                 dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
