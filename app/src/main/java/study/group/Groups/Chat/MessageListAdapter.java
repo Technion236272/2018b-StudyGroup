@@ -187,6 +187,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageTextUser = (TextView) itemView.findViewById(R.id.RequestMessageUserName);
             acceptButton = (Button) itemView.findViewById(R.id.RequestAcceptButton);
             rejectButton = (Button) itemView.findViewById(R.id.RequestRejectButton);
+
         }
 
         void bind(final UserMessage message) {
@@ -199,7 +200,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             if(!groupAdmin.equals(Profile.getCurrentProfile().getId()))
             {
                 acceptButton.setClickable(false);
+                acceptButton.setEnabled(false);
+                acceptButton.setBackground(itemView.getResources().getDrawable(R.drawable.ic_interested_bubble));
                 rejectButton.setClickable(false);
+                rejectButton.setEnabled(false);
+                rejectButton.setBackground(itemView.getResources().getDrawable(R.drawable.ic_interested_bubble));
             }
             else
             {
