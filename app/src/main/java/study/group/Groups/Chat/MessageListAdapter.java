@@ -37,6 +37,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private Context myContext;
     private List<UserMessage> MessageList;
     private Transformation transformation;
+    private String groupName = "";
 
     public MessageListAdapter(Context context, List<UserMessage> messageList) {
         myContext = context;
@@ -221,6 +222,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     {
                         if(ds.child("groupID").getValue().equals(groupID))
                         {
+                            groupName = (String)ds.child("subject").getValue();
                             currentParticipants[0] = (long) ds.child("currentNumOfPart").getValue();
                             maxParticipants[0] = (long) ds.child("maxNumOfPart").getValue();
                         }
@@ -253,7 +255,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
                     database.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentParticipants[0]+1);
                     database.child("Users").child(user.getToken()).child("Joined").child(groupID)
-                            .setValue("");
+                            .setValue(groupName);
                     deleteRequest(user.getToken(),groupID);
                     notifyDataSetChanged();
                 }

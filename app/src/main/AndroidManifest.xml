@@ -20,13 +20,11 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <meta-data
@@ -55,6 +53,7 @@
         <activity android:name=".Groups.Admin.GroupAdminActivity" />
         <activity android:name=".Groups.Chat.Chat" />
         <activity android:name=".Utilities.Credits" />
+        <activity android:name=".Groups.Participant.GroupDetails"></activity>
     </application>
 
 </manifest>

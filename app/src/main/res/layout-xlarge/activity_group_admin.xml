@@ -4,172 +4,186 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="study.group.Groups.Admin.GroupAdminActivity">
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/subjectAdmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/Subject"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/dateAdmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/Date"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subjectAdminEdit" />
-
-        <TextView
-            android:id="@+id/timeAdmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/Time"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
-
-        <TextView
-            android:id="@+id/locationAdmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/Location"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeAdminEdit" />
-
         <EditText
             android:id="@+id/subjectAdminEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="250dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/Name"
-            android:textSize="24sp"
             android:hint="@string/Subject"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/subjectAdmin" />
-
-        <Button
-            android:id="@+id/dateAdminEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="4dp"
-            android:ems="10"
-            android:text="@string/Date"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateAdmin" />
-
-        <Button
-            android:id="@+id/timeAdminEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="4dp"
-            android:ems="10"
-            android:text="@string/Time"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeAdmin" />
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@+id/subjectIcon"
+            app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
 
         <EditText
             android:id="@+id/locationAdminEdit"
+            android:layout_width="250dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="@string/Location"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@+id/locationIcon"
+            app:layout_constraintTop_toBottomOf="@+id/subjectAdminEdit" />
+
+        <Spinner
+            android:id="@+id/NumOfParticipants"
+            android:layout_width="250dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toEndOf="@+id/numberOfParticipantsIcon"
+            app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
+
+        <TextView
+            android:id="@+id/dateAdminEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="32dp"
+            android:hint="@string/click_choose_date"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/dateAndTimeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
+
+        <TextView
+            android:id="@+id/timeAdminEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:hint="@string/click_choose_time"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.518"
+            app:layout_constraintStart_toEndOf="@+id/dateAdminEdit"
+            app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
+
+        <View
+            android:id="@+id/subjectIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="4dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/Location"
-            android:hint="@string/Location"
-            android:textSize="24sp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ic_share_megaphone_2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/locationAdmin" />
+            app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
+
+        <View
+            android:id="@+id/locationIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/ic_location_pin_4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/subjectIcon" />
+
+        <View
+            android:id="@+id/dateAndTimeIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/ic_calendar_1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/locationIcon" />
+
+        <View
+            android:id="@+id/numberOfParticipantsIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ic_user_add"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateAndTimeIcon" />
+
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/imageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/chat_background">
+
+            <ImageView
+                android:id="@+id/imageAdminEdit"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/group_image"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/studygroup1" />
+
+            <View
+                android:id="@+id/cameraIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="138dp"
+                android:layout_marginStart="138dp"
+                android:background="@drawable/ic_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerPaticipantsGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/participantsAdmin" />
+            app:layout_constraintTop_toBottomOf="@+id/numberOfPartAdminEdit" />
 
         <TextView
-            android:id="@+id/participantsAdmin"
+            android:id="@+id/numberOfPartAdminEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:textSize="30sp"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:layout_marginTop="24dp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
+            app:layout_constraintTop_toBottomOf="@+id/numberOfParticipantsIcon" />
 
-        <TextView
-            android:id="@+id/requestsAdmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/Requests"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
-            android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerPaticipantsGroup" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/requestAdminRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/requestsAdmin" />
     </android.support.constraint.ConstraintLayout>
+
 </ScrollView>

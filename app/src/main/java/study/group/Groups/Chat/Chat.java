@@ -278,8 +278,7 @@ public class Chat extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot ds : dataSnapshot.getChildren())
                         {
-                            if(!ds.getValue().equals(Profile.getCurrentProfile().getId()))
-                            {
+                            if(!ds.getKey().equals(Profile.getCurrentProfile().getId())) {
                                 String nextAdmin = ds.getKey();
                                 dataBase.child("Groups").child(groupID).child("adminID").setValue(nextAdmin);
                                 dataBase.child("Users").child(nextAdmin).child("myGroups").child(groupID).setValue(subject);

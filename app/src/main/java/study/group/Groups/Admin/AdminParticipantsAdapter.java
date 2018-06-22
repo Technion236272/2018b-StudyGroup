@@ -1,6 +1,7 @@
 package study.group.Groups.Admin;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -22,17 +23,21 @@ import java.util.ArrayList;
 
 import study.group.R;
 
+import static android.support.annotation.Dimension.DP;
+
 
 class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAdapter.adminPartHolder>{
     private ArrayList<Pair<String,String>> participants;
     String groupID;
     long currentNumOfParticipants;
     private DatabaseReference dataBase;
-    AdminParticipantsAdapter(ArrayList<Pair<String,String>> arr, String grpID,long currNumOfParticipants)
-    {
+    Context groupContext;
+
+    AdminParticipantsAdapter(ArrayList<Pair<String,String>> arr, String grpID,long currNumOfParticipants, Context context) {
         groupID = grpID;
         currentNumOfParticipants = currNumOfParticipants;
         participants = new ArrayList<>(arr);
+        groupContext = context;
         dataBase = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -45,8 +50,15 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
 
     @Override
     public void onBindViewHolder(@NonNull adminPartHolder holder, int position) {
+        holder.leaveAdmin.setVisibility(View.INVISIBLE);
         Pair<String,String> currentParticipant = participants.get(position);
         holder.participant.setText(currentParticipant.second);
+
+        if((currentParticipant.first).equals(Profile.getCurrentProfile().getId())) {
+     //       holder.leaveAdmin.setVisibility(View.VISIBLE);
+            holder.removeUser.setVisibility(View.INVISIBLE);
+     //       holder.removeUser.setText(R.string.leave);
+        }
     }
 
     @Override
@@ -58,10 +70,13 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
     class adminPartHolder extends RecyclerView.ViewHolder {
         TextView participant;
         Button removeUser;
+        Button leaveAdmin;
+
         adminPartHolder(final View itemView) {
             super(itemView);
             participant = itemView.findViewById(R.id.adminPart);
             removeUser = itemView.findViewById(R.id.removeUser);
+            leaveAdmin = itemView.findViewById(R.id.leaveAdmin);
 
             dataBase.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -96,6 +111,65 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
                     }).show();
                 }
             });
+
+//            leaveAdmin.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if ((int) currentNumOfParticipants == 1) {
+//                        android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(itemView.getContext());
+//                        alertDialog.setTitle(R.string.only_member_delete_group);
+//                        alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dataBase.child("Groups").child(groupID).removeValue();
+//                                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
+//                                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
+//                                ((GroupAdminActivity)groupContext).finish();
+//                            }
+//                        }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        }).show();
+//                    } else {
+//                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(itemView.getContext());
+//                        alertDialog.setTitle("Are you sure you want to leave the group?");
+//                        alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                                            if (!ds.getKey().equals(Profile.getCurrentProfile().getId())) {
+//                                                String nextAdmin = ds.getKey();
+//                                                dataBase.child("Groups").child(groupID).child("adminID").setValue(nextAdmin);
+//                                                dataBase.child("Users").child(nextAdmin).child("myGroups").child(groupID).setValue("");
+//                                                break;
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+//
+//                                dataBase.child("Groups").child(groupID).child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
+//                                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
+//                                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
+//                                --currentNumOfParticipants;
+//                                dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
+//                                ((GroupAdminActivity)groupContext).finish();
+//                            }
+//                        }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                            }
+//                        }).show();
+//                    }
+//                }
+//            });
         }
+
     }
 }

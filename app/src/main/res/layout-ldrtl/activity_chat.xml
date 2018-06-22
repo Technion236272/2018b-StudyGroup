@@ -29,7 +29,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/chat_box"
+        android:background="@drawable/ic_chat_box"
         android:ems="10"
         android:hint="@string/enter_message"
         android:inputType="textPersonName"
