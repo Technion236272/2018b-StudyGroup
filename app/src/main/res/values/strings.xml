@@ -66,7 +66,7 @@
     <string name="Interested">Interested</string>
     <string name="request_declined">Request declined!</string>
     <string name="request_accepted">Request accepted!</string>
-    <string name="request_group_full">Group is already full!</string>
+    <string name="request_group_full">Group is already full! Consider editing the group details</string>
     <string name="enter_message">Enter your message</string>
 
     <string name="notification_join_title">StudyGroup - Join request</string>

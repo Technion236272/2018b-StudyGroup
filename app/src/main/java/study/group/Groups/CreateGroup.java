@@ -272,6 +272,11 @@ public class CreateGroup extends AppCompatActivity {
 
         }
 
+        if(mImageUri == null)
+        {
+            mImageUri = Uri.parse("gs://b-studygroup.appspot.com/uploads/StudyGroup1.png");
+        }
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         final String subject = groupSubject.getText().toString();
         if(subject.length()==0) {

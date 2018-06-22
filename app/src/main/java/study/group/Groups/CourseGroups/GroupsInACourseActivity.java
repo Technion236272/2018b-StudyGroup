@@ -19,7 +19,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import study.group.Groups.CreateGroup;
 import study.group.R;
@@ -77,7 +80,20 @@ public class GroupsInACourseActivity extends AppCompatActivity {
                     Group g = data.getValue(Group.class);
 
                     if(g.getId().equals(courseId) && !groups.contains(g)) {
-                        groups.add(g);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+
+                        Date strDate = null;
+
+                        try {
+                            strDate = sdf.parse(g.getDate() + " " + g.getTime());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (System.currentTimeMillis() > strDate.getTime()) {
+                            groups.add(g);
+                        }
+
                     }
                 }
                 TextView noGroups = findViewById(R.id.noGroupsView);
