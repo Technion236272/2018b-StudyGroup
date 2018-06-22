@@ -4,11 +4,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +49,7 @@ public class GroupActivity extends AppCompatActivity {
     public static final String CHANNEL_ID = "my_notification_channel";
     public static final String TEXT_REPLY = "text_reply";
     final Context currentContext = this;
+    private boolean isJoined = false;
     //    static boolean isExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,65 +148,99 @@ public class GroupActivity extends AppCompatActivity {
         cancelRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
-                    database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
-                    database.child("Groups").child(groupID).child("Chat").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot ds : dataSnapshot.getChildren())
-                            {
-                                HashMap<String, Object> m = (HashMap<String,Object>)ds.getValue();
-                                if(m != null && m.size() == 7)
-                                {
-                                    if(m.get("Type").equals("Request") && m.get("User").equals(Profile.getCurrentProfile().getId()))
-//                                        if(ds.child("Type").getValue().equals("Request")&&
-//                                                ds.child("User").getValue().equals(Profile.getCurrentProfile().getId()))
-                                    {
-                                        database.child("Groups").child(groupID).child("Chat").child(ds.getKey()).removeValue();
-                                        break;
-                                    }
-                                }
-
+                //here we check if the user is already accepted in the group
+                database.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        isJoined = false;
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            if(ds.getKey().equals(Profile.getCurrentProfile().getId())) {
+                                isJoined = true;
                             }
                         }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        if(isJoined == true)
+                        {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentContext);
+                            alertDialog.setTitle(R.string.already_joined);
+                            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    finish();
+                                    return;
+                                }
+                            }).setNegativeButton("", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
+                        }
+                        else
+                        {
+                            joinRequest.setVisibility(View.VISIBLE);
+                            cancelRequest.setVisibility(View.GONE);
+                            interestedButton.setVisibility(View.VISIBLE);
+                            Toast.makeText(currentContext, "Join request canceled", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                database.child("Users").child(userID).child("Requests").child(groupID).removeValue();
+                database.child("Groups").child(groupID).child("Requests").child(userID).removeValue();
+                database.child("Groups").child(groupID).child("Chat").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren())
+                        {
+                            HashMap<String, Object> m = (HashMap<String,Object>)ds.getValue();
+                            if(m != null && m.size() == 7)
+                            {
+                                if(m.get("Type").equals("Request") && m.get("User").equals(Profile.getCurrentProfile().getId()))
+//                                        if(ds.child("Type").getValue().equals("Request")&&
+//                                                ds.child("User").getValue().equals(Profile.getCurrentProfile().getId()))
+                                {
+                                    database.child("Groups").child(groupID).child("Chat").child(ds.getKey()).removeValue();
+                                    break;
+                                }
+                            }
 
                         }
-                    });
-                    joinRequest.setVisibility(View.VISIBLE);
-                    cancelRequest.setVisibility(View.GONE);
-                    interestedButton.setVisibility(View.VISIBLE);
-                    Toast.makeText(currentContext, "Join request canceled", Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
-
-
         });
 
         joinRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    interestedButton.setEnabled(true);
-                    interestedButton.setVisibility(View.GONE);
+                interestedButton.setEnabled(true);
+                interestedButton.setVisibility(View.GONE);
 
-                    database.child("Users").child(userID).child("Requests").child(groupID).setValue(subject);
-                    database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
-                    database.child("Users").child(userID).
-                        child("interested").child(groupID).removeValue();
-                    database.child("Groups").child(groupID).child("interested").child(userID).removeValue();
+                database.child("Users").child(userID).child("Requests").child(groupID).setValue(subject);
+                database.child("Groups").child(groupID).child("Requests").child(userID).setValue(userName);
+                database.child("Users").child(userID).
+                    child("interested").child(groupID).removeValue();
+                database.child("Groups").child(groupID).child("interested").child(userID).removeValue();
 
-                    String key = database.child("Groups").child(groupID).child("Chat").push().getKey();
-                    database.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
-                    database.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
-                    database.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
-                    database.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(Profile.getCurrentProfile().getName());
-                    String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
-                    database.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
-                    database.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("Request");
-                    database.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
+                String key = database.child("Groups").child(groupID).child("Chat").push().getKey();
+                database.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
+                database.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
+                database.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
+                database.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(Profile.getCurrentProfile().getName());
+                String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
+                database.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
+                database.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("Request");
+                database.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
 
-                    joinRequest.setVisibility(View.GONE);
-                    cancelRequest.setVisibility(View.VISIBLE);
+                joinRequest.setVisibility(View.GONE);
+                cancelRequest.setVisibility(View.VISIBLE);
 
                 Toast.makeText(currentContext, "Join request has been sent", Toast.LENGTH_SHORT).show();
 
@@ -251,49 +288,6 @@ public class GroupActivity extends AppCompatActivity {
 
         final Set<String> participants = new HashSet<>();
 
-        //the DB listener of the group participants.
-        database.child("Groups").child(groupID).child("participants").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                RecyclerView participantsRecycler = (RecyclerView)findViewById(R.id.recyclerPaticipantsGroup);
-                participantsRecycler.setLayoutManager(new LinearLayoutManager(currentContext));
-                boolean flag = false;
-                for (DataSnapshot d : dataSnapshot.getChildren()) {
-                    participants.add(d.getValue().toString());
-                    if(d.getKey().equals(Profile.getCurrentProfile().getId()))
-                    {
-                        flag = true;
-                        break;
-                    }
-                }
-
-                if(flag)
-                {
-                    Intent chatActivity;
-                    chatActivity = new Intent(currentContext, Chat.class);
-                    chatActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    chatActivity.putExtra("groupSubject",subject);
-                    chatActivity.putExtra("groupDate",date);
-                    chatActivity.putExtra("groupTime",time);
-                    chatActivity.putExtra("groupID",groupID);
-                    chatActivity.putExtra("groupLocation",location);
-                    chatActivity.putExtra("numOfParticipants",numOfParticipants);
-                    chatActivity.putExtra("adminID",adminID);
-                    chatActivity.putExtra("groupCurrentParticipants",numOfParticipants);
-                    chatActivity.putExtra("groupName",getIntent().getExtras().getString("groupName"));
-                    currentContext.startActivity(chatActivity);
-                    finish();
-                }
-
-                GroupParticipantsAdapter participantsAdapter = new GroupParticipantsAdapter(new ArrayList<>(participants));
-                participantsRecycler.setAdapter(participantsAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         interestedButton.setOnClickListener(new View.OnClickListener() {
             @Override

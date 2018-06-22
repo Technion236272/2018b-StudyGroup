@@ -139,7 +139,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
                 @Override
                 public void onClick(final View v) {
                     final Group group = data.get(getAdapterPosition());
-                    myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
+                    myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             isJoined = false;
@@ -189,6 +189,7 @@ public class GroupInformationAdapter extends RecyclerView.Adapter<GroupInformati
                                 {
                                     userGroup = new Intent(v.getContext(), GroupActivity.class);
                                 }
+
                                 userGroup.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 userGroup.putExtra("groupSubject", group.getSubject());
                                 userGroup.putExtra("groupDate", group.getDate());

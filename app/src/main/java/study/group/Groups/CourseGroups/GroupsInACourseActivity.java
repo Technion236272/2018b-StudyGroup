@@ -65,6 +65,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
         FirebaseDatabase mDataBase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = mDataBase.getReference();
 
+        //adding the existing groups
         myRef.child("Groups").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -123,8 +123,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
         viewHolder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addValueEventListener(new ValueEventListener() {
-
+                myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         isJoined = false;
