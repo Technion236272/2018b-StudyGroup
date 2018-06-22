@@ -18,6 +18,7 @@
     <string name="yearError">Please select year</string>
     <string name="dateError">Please pick a date</string>
     <string name="timeError">Please pick time</string>
+    <string name="AreYouSureChanges">Are you sure you wanna save the changes?</string>
     <string name="locationError">Please enter location!</string>
     <string name="cancel_request">Cancel Request</string>
     <string name="leave_group">Leave Group</string>
@@ -68,6 +69,9 @@
     <string name="request_accepted">Request accepted!</string>
     <string name="request_group_full">Group is already full! Consider editing the group details</string>
     <string name="enter_message">Enter your message</string>
+    <string name="leave">Leave</string>
+    <string name="save_changes">save changes</string>
+    <string name="camera_credit">Camera Icon made by https://www.flaticon.com/authors/daniel-bruce from www.flaticon.com</string>
 
     <string name="notification_join_title">StudyGroup - Join request</string>
     <string name="notification_wish_to_join"> is wish to join </string>
@@ -79,15 +83,12 @@
     <string name="delete_group">Delete group</string>
     <string name="pass_admin">Pass administraship</string>
     <string name="make_poll">Make a poll</string>
-    <string name="leave">Leave</string>
-    <string name="camera_credit">Camera Icon made by https://www.flaticon.com/authors/daniel-bruce from www.flaticon.com</string>
     <string name="leave_the_group">Leave group</string>
     <string name="pick_the_time">Pick time:</string>
     <string name="pick_the_date">Pick date:</string>
     <string name="click_choose_time">Pick time</string>
     <string name="click_choose_date">Pick date</string>
     <string name="loading">Loading ..</string>
-    <string name="save_changes">save changes</string>
 
     <!-- RTL support -->
     <string name="delete_group_rtl">Delete group\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>

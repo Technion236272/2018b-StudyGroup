@@ -72,6 +72,30 @@ public class GroupAdminActivity extends AppCompatActivity {
     private Uri mImageUri;
     private Transformation transformation;
     private StorageReference mStorageRef;
+    private Context currentContext = this;
+
+    boolean dateChanged = false;
+    boolean dateValid = false;
+    boolean timeChanged = false;
+    boolean timeValid = false;
+    boolean maxNumOfPartChanged = false;
+    boolean imageChanged = false;
+    String newDate;
+    String newTime;
+    int newMaxNumOfPart;
+
+    Calendar cal;
+    int currentDay;
+    int currentMonth;
+    int currentYear;
+    int currentHour;
+    int currentMinute;
+
+    private int newYear;
+    private int newMonth;
+    private int newDay;
+    private int newHour;
+    private int newMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +129,7 @@ public class GroupAdminActivity extends AppCompatActivity {
         groupPhoto = findViewById(R.id.imageAdminEdit);
         final View cameraIcon = findViewById(R.id.cameraIcon);
         final Spinner maxNumOfPartSpinner = findViewById(R.id.NumOfParticipants);
+        final Button saveChanges = findViewById(R.id.saveChangesButton);
 
         Integer[] participantsNum = new Integer[]{2,3,4,5,6,7,8,9,10};
         final List<Integer> participantsNumList = new ArrayList<>(Arrays.asList(participantsNum));
@@ -135,22 +160,19 @@ public class GroupAdminActivity extends AppCompatActivity {
             }
         });
 
-        subjectET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        dateChanged = false;
+        dateValid = true;
+        timeChanged = false;
+        timeValid = false;
+        maxNumOfPartChanged = false;
+        imageChanged = false;
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                database.child("Groups").child(groupID).child("subject").setValue(subjectET.getText().toString());
-            }
-        });
+        cal  = Calendar.getInstance();
+        currentDay = cal.get(Calendar.DAY_OF_MONTH);
+        currentMonth = cal.get(Calendar.MONTH) + 1;
+        currentYear = cal.get(Calendar.YEAR);
+        currentHour = (cal.get(Calendar.HOUR_OF_DAY) + 3) % 24;
+        currentMinute = cal.get(Calendar.MINUTE);
 
         dateET.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,15 +182,17 @@ public class GroupAdminActivity extends AppCompatActivity {
                         , new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String text = String.format("%02d", dayOfMonth) + "/" + String.format("%02d", month+1) + "/" + year;
-                        database.child("Groups").child(groupID).child("date").setValue(text);
-                        dateET.setText(text);
+                        newYear = year;
+                        newMonth = month;
+                        newDay = dayOfMonth;
+                        dateChanged = true;
+                        dateET.setText(newDate);
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
                 mDatePicker.show();
             }
         });
-        // need to notify something, not changing immediately   /////////////////////////////////////////////////////////////////////////////////////
+
         timeET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,30 +203,15 @@ public class GroupAdminActivity extends AppCompatActivity {
                         , new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        String text = String.format("%02d", selectedHour) + ":" + String.format("%02d", selectedMinute);
-                        database.child("Groups").child(groupID).child("time").setValue(text);
-                        timeET.setText(text);
+                        newHour = selectedHour;
+                        newMinute = selectedMinute;
+                        newTime = String.format("%02d", selectedHour) + ":" + String.format("%02d", selectedMinute);
+                        timeChanged = true;
+                        timeET.setText(newTime);
 
                     }
                 }, currentHour, currentMinute, true);
                 mTimePicker.show();
-            }
-        });
-
-        locationET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                database.child("Groups").child(groupID).child("location").setValue(locationET.getText().toString());
             }
         });
 
@@ -228,7 +237,8 @@ public class GroupAdminActivity extends AppCompatActivity {
                     Toast.makeText(GroupAdminActivity.this, "Please pick another max number of participants", Toast.LENGTH_SHORT).show();
                 } else {
                     maxNumOfPartSpinner.setSelection(position);
-                    database.child("Groups").child(groupID).child("maxNumOfPart").setValue(adapter.getItem(position));
+                    newMaxNumOfPart = adapter.getItem(position);
+                    maxNumOfPartChanged = true;
                 }
             }
 
@@ -238,11 +248,59 @@ public class GroupAdminActivity extends AppCompatActivity {
             }
         });
 
+        saveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(subjectET.getText().toString().length() == 0)
+                {
+                    Toast.makeText(GroupAdminActivity.this, "Please enter a valid subject", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(locationET.getText().toString().length() == 0)
+                {
+                    Toast.makeText(GroupAdminActivity.this, "Please enter a valid location", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentContext);
+                alertDialog.setTitle(R.string.AreYouSureChanges);
+                alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        database.child("Groups").child(groupID).child("subject").setValue(subjectET.getText().toString());
+                        if(dateChanged)
+                        {
+                            database.child("Groups").child(groupID).child("date").setValue(newDate);
+                        }
+
+                        if(timeChanged)
+                        {
+                            database.child("Groups").child(groupID).child("time").setValue(newTime);
+                        }
+                        database.child("Groups").child(groupID).child("location").setValue(locationET.getText().toString());
+                        if(maxNumOfPartChanged)
+                        {
+                            database.child("Groups").child(groupID).child("maxNumOfPart").setValue(newMaxNumOfPart);
+                        }
+                        String [] nameArr = groupName.split("-");
+                        String newGroupName = nameArr[0] + subjectET.getText().toString();
+                        database.child("Groups").child(groupID).child("name").setValue(newGroupName);
+                        finish();
+                    }
+                }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).show();
+            }
+        });
+
         subjectET.setText(subject);
         dateET.setText(date);
         timeET.setText(time);
         locationET.setText(location);
-        StringBuilder currentMessageBuilder = new StringBuilder(String.valueOf(numOfParticipants)).append(" current participants:") ;
+        StringBuilder currentMessageBuilder = new StringBuilder(String.valueOf(numOfParticipants)).append(" current participants") ;
         currentNumOfParticipants.setText(currentMessageBuilder.toString());
 
 //        database.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
@@ -346,7 +404,7 @@ public class GroupAdminActivity extends AppCompatActivity {
         } else if(id == R.id.make_poll) {
             Toast.makeText(this, "Making a poll will be available soon", Toast.LENGTH_LONG).show();
         } else if(id == R.id.delete_group) {
-     //       Toast.makeText(this, "Deleting the group will be available soon", Toast.LENGTH_LONG).show();
+            //       Toast.makeText(this, "Deleting the group will be available soon", Toast.LENGTH_LONG).show();
             deleteTheGroup();
         }
         return super.onOptionsItemSelected(item);
