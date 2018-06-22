@@ -90,7 +90,7 @@ public class GroupsInACourseActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        if (System.currentTimeMillis() > strDate.getTime()) {
+                        if (System.currentTimeMillis()+(3*60*60*1000) < strDate.getTime()) {
                             groups.add(g);
                         }
 
