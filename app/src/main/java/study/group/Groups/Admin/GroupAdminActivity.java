@@ -242,7 +242,7 @@ public class GroupAdminActivity extends AppCompatActivity {
         dateET.setText(date);
         timeET.setText(time);
         locationET.setText(location);
-        StringBuilder currentMessageBuilder = new StringBuilder(String.valueOf(numOfParticipants)).append(" current participants") ;
+        StringBuilder currentMessageBuilder = new StringBuilder(String.valueOf(numOfParticipants)).append(" current participants:") ;
         currentNumOfParticipants.setText(currentMessageBuilder.toString());
 
 //        database.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {

@@ -13,37 +13,42 @@
 
         <EditText
             android:id="@+id/subjectAdminEdit"
-            android:layout_width="250dp"
-            android:layout_height="44dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="28dp"
             android:ems="10"
             android:hint="@string/Subject"
             android:inputType="textPersonName"
+            android:textSize="30sp"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/subjectIcon"
             app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
 
         <EditText
             android:id="@+id/locationAdminEdit"
-            android:layout_width="250dp"
-            android:layout_height="44dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginStart="32dp"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginStart="70dp"
             android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/Location"
             android:inputType="textPersonName"
+            android:textSize="30sp"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/locationIcon"
             app:layout_constraintTop_toBottomOf="@+id/subjectAdminEdit" />
 
         <Spinner
             android:id="@+id/NumOfParticipants"
-            android:layout_width="250dp"
-            android:layout_height="44dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="50dp"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/numberOfParticipantsIcon"
             app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
 
@@ -51,11 +56,12 @@
             android:id="@+id/dateAdminEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="36dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="40dp"
             android:hint="@string/click_choose_date"
-            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
             app:layout_constraintStart_toEndOf="@+id/dateAndTimeIcon"
             app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
 
@@ -67,20 +73,21 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:hint="@string/click_choose_time"
-            android:textSize="18sp"
+            android:textSize="30sp"
+            android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.518"
+            app:layout_constraintHorizontal_bias="0.398"
             app:layout_constraintStart_toEndOf="@+id/dateAdminEdit"
             app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
 
         <View
             android:id="@+id/subjectIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/ic_share_megaphone_2"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,10 +95,10 @@
 
         <View
             android:id="@+id/locationIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/ic_location_pin_4"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,10 +106,10 @@
 
         <View
             android:id="@+id/dateAndTimeIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/ic_calendar_1"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,10 +117,10 @@
 
         <View
             android:id="@+id/numberOfParticipantsIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="26dp"
-            android:layout_marginStart="26dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/ic_user_add"
             app:layout_constraintStart_toStartOf="parent"
@@ -123,12 +130,15 @@
             android:id="@+id/imageLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/chat_background">
+            android:background="@color/chat_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imageAdminEdit"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
@@ -144,11 +154,11 @@
 
             <View
                 android:id="@+id/cameraIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginLeft="138dp"
-                android:layout_marginStart="138dp"
+                android:layout_marginLeft="316dp"
+                android:layout_marginStart="316dp"
                 android:background="@drawable/ic_camera"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -159,14 +169,14 @@
             android:id="@+id/recyclerPaticipantsGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="44dp"
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/saveChangesButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -176,13 +186,41 @@
             android:id="@+id/numberOfPartAdminEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:textSize="18sp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
+            android:textColor="@android:color/black"
+            android:textSize="36sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/numberOfParticipantsIcon" />
+            app:layout_constraintTop_toBottomOf="@+id/middleLayout" />
 
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/middleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="65dp"
+            android:background="@color/chat_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/NumOfParticipants">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <Button
+            android:id="@+id/saveChangesButton"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/ic_blue_butten"
+            android:text="@string/save_changes"
+            android:textColor="@color/textColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

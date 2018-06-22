@@ -13,44 +13,44 @@
 
         <TextView
             android:id="@+id/subjectGroupDetail"
-            android:layout_width="250dp"
+            android:layout_width="300dp"
             android:layout_height="44dp"
             android:layout_marginLeft="32dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="28dp"
             android:ems="10"
             android:hint="@string/Subject"
             android:padding="8dp"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@+id/subjectIcon"
             app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
 
         <TextView
             android:id="@+id/locationGroupDetail"
-            android:layout_width="250dp"
+            android:layout_width="300dp"
             android:layout_height="44dp"
             android:layout_marginLeft="32dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:ems="10"
             android:hint="@string/Location"
             android:padding="8dp"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@+id/locationIcon"
             app:layout_constraintTop_toBottomOf="@+id/subjectGroupDetail" />
 
         <TextView
             android:id="@+id/NumOfParticipantsGroupDetail"
-            android:layout_width="250dp"
+            android:layout_width="300dp"
             android:layout_height="44dp"
             android:layout_marginLeft="28dp"
             android:layout_marginStart="28dp"
             android:layout_marginTop="32dp"
             android:padding="8dp"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@+id/numberOfParticipantsIcon"
             app:layout_constraintTop_toBottomOf="@+id/dateGroupDetail" />
 
@@ -60,10 +60,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="36dp"
             android:layout_marginStart="36dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:hint="@string/click_choose_date"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@+id/dateAndTimeIcon"
             app:layout_constraintTop_toBottomOf="@+id/locationGroupDetail" />
 
@@ -75,19 +75,19 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:hint="@string/click_choose_time"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.717"
+            app:layout_constraintHorizontal_bias="0.531"
             app:layout_constraintStart_toEndOf="@+id/dateGroupDetail"
             app:layout_constraintTop_toBottomOf="@+id/locationGroupDetail" />
 
         <View
             android:id="@+id/subjectIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="30dp"
@@ -97,8 +97,8 @@
 
         <View
             android:id="@+id/locationIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="40dp"
@@ -108,19 +108,19 @@
 
         <View
             android:id="@+id/dateAndTimeIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/ic_calendar_1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/locationIcon" />
 
         <View
             android:id="@+id/numberOfParticipantsIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_marginLeft="26dp"
             android:layout_marginStart="26dp"
             android:layout_marginTop="30dp"
@@ -136,8 +136,8 @@
 
             <ImageView
                 android:id="@+id/imageGroupDetail"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
@@ -153,11 +153,11 @@
 
             <View
                 android:id="@+id/cameraIconGroupDetail"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginLeft="138dp"
-                android:layout_marginStart="138dp"
+                android:layout_marginLeft="172dp"
+                android:layout_marginStart="172dp"
                 android:background="@drawable/ic_camera"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -187,17 +187,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="40dp"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/middleLayout" />
 
         <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/middleLayout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="24dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="40dp"
             android:background="@color/chat_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

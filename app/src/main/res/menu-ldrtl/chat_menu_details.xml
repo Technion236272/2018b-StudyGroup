@@ -2,13 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:id="@+id/leave_group_chat"
-        android:orderInCategory="101"
-        android:title="@string/leave_the_group_rtl" />
-    <item
         android:id="@+id/group_details"
         android:orderInCategory="102"
-        android:title="@string/group_details_rtl"
-        app:showAsAction="never" />
+        android:title="@string/group_details_rtl" />
+    <item
+        android:id="@+id/leave_group_chat"
+        android:orderInCategory="103"
+        android:title="@string/leave_the_group_rtl" />
 
 </menu>

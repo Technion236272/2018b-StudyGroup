@@ -45,8 +45,8 @@
             android:id="@+id/NumOfParticipantsGroupDetail"
             android:layout_width="250dp"
             android:layout_height="44dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginStart="28dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:padding="8dp"
             android:textColor="@android:color/black"
@@ -58,8 +58,8 @@
             android:id="@+id/dateGroupDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="36dp"
-            android:layout_marginStart="36dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:hint="@string/click_choose_date"
             android:textColor="@android:color/black"
@@ -80,7 +80,7 @@
             android:textColor="@android:color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.717"
+            app:layout_constraintHorizontal_bias="0.728"
             app:layout_constraintStart_toEndOf="@+id/dateGroupDetail"
             app:layout_constraintTop_toBottomOf="@+id/locationGroupDetail" />
 
@@ -121,8 +121,8 @@
             android:id="@+id/numberOfParticipantsIcon"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginLeft="26dp"
-            android:layout_marginStart="26dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginStart="22dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/ic_user_add"
             app:layout_constraintStart_toStartOf="parent"
@@ -156,11 +156,11 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginLeft="138dp"
-                android:layout_marginStart="138dp"
+                android:layout_marginEnd="138dp"
+                android:layout_marginRight="138dp"
                 android:background="@drawable/ic_camera"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 

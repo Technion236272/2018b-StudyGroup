@@ -36,6 +36,7 @@ import java.util.Map;
 
 import study.group.Groups.Admin.GroupAdminActivity;
 import study.group.Groups.CreateGroup;
+import study.group.Groups.Participant.GroupDetails;
 import study.group.R;
 import study.group.Utilities.User;
 
@@ -237,7 +238,17 @@ public class Chat extends AppCompatActivity {
             intent.putExtra("groupName",groupName);
             startActivity(intent);      // ADD FLAGS TO THE INTENT
         } else if(id == R.id.group_details) {
-            Toast.makeText(this, "Details will be available soon", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, GroupDetails.class);
+            intent.putExtra("groupSubject",subject);
+            intent.putExtra("groupDate",date);
+            intent.putExtra("groupTime",time);
+            intent.putExtra("groupID",groupID);
+            intent.putExtra("groupLocation",location);
+            intent.putExtra("maxNumOfParticipants", maxNumOfParticipants);
+            intent.putExtra("numOfParticipants", currentNumOfParticipants);
+            intent.putExtra("adminID",adminID);
+            intent.putExtra("groupName",groupName);
+            startActivity(intent);      // ADD FLAGS TO THE INTENT
         } else if(id == R.id.leave_group_chat) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle(R.string.leaving_the_group);

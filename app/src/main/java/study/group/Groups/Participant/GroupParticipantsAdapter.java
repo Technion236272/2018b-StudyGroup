@@ -15,8 +15,7 @@ public class GroupParticipantsAdapter extends RecyclerView.Adapter<GroupParticip
 
     private ArrayList<String> participants;
 
-    GroupParticipantsAdapter(ArrayList<String> arr)
-    {
+    GroupParticipantsAdapter(ArrayList<String> arr) {
         participants = new ArrayList<>(arr);
     }
 

@@ -11,31 +11,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/subjectAdminEdit"
-        android:layout_width="250dp"
-        android:layout_height="44dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="@string/Subject"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toEndOf="@+id/subjectIcon"
-        app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
+        <EditText
+            android:id="@+id/subjectAdminEdit"
+            android:layout_width="250dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:hint="@string/Subject"
+            android:textColor="@android:color/black"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@+id/subjectIcon"
+            app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
 
-    <EditText
-        android:id="@+id/locationAdminEdit"
-        android:layout_width="250dp"
-        android:layout_height="44dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="@string/Location"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toEndOf="@+id/locationIcon"
-        app:layout_constraintTop_toBottomOf="@+id/subjectAdminEdit" />
+        <EditText
+            android:id="@+id/locationAdminEdit"
+            android:layout_width="250dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="@string/Location"
+            android:textColor="@android:color/black"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@+id/locationIcon"
+            app:layout_constraintTop_toBottomOf="@+id/subjectAdminEdit" />
 
         <Spinner
             android:id="@+id/NumOfParticipants"
@@ -44,36 +46,39 @@
             android:layout_marginLeft="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/numberOfParticipantsIcon"
             app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
 
-    <TextView
-        android:id="@+id/dateAdminEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="32dp"
-        android:hint="@string/click_choose_date"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/dateAndTimeIcon"
-        app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
+        <TextView
+            android:id="@+id/dateAdminEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="32dp"
+            android:hint="@string/click_choose_date"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toEndOf="@+id/dateAndTimeIcon"
+            app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
 
-    <TextView
-        android:id="@+id/timeAdminEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:hint="@string/click_choose_time"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
-        app:layout_constraintStart_toEndOf="@+id/dateAdminEdit"
-        app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
+        <TextView
+            android:id="@+id/timeAdminEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:hint="@string/click_choose_time"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.717"
+            app:layout_constraintStart_toEndOf="@+id/dateAdminEdit"
+            app:layout_constraintTop_toBottomOf="@+id/locationAdminEdit" />
 
         <View
             android:id="@+id/subjectIcon"
@@ -158,15 +163,15 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerPaticipantsGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_height="196dp"
+            android:layout_marginBottom="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/saveChangesButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -179,10 +184,38 @@
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
-            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/numberOfParticipantsIcon" />
+            app:layout_constraintTop_toBottomOf="@+id/middleLayout" />
 
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/middleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/chat_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/NumOfParticipants">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <Button
+            android:id="@+id/saveChangesButton"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/ic_blue_butten"
+            android:text="@string/save_changes"
+            android:textColor="@color/textColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
