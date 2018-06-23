@@ -81,7 +81,11 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
             dataBase.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    currentNumOfParticipants = (long)dataSnapshot.getValue();
+                    if(dataSnapshot.getValue() != null) {
+                        currentNumOfParticipants = (long)dataSnapshot.getValue();
+                    } else {
+                        currentNumOfParticipants = 0;
+                    }
                 }
 
                 @Override

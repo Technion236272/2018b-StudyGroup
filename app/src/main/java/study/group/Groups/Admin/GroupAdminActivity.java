@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,13 +13,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
@@ -34,7 +30,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.facebook.Profile;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -57,10 +52,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import study.group.Groups.CreateGroup;
 import study.group.R;
-import study.group.Utilities.User;
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 public class GroupAdminActivity extends AppCompatActivity {
 
@@ -421,6 +414,23 @@ public class GroupAdminActivity extends AppCompatActivity {
         alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String checkImgUrl = "gs://b-studygroup.appspot.com/uploads/StudyGroup1.png";
+                if(mImageUri != null) {
+                    if (!mImageUri.toString().equals(checkImgUrl)) {
+                        StorageReference photoRef = mStorageRef.getStorage().getReferenceFromUrl(mImageUri.toString());
+                        photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // File deleted successfully
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Uh-oh, an error occurred!
+                            }
+                        });
+                    }
+                }
                 database.child("Groups").child(groupID).child("participants")
                         .addValueEventListener(new ValueEventListener() {
                             @Override

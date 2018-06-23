@@ -1,4 +1,4 @@
-package study.group.Utilities.Writer;
+package study.group.Utilities;
 
 import android.app.ProgressDialog;
 import android.app.Service;
@@ -44,19 +44,4 @@ public class ConnectionDetector {
         return false;
     }
 
-    public void showSearchingForNetworkDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(context);
-            mProgressDialog.setMessage("Searching for connection..");
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideSearchingForNetworkDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
 }

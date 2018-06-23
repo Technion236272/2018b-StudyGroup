@@ -15,7 +15,7 @@ import study.group.Groups.Fragments.Interested.InterestedFragment;
 import study.group.Groups.Fragments.Joined.JoinedFragment;
 import study.group.Groups.Fragments.Requests.RequestsFragment;
 import study.group.R;
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 
 /**

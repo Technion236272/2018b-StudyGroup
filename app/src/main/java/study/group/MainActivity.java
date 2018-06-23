@@ -35,7 +35,7 @@ import study.group.Courses.CoursesFragment;
 import study.group.Groups.Fragments.GroupsFragment;
 import study.group.Utilities.Credits;
 import study.group.Utilities.MyDatabaseUtil;
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 public class MainActivity extends AppCompatActivity {
     GroupsFragment gf;

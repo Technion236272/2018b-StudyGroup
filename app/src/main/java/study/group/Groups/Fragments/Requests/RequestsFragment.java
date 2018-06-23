@@ -29,7 +29,7 @@ import study.group.Groups.Fragments.GroupInformationAdapter;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 public class RequestsFragment extends Fragment {
     private GroupInformationAdapter adapter;

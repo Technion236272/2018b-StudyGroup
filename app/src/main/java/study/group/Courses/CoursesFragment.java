@@ -34,7 +34,7 @@ import study.group.Groups.Fragments.GroupsFragment;
 import study.group.R;
 import study.group.Utilities.Course;
 import study.group.Utilities.MyDatabaseUtil;
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 public class CoursesFragment extends Fragment {
     ArrayList<Course> favouriteCourses, otherCourses;

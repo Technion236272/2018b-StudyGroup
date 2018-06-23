@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,11 +37,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import study.group.Groups.Admin.GroupAdminActivity;
-import study.group.Groups.CreateGroup;
 import study.group.Groups.Participant.GroupDetails;
 import study.group.R;
 import study.group.Utilities.User;
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 public class Chat extends AppCompatActivity {
 
@@ -62,11 +63,14 @@ public class Chat extends AppCompatActivity {
     private Integer maxNumOfParticipants;
     private Integer currentNumOfParticipants;
     private FirebaseFirestore mFirestore;
+    private StorageReference mStorageRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         mFirestore = FirebaseFirestore.getInstance();
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -181,7 +185,11 @@ public class Chat extends AppCompatActivity {
         dataBase.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                currentNumOfParticipants = Integer.parseInt(dataSnapshot.getValue().toString());
+                if((dataSnapshot.getValue()) != null) {
+                    currentNumOfParticipants = Integer.parseInt(dataSnapshot.getValue().toString());
+                } else {
+                    currentNumOfParticipants = 0;
+                }
             }
 
             @Override
@@ -277,10 +285,26 @@ public class Chat extends AppCompatActivity {
                 alertDialog.setTitle(R.string.only_member_delete_group);
                 alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dataBase.child("Groups").child(groupID).removeValue();
-                        dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
-                        dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
-                        finish();
+                        final String checkImgUrl = "gs://b-studygroup.appspot.com/uploads/StudyGroup1.png";
+                        mStorageRef.child(groupID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                if(!uri.toString().equals(checkImgUrl)) {
+                                    StorageReference photoRef = mStorageRef.getStorage().getReferenceFromUrl(uri.toString());
+                                    photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                        }
+                                    });
+                                }
+
+                                dataBase.child("Groups").child(groupID).removeValue();
+                                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
+                                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
+                                finish();
+                            }
+                        });
+
                     }
                 }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override

@@ -21,7 +21,7 @@ import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import study.group.R;
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 public class GroupDetails extends AppCompatActivity {
 

@@ -23,13 +23,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 /**
  * Demonstrate Firebase Authentication using a Facebook access token.
@@ -78,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         ConnectionDetector cd = new ConnectionDetector(this);
         cd.isConnected();
 
-        cd.hideSearchingForNetworkDialog();
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             final HashMap<String,Object> userData = new HashMap<>();

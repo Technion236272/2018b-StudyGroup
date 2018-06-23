@@ -26,7 +26,7 @@ import study.group.Groups.CreateGroup;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
-import study.group.Utilities.Writer.ConnectionDetector;
+import study.group.Utilities.ConnectionDetector;
 
 public class GroupsInACourseActivity extends AppCompatActivity {
 
