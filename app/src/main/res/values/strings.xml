@@ -89,6 +89,8 @@
     <string name="click_choose_time">Pick time</string>
     <string name="click_choose_date">Pick date</string>
     <string name="loading">Loading ..</string>
+    <string name="searching_for_connection">Searching for connection..</string>
+    <string name="bad_connection">No internet connection found, please connect to the internet first!</string>
 
     <!-- RTL support -->
     <string name="delete_group_rtl">Delete group\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>

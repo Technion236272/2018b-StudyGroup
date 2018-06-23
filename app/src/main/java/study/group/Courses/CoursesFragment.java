@@ -34,6 +34,7 @@ import study.group.Groups.Fragments.GroupsFragment;
 import study.group.R;
 import study.group.Utilities.Course;
 import study.group.Utilities.MyDatabaseUtil;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class CoursesFragment extends Fragment {
     ArrayList<Course> favouriteCourses, otherCourses;
@@ -151,6 +152,10 @@ public class CoursesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_courses, container, false);
         final Context currentContext = getContext();
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(currentContext);
+        cd.isConnected();
 
         //SearchView s = view.findvi(R.menu.menu_main);
         MyDatabaseUtil my = new MyDatabaseUtil();

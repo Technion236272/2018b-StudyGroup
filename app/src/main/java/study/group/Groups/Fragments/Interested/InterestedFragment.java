@@ -29,6 +29,7 @@ import study.group.Groups.Fragments.GroupInformationAdapter;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class InterestedFragment extends Fragment {
     private GroupInformationAdapter adapter;
@@ -47,6 +48,10 @@ public class InterestedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(getContext());
+        cd.isConnected();
 
         myRef.child("Groups").addValueEventListener(new ValueEventListener() {
             @Override

@@ -21,6 +21,7 @@ import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 import study.group.R;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class GroupDetails extends AppCompatActivity {
 
@@ -40,6 +41,10 @@ public class GroupDetails extends AppCompatActivity {
         setContentView(R.layout.activity_group_details);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(this);
+        cd.isConnected();
 
         database = FirebaseDatabase.getInstance().getReference();
 

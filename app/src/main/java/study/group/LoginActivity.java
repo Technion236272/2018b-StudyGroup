@@ -29,6 +29,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 
+import study.group.Utilities.Writer.ConnectionDetector;
+
 /**
  * Demonstrate Firebase Authentication using a Facebook access token.
  */
@@ -44,8 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
         mAuth = FirebaseAuth.getInstance();
         mFirestore  = FirebaseFirestore.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
@@ -73,6 +73,12 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(this);
+        cd.isConnected();
+
+        cd.hideSearchingForNetworkDialog();
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             final HashMap<String,Object> userData = new HashMap<>();
@@ -147,6 +153,8 @@ public class LoginActivity extends AppCompatActivity {
             mProgressDialog.dismiss();
         }
     }
+
+
 
     @Override
     public void onStop() {

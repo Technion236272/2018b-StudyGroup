@@ -39,6 +39,7 @@ import study.group.Groups.CreateGroup;
 import study.group.Groups.Participant.GroupDetails;
 import study.group.R;
 import study.group.Utilities.User;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class Chat extends AppCompatActivity {
 
@@ -68,6 +69,10 @@ public class Chat extends AppCompatActivity {
         mFirestore = FirebaseFirestore.getInstance();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(this);
+        cd.isConnected();
 
         final Context myContext = this;
         groupID = getIntent().getExtras().getString("groupID");

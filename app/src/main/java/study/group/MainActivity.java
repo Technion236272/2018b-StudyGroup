@@ -35,6 +35,7 @@ import study.group.Courses.CoursesFragment;
 import study.group.Groups.Fragments.GroupsFragment;
 import study.group.Utilities.Credits;
 import study.group.Utilities.MyDatabaseUtil;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class MainActivity extends AppCompatActivity {
     GroupsFragment gf;
@@ -62,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(this);
+        cd.isConnected();
     }
 
 

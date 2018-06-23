@@ -60,6 +60,7 @@ import java.util.Set;
 import study.group.Groups.CreateGroup;
 import study.group.R;
 import study.group.Utilities.User;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class GroupAdminActivity extends AppCompatActivity {
 
@@ -102,6 +103,10 @@ public class GroupAdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_admin);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(this);
+        cd.isConnected();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

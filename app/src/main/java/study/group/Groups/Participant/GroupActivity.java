@@ -49,6 +49,7 @@ import study.group.Groups.Chat.Chat;
 import study.group.Groups.CreateGroup;
 import study.group.MainActivity;
 import study.group.R;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class GroupActivity extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
@@ -62,6 +63,11 @@ public class GroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(this);
+        cd.isConnected();
+
         mFirestore = FirebaseFirestore.getInstance();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

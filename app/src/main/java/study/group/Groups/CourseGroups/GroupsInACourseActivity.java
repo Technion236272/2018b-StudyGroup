@@ -26,6 +26,7 @@ import study.group.Groups.CreateGroup;
 import study.group.R;
 import study.group.Utilities.Group;
 import study.group.Utilities.MyDatabaseUtil;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class GroupsInACourseActivity extends AppCompatActivity {
 
@@ -36,6 +37,10 @@ public class GroupsInACourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups_in_acourse);
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(this);
+        cd.isConnected();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

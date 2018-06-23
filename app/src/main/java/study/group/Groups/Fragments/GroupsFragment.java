@@ -15,6 +15,7 @@ import study.group.Groups.Fragments.Interested.InterestedFragment;
 import study.group.Groups.Fragments.Joined.JoinedFragment;
 import study.group.Groups.Fragments.Requests.RequestsFragment;
 import study.group.R;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 
 /**
@@ -33,6 +34,10 @@ public class GroupsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(getContext());
+        cd.isConnected();
     }
 
     @Override

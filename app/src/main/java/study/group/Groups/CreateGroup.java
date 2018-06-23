@@ -64,6 +64,7 @@ import java.util.Map;
 
 import study.group.R;
 import study.group.Utilities.Group;
+import study.group.Utilities.Writer.ConnectionDetector;
 
 public class CreateGroup extends AppCompatActivity {
     private EditText groupSubject;
@@ -104,6 +105,10 @@ public class CreateGroup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
+
+        //checking connection
+        ConnectionDetector cd = new ConnectionDetector(this);
+        cd.isConnected();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
