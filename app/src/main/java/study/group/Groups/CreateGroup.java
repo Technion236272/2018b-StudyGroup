@@ -90,6 +90,7 @@ public class CreateGroup extends AppCompatActivity {
     private String courseName;
 
     private Uri mImageUri;
+    private boolean imageFlag;
     private Button mButtonChooseImage;
     private static final int PICK_IMAGE_REQUEST = 112;
     private StorageTask mUploadTask;
@@ -106,6 +107,8 @@ public class CreateGroup extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        imageFlag = false;
         mFirestore = FirebaseFirestore.getInstance();
         groupSubject = findViewById(R.id.groupSubject);
         Location = findViewById(R.id.Location);
@@ -134,7 +137,7 @@ public class CreateGroup extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
-        String[] participantsNum = new String[]{"Number Of Participants","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
+        String[] participantsNum = new String[]{"Number Of Participants","2","3","4","5","6","7","8","9","10"};
         final List<String> participantsNumList = new ArrayList<>(Arrays.asList(participantsNum));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, participantsNumList) {
             @Override
@@ -243,7 +246,6 @@ public class CreateGroup extends AppCompatActivity {
 
 
     public void openAlertDialog(View view) throws ParseException {
-
         final String key = myRef.child("Groups").push().getKey();
         StorageReference fileReference = mStorageRef.child(key);
         if (mImageUri != null) {
@@ -254,14 +256,16 @@ public class CreateGroup extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Uri img = taskSnapshot.getDownloadUrl();
                             mImageUri = img;
-                            myRef.child("Groups").child(key).child("image").setValue(img.toString());
+                            if(imageFlag) {
+                                myRef.child("Groups").child(key).child("image").setValue(img.toString());
+                            }
                             mButtonChooseImage.setText("Image uploaded");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(CreateGroup.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CreateGroup.this, "Upload image failed", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -272,8 +276,7 @@ public class CreateGroup extends AppCompatActivity {
 
         }
 
-        if(mImageUri == null)
-        {
+        if(mImageUri == null) {
             mImageUri = Uri.parse("gs://b-studygroup.appspot.com/uploads/StudyGroup1.png");
         }
 
@@ -364,6 +367,7 @@ public class CreateGroup extends AppCompatActivity {
 
         Group newGroup = new Group(key,courseId, subject, date, location, numOfPart, current,
                 Profile.getCurrentProfile().getId(), time, mImageUri.toString());
+        imageFlag = true;
 
         myRef.child("Groups").child(key).setValue(newGroup);
         myRef.child("Groups").child(key).child("participants").child(Profile.getCurrentProfile().getId())
