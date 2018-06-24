@@ -18,9 +18,12 @@
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs2"
+            style="@style/MyCustomTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary" />
+            android:background="@color/chat_background"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabSelectedTextColor="@color/black" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"

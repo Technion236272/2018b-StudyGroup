@@ -311,12 +311,23 @@ public class GroupActivity extends AppCompatActivity {
         });
 
 
+        database.child("Groups").child(groupID).child("maxNumOfPart").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                StringBuilder maxParticipantsBuilder = new StringBuilder("Max participants : ").append(dataSnapshot.getValue().toString());
+                maxNumOfParticipants.setText(maxParticipantsBuilder.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         dateTV.setText(date);
         timeTV.setText(time);
         subjectTV.setText(subject);
         locationTV.setText(location);
-        maxNumOfParticipants.setText("Max participants: " + String.valueOf(maxNumOfParticipants));
 
         interestedButton.setOnClickListener(new View.OnClickListener() {
             @Override

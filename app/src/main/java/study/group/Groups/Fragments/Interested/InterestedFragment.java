@@ -56,16 +56,20 @@ public class InterestedFragment extends Fragment {
         myRef.child("Groups").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Group> tempArray = new ArrayList<>();
                 for(DataSnapshot child : dataSnapshot.getChildren()) {
                     Group g = child.getValue(Group.class);
                     for (Group group : allInterestedList) {
                         if(group.getGroupID().equals(g.getGroupID()))
                         {
-                            allInterestedList.remove(group);
-                            allInterestedList.add(g);
+                            tempArray.add(g);
+                        //    allInterestedList.remove(group);
+                        //    allInterestedList.add(g);
                         }
                     }
                 }
+                allInterestedList.clear();
+                allInterestedList.addAll(tempArray);
                 adapter = new GroupInformationAdapter(new ArrayList<>(allInterestedList), R.id.interestedGroupsRecyclerView);
                 lastAdapter = new GroupInformationAdapter(new ArrayList<>(allInterestedList), R.id.interestedGroupsRecyclerView);
                 recyclerView.setAdapter(adapter);

@@ -30,6 +30,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +65,7 @@ public class Chat extends AppCompatActivity {
     private Integer currentNumOfParticipants;
     private FirebaseFirestore mFirestore;
     private StorageReference mStorageRef;
+    private Uri mImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,18 @@ public class Chat extends AppCompatActivity {
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("Message");
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
                 messageToSend.setText("");
+
+            }
+        });
+
+        dataBase.child("Groups").child(groupID).child("image").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mImageUri = Uri.parse((String)dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
@@ -366,6 +380,8 @@ public class Chat extends AppCompatActivity {
 
 
             }
+        } else if(id == R.id.delete_group) {
+            deleteTheGroup();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -420,6 +436,72 @@ public class Chat extends AppCompatActivity {
         }
 
     }
+
+
+    private void deleteTheGroup() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Chat.this);
+        alertDialog.setTitle(R.string.AreYouSure);
+        alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String checkImgUrl = "gs://b-studygroup.appspot.com/uploads/StudyGroup1.png";
+                if(mImageUri != null) {
+                    if (!mImageUri.toString().equals(checkImgUrl)) {
+                        StorageReference photoRef = mStorageRef.getStorage().getReferenceFromUrl(mImageUri.toString());
+                        photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // File deleted successfully
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Uh-oh, an error occurred!
+                            }
+                        });
+                    }
+                }
+                dataBase.child("Groups").child(groupID).child("participants")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot participant : dataSnapshot.getChildren()) {
+                                    if (participant.getKey().equals(adminID)) {
+                                        dataBase.child("Users").child(participant.getKey()).child("myGroups").child(groupID).removeValue();
+                                    }
+                                    dataBase.child("Users").child(participant.getKey()).child("Joined").child(groupID).removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+                dataBase.child("Groups").child(groupID).child("Requests")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                    String currentUser = child.getKey();
+                                    dataBase.child("Users").child(currentUser).child("Requests").child(groupID).removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+                dataBase.child("Groups").child(groupID).removeValue();
+                finish();
+            }
+        }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        }).show();
+    }
+
 
     @Override
     public boolean onSupportNavigateUp(){

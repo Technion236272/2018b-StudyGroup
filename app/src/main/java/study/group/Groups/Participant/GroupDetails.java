@@ -29,7 +29,7 @@ public class GroupDetails extends AppCompatActivity {
     private DatabaseReference database;
     private String groupID;
     private String adminID;
-    private int maxNumOfParticipants;
+  //  private int maxNumOfParticipants;
     private ImageView groupPhoto;
     private Uri mImageUri;
     private Transformation transformation;
@@ -54,7 +54,7 @@ public class GroupDetails extends AppCompatActivity {
         String location = getIntent().getExtras().getString("groupLocation");
         groupID = getIntent().getExtras().getString("groupID");
         final int numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
-        maxNumOfParticipants = getIntent().getExtras().getInt("maxNumOfParticipants");
+   //     maxNumOfParticipants = getIntent().getExtras().getInt("maxNumOfParticipants");
         adminID = getIntent().getExtras().getString("adminID");
         final String groupName = getIntent().getExtras().getString("groupName");
 
@@ -74,9 +74,22 @@ public class GroupDetails extends AppCompatActivity {
         dateET.setText(date);
         timeET.setText(time);
         locationET.setText(location);
-        StringBuilder maxParticipantsBuilder = new StringBuilder("Max participants: ").append(String.valueOf(maxNumOfParticipants));
-        maxNumOfPart.setText(maxParticipantsBuilder.toString());
-        StringBuilder currentMessageBuilder = new StringBuilder(String.valueOf(numOfParticipants)).append(" current participants") ;
+
+        database.child("Groups").child(groupID).child("maxNumOfPart").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                StringBuilder maxParticipantsBuilder = new StringBuilder("Max participants : ").append(dataSnapshot.getValue().toString());
+                maxNumOfPart.setText(maxParticipantsBuilder.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        StringBuilder currentMessageBuilder = new StringBuilder(String.valueOf(numOfParticipants)).append("  current participants :") ;
         currentNumOfParticipants.setText(currentMessageBuilder.toString());
 
         transformation = new RoundedTransformationBuilder()

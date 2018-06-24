@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,12 +31,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import study.group.Courses.CoursesFragment;
+import study.group.Groups.Admin.GroupAdminActivity;
 import study.group.Groups.Fragments.GroupsFragment;
 import study.group.Utilities.Credits;
 import study.group.Utilities.MyDatabaseUtil;
@@ -94,27 +98,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_settings) {
-            Toast.makeText(this, "Settings will be available soon", Toast.LENGTH_LONG).show();
-        } else if(id == R.id.credits) {
+        if(id == R.id.credits) {
             Intent intent = new Intent(this, Credits.class);
             startActivity(intent);
-        } else {
-            String userId = mAuth.getUid();
-
-            Map<String,Object> m = new HashMap<>();
-            m.put("token_id", FieldValue.delete());
-
-            FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-            mFirestore.collection("Users").document(Profile.getCurrentProfile().getId()).update(m).addOnSuccessListener(new OnSuccessListener<Void>() {
+        } else if(id == R.id.log_out) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+            alertDialog.setTitle("Do you wish to log out?");
+            alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                 @Override
-                public void onSuccess(Void aVoid) {
-                    LoginManager.getInstance().logOut();
-                    mAuth.signOut();
-                    finish();
-                }
-            });
+                public void onClick(DialogInterface dialog, int which) {
+                    String userId = mAuth.getUid();
 
+                    Map<String,Object> m = new HashMap<>();
+                    m.put("token_id", FieldValue.delete());
+
+                    FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+                    mFirestore.collection("Users").document(Profile.getCurrentProfile().getId()).update(m).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            LoginManager.getInstance().logOut();
+                            mAuth.signOut();
+                            finish();
+                        }
+                    });
+                }
+            }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            }).show();
         }
         return super.onOptionsItemSelected(item);
     }

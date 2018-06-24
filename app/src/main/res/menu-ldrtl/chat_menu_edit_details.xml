@@ -13,4 +13,11 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orderInCategory="100"
     android:title="@string/leave_the_group_rtl"
     app:showAsAction="never" />
+
+<item
+    android:id="@+id/delete_group"
+    android:orderInCategory="101"
+    android:title="@string/delete_group_rtl"
+    app:showAsAction="never" />
+
 </menu>
