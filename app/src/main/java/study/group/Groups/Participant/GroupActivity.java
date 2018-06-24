@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -46,7 +51,9 @@ public class GroupActivity extends AppCompatActivity {
     public static final String TEXT_REPLY = "text_reply";
     final Context currentContext = this;
     private boolean isJoined = false;
+    private Uri mImageUri;
     //    static boolean isExist;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,15 +81,39 @@ public class GroupActivity extends AppCompatActivity {
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         final String userID = Profile.getCurrentProfile().getId();
         final String userName = Profile.getCurrentProfile().getName();
-        final Button joinRequest = (Button) findViewById(R.id.Request);
-        final Button cancelRequest = (Button) findViewById(R.id.cancelRequest);
-        final Button interestedButton = (Button) findViewById(R.id.Interested);
+        final Button joinRequest = findViewById(R.id.Request);
+        final Button cancelRequest = findViewById(R.id.cancelRequest);
+        final Button interestedButton = findViewById(R.id.Interested);
+        final ImageView groupPhoto = findViewById(R.id.imageInGroupContent);
 
         //if a group is full a user cant send a request
-        if(groupMaxParticipants == numOfParticipants)
-        {
+        if(groupMaxParticipants == numOfParticipants) {
             joinRequest.setVisibility(View.GONE);
         }
+
+        final Transformation transformation = new RoundedTransformationBuilder()
+                .cornerRadiusDp(60)
+                .oval(false)
+                .build();
+
+        // receiving group image from db and put it in ImageView
+        database.child("Groups").child(groupID).child("image").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mImageUri = Uri.parse((String)dataSnapshot.getValue());
+                Picasso.with(GroupActivity.this)
+                        .load(mImageUri)
+                        .fit()
+                        .transform(transformation)
+                        .into(groupPhoto);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         //In case the user is interested in a coursse
         database.child("Users").child(userID).child("interested").addValueEventListener(new ValueEventListener() {
             @Override
@@ -97,12 +128,12 @@ public class GroupActivity extends AppCompatActivity {
                 }
                 if (isExist) {
                     interestedButton.setText(R.string.uninterested);
-                    interestedButton.setBackgroundColor(getResources().getColor(R.color.Red));
+                    interestedButton.setBackground(getResources().getDrawable(R.drawable.ic_red_button));
                 }
                 else
                 {
                     interestedButton.setText(R.string.Interested);
-                    interestedButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    interestedButton.setBackground(getResources().getDrawable(R.drawable.ic_blue_butten));
                 }
             }
 
@@ -139,11 +170,11 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
 
-        TextView subjectTV = (TextView)findViewById(R.id.SubjectInGroupContent);
-        TextView dateTV = (TextView)findViewById(R.id.DateInGroupContent);
-        TextView timeTV = (TextView)findViewById(R.id.timeInGroupContent);
-        TextView locationTV = (TextView)findViewById(R.id.LocationInGroupContent);
-        final TextView currentNumOfParticipants = (TextView)findViewById(R.id.groupParticipants);
+        TextView subjectTV = findViewById(R.id.SubjectInGroupContent);
+        TextView dateTV = findViewById(R.id.DateInGroupContent);
+        TextView timeTV = findViewById(R.id.timeInGroupContent);
+        TextView locationTV = findViewById(R.id.LocationInGroupContent);
+        final TextView maxNumOfParticipants = findViewById(R.id.NumOfParticipantsInGroupContent);
 
         //The listener of the join requets button
         cancelRequest.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +190,7 @@ public class GroupActivity extends AppCompatActivity {
                                 isJoined = true;
                             }
                         }
-                        if(isJoined == true)
+                        if(isJoined)
                         {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentContext);
                             alertDialog.setTitle(R.string.already_joined);
@@ -285,10 +316,7 @@ public class GroupActivity extends AppCompatActivity {
         timeTV.setText(time);
         subjectTV.setText(subject);
         locationTV.setText(location);
-        currentNumOfParticipants.setText(String.valueOf(numOfParticipants) + " Participants:");
-
-        final Set<String> participants = new HashSet<>();
-
+        maxNumOfParticipants.setText("Max participants: " + String.valueOf(maxNumOfParticipants));
 
         interestedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,13 +342,13 @@ public class GroupActivity extends AppCompatActivity {
                             database.child("Users").child(userID).child("interested").child(groupID).removeValue();
                             database.child("Groups").child(groupID).child("interested").child(userID).removeValue();
                             interestedButton.setText(R.string.Interested);
-                            interestedButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                            interestedButton.setBackground(getResources().getDrawable(R.drawable.ic_blue_butten));
 
                         } else {
                             database.child("Users").child(userID).child("interested").child(groupID).setValue(subject);
                             database.child("Groups").child(groupID).child("interested").child(userID).setValue(userName);
                             interestedButton.setText(R.string.uninterested);
-                            interestedButton.setBackgroundColor(getResources().getColor(R.color.Red));
+                            interestedButton.setBackground(getResources().getDrawable(R.drawable.ic_red_button));
                         }
 
                     }

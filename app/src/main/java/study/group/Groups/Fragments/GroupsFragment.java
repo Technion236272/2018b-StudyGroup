@@ -1,7 +1,9 @@
 package study.group.Groups.Fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.Locale;
 
 import study.group.Groups.Fragments.GroupFragment.GroupFragment;
 import study.group.Groups.Fragments.Interested.InterestedFragment;
@@ -49,7 +53,25 @@ public class GroupsFragment extends Fragment {
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        TabLayout tabLayout = view.findViewById(R.id.tabs2);
+
+        if(isRTL()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                tabLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+        }
+
         return view;
+    }
+
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    public static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
+                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

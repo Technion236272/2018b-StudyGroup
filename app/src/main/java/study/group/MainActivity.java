@@ -3,6 +3,7 @@ package study.group;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -29,6 +31,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import study.group.Courses.CoursesFragment;
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     GroupsFragment gf;
     CoursesFragment cf;
     FirebaseAuth mAuth;
+    ViewPager mViewPager;
+    String firstLogin;
+    Boolean courseTabFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,28 +58,36 @@ public class MainActivity extends AppCompatActivity {
         cf.setGroupsFragment(gf);
         insertUserInfoToDatabase();
 
+        courseTabFlag = false;
+        firstLogin = getIntent().getExtras().getString("FirstLogin");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        ViewPager mViewPager = findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         TabLayout tabLayout = findViewById(R.id.tabs);
 
+        if(isRTL()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                tabLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
+        }
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
         //checking connection
         ConnectionDetector cd = new ConnectionDetector(this);
         cd.isConnected();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(!courseTabFlag && firstLogin.equals("yes")) {
+            courseTabFlag = true;
+            mViewPager.setCurrentItem(cf.getId());
+        }
         return true;
     }
 
@@ -105,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class PlaceholderFragment extends Fragment {
 
+    public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {
@@ -143,6 +157,16 @@ public class MainActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public static boolean isRTL() {
+        return isRTL(Locale.getDefault());
+    }
+
+    public static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
+                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

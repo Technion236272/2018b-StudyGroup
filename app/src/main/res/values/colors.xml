@@ -10,4 +10,5 @@
     <color name="sender_chat_color">#0e4166</color>
     <color name="receiver_chat_color">#818182</color>
     <color name="chat_background">#e3e3e3</color>
+    <color name="black">#000000</color>
 </resources>

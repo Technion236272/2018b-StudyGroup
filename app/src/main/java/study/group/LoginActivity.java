@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                    myIntent.putExtra("FirstLogin", "no");
                     startActivity(myIntent);
                 }
             });
@@ -123,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                    myIntent.putExtra("FirstLogin", "yes");
                                     startActivity(myIntent);
                                 }
                             });
