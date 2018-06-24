@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -143,6 +144,7 @@ public class Chat extends AppCompatActivity {
                 notification.put("Sender",Profile.getCurrentProfile().getFirstName());
 
                 final Set<String> participants = new HashSet<>();
+
                 dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -150,6 +152,10 @@ public class Chat extends AppCompatActivity {
                             if (!d.getKey().equals(Profile.getCurrentProfile().getId())){
                                 participants.add(d.getKey());
                             }
+                        }
+                        for (String s:participants) {
+
+                            Log.d("TEST0", s);
                         }
                     }
 
@@ -160,6 +166,7 @@ public class Chat extends AppCompatActivity {
                 });
 
                 for(String s:participants){
+
                     mFirestore.collection("Users/"+s+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
@@ -167,6 +174,7 @@ public class Chat extends AppCompatActivity {
                         }
                     });
                 }
+
 
 //                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
 //                    @Override
@@ -296,12 +304,25 @@ public class Chat extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if(adminID.equals(Profile.getCurrentProfile().getId())) {
-            getMenuInflater().inflate(R.menu.chat_menu_edit_details, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.chat_menu_details, menu);
-        }
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        final Menu m = menu;
+        dataBase.child("Groups").child(groupID).child("adminID").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(adminID.equals(Profile.getCurrentProfile().getId())) {
+                    menu.clear();
+                    getMenuInflater().inflate(R.menu.chat_menu_edit_details, m);
+                } else {
+                    menu.clear();
+                    getMenuInflater().inflate(R.menu.chat_menu_details, m);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         return true;
     }
 
@@ -531,6 +552,11 @@ public class Chat extends AppCompatActivity {
         }).show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     @Override
     public boolean onSupportNavigateUp(){
