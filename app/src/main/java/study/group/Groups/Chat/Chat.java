@@ -35,7 +35,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import study.group.Groups.Admin.GroupAdminActivity;
 import study.group.Groups.Participant.GroupDetails;
@@ -132,6 +134,60 @@ public class Chat extends AppCompatActivity {
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("Message");
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
                 messageToSend.setText("");
+
+                String userName = Profile.getCurrentProfile().getName() + Profile.getCurrentProfile().getLastName();
+                final Map<String, Object> notification = new HashMap<>();
+                String newMessage = "New Message From: "+userName + Profile.getCurrentProfile().getLastName() + " in " + subject;
+                notification.put("Notification", newMessage);
+                notification.put("Type","New Message");
+                notification.put("Sender",Profile.getCurrentProfile().getFirstName());
+
+                final Set<String> participants = new HashSet<>();
+                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot d : dataSnapshot.getChildren()) {
+                            if (!d.getKey().equals(Profile.getCurrentProfile().getId())){
+                                participants.add(d.getKey());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                for(String s:participants){
+                    mFirestore.collection("Users/"+s+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+
+                        }
+                    });
+                }
+
+//                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        for(DataSnapshot d:dataSnapshot.getChildren()){
+//                            if(!d.getKey().equals(Profile.getCurrentProfile().getId())){
+//                                mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                                    @Override
+//                                    public void onSuccess(DocumentReference documentReference) {
+//
+//                                    }
+//                                });
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
 
             }
         });
@@ -406,33 +462,6 @@ public class Chat extends AppCompatActivity {
             UserMessage um = new UserMessage(chatMessage, currentUser, time, Type, AdminID, groupID);
             messages.add(um);
             mMessageAdapter.notifyDataSetChanged();
-
-            final Map<String, Object> notification = new HashMap<>();
-            String newMessage = "New Message From: "+userName + Profile.getCurrentProfile().getLastName() + " in " + subject;
-            notification.put("Notification", newMessage);
-            notification.put("Type","New Message");
-            notification.put("Sender",Profile.getCurrentProfile().getFirstName());
-            dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot d:dataSnapshot.getChildren()){
-                        if(!d.getKey().equals(Profile.getCurrentProfile().getId())){
-                            mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-
-                                }
-                            });
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
         }
 
     }
