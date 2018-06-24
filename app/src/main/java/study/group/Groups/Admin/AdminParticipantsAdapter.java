@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import study.group.R;
 
@@ -98,7 +99,7 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(itemView.getContext());
-                    int pos = getAdapterPosition();
+                    final int pos = getAdapterPosition();
                     final String currPartId = participants.get(pos).first;
                     alertDialog.setTitle("Are you sure you want to remove " + participants.get(pos).second + " from the group?");
                     alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
@@ -107,6 +108,18 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
                             dataBase.child("Users").child(currPartId).child("Joined").child(groupID).removeValue();
                             --currentNumOfParticipants;
                             dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
+
+                            //adding a system message that the current participant has been removed from the group
+                            String key = dataBase.child("Groups").child(groupID).child("Chat").push().getKey();
+                            dataBase.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(currPartId);
+                            dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
+                            dataBase.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
+                            dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(participants.get(pos).second);
+                            String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
+                            dataBase.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
+                            dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("System_Removed");
+                            dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(Profile.getCurrentProfile().getId());
+
                         }
                     }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                         @Override

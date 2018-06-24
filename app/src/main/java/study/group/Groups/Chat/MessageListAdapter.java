@@ -23,6 +23,7 @@ import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import java.util.Date;
 import java.util.List;
 
 import study.group.R;
@@ -33,6 +34,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
     private static final int VIEW_TYPE_REQUEST = 3;
+    private static final int VIEW_TYPE_SYSTEM_MESSAGE = 4;
 
     private Context myContext;
     private List<UserMessage> MessageList;
@@ -59,12 +61,20 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
         else
         {
-            if (message.getSender().getToken().equals(Profile.getCurrentProfile().getId())) {
-                // If the current user is the sender of the message
-                return VIEW_TYPE_MESSAGE_SENT;
-            } else {
-                // If some other user sent the message
-                return VIEW_TYPE_MESSAGE_RECEIVED;
+            if(message.getType().equals("System_Left") || message.getType().equals("System_Joined") ||
+                    message.getType().equals("System_Removed"))
+            {
+                return VIEW_TYPE_SYSTEM_MESSAGE;
+            }
+            else
+            {
+                if (message.getSender().getToken().equals(Profile.getCurrentProfile().getId())) {
+                    // If the current user is the sender of the message
+                    return VIEW_TYPE_MESSAGE_SENT;
+                } else {
+                    // If some other user sent the message
+                    return VIEW_TYPE_MESSAGE_RECEIVED;
+                }
             }
         }
 
@@ -87,17 +97,23 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
         else
         {
-            if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
+            if (viewType == VIEW_TYPE_SYSTEM_MESSAGE) {
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.recieved_message, parent, false);
-                return new ReceivedMessageHolder(view);
+                        .inflate(R.layout.chat_system_message, parent, false);
+                return new systemMessageHolder(view);
             }
             else
             {
-                if (viewType == VIEW_TYPE_REQUEST) {
+                if (viewType == VIEW_TYPE_MESSAGE_RECEIVED) {
                     view = LayoutInflater.from(parent.getContext())
-                            .inflate(R.layout.request_message, parent, false);
-                    return new RequestMessageHolder(view);
+                            .inflate(R.layout.recieved_message, parent, false);
+                    return new ReceivedMessageHolder(view);
+                } else {
+                    if (viewType == VIEW_TYPE_REQUEST) {
+                        view = LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.request_message, parent, false);
+                        return new RequestMessageHolder(view);
+                    }
                 }
             }
         }
@@ -120,6 +136,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_REQUEST:
                 ((RequestMessageHolder) holder).bind(message);
+                break;
+            case VIEW_TYPE_SYSTEM_MESSAGE:
+                ((systemMessageHolder) holder).bind(message);
 
         }
     }
@@ -173,6 +192,30 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             // Insert the profile image from the URL into the ImageView.
 
 
+        }
+    }
+
+    private class systemMessageHolder extends RecyclerView.ViewHolder {
+        TextView systemMessageText;
+
+        systemMessageHolder(View itemView) {
+            super(itemView);
+            systemMessageText = (TextView) itemView.findViewById(R.id.systemMessage);
+        }
+
+        void bind(UserMessage message) {
+            if(message.getType() == "System_Left")
+            {
+                systemMessageText.setText(message.getSender().getName() + " has left the group!");
+            }
+            if(message.getType().equals("System_Removed"))
+            {
+                systemMessageText.setText(message.getSender().getName() + " has been removed from the group!");
+            }
+            if(message.getType().equals("System_Joined"))
+            {
+                systemMessageText.setText(message.getSender().getName() + " has joined the group!");
+            }
         }
     }
 
@@ -251,12 +294,22 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     database.child("Groups").child(groupID).child("participants")
                             .child(user.getToken()).setValue(user.getName());
 
-
-
                     database.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentParticipants[0]+1);
                     database.child("Users").child(user.getToken()).child("Joined").child(groupID)
                             .setValue(groupName);
                     deleteRequest(user.getToken(),groupID);
+
+                    //adding a system message that the current participant joined
+                    String key = database.child("Groups").child(groupID).child("Chat").push().getKey();
+                    database.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(message.getSender().getToken());
+                    database.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
+                    database.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
+                    database.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(message.getSender().getName());
+                    String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
+                    database.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
+                    database.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("System_Joined");
+                    database.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(Profile.getCurrentProfile().getId());
+
                     notifyDataSetChanged();
                 }
             });
