@@ -69,37 +69,6 @@ public class Chat extends AppCompatActivity {
     private StorageReference mStorageRef;
     private Uri mImageUri;
 
-    private Set<String> getGroupParticipants(){
-        final Set<String> s = new HashSet<>();
-        dataBase.child("Groups").child(groupID).child("Chat").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot d : dataSnapshot.getChildren()) {
-                            if (!d.getKey().equals(Profile.getCurrentProfile().getId())){
-                                s.add(d.getKey());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return s;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,7 +149,7 @@ public class Chat extends AppCompatActivity {
                         dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                                participants.clear();
                                 for (DataSnapshot d : dataSnapshot.getChildren()) {
                                     if (!d.getKey().equals(Profile.getCurrentProfile().getId())){
                                         participants.add(d.getKey());
