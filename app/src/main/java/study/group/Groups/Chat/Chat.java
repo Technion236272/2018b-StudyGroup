@@ -309,25 +309,13 @@ public class Chat extends AppCompatActivity {
                                         }
                                     });
                                 }
-
-                                dataBase.child("Groups").child(groupID).removeValue();
-                                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
-                                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
-
-                                //adding a system message that the current participant left
-                                String key = dataBase.child("Groups").child(groupID).child("Chat").push().getKey();
-                                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
-                                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
-                                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
-                                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(Profile.getCurrentProfile().getName());
-                                String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
-                                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
-                                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("System_Left");
-                                dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
-
-                                finish();
                             }
                         });
+                        dataBase.child("Groups").child(groupID).removeValue();
+                        dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
+                        dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
+
+                        finish();
 
                     }
                 }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
@@ -349,6 +337,17 @@ public class Chat extends AppCompatActivity {
                                 break;
                             }
                         }
+
+                        //adding a system message that the current participant left
+                        String key = dataBase.child("Groups").child(groupID).child("Chat").push().getKey();
+                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
+                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
+                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
+                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(Profile.getCurrentProfile().getName());
+                        String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
+                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
+                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("System_Left");
+                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
                     }
 
                     @Override
