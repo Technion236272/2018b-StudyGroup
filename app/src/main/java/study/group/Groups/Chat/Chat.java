@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -144,19 +143,25 @@ public class Chat extends AppCompatActivity {
                 notification.put("Sender",Profile.getCurrentProfile().getFirstName());
 
                 final Set<String> participants = new HashSet<>();
-
-                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                dataBase.child("Groups").child(groupID).child("Chat").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot d : dataSnapshot.getChildren()) {
-                            if (!d.getKey().equals(Profile.getCurrentProfile().getId())){
-                                participants.add(d.getKey());
+                        dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                participants.clear();
+                                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                    if (!d.getKey().equals(Profile.getCurrentProfile().getId())){
+                                        participants.add(d.getKey());
+                                    }
+                                }
                             }
-                        }
-                        for (String s:participants) {
 
-                            Log.d("TEST0", s);
-                        }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -166,7 +171,6 @@ public class Chat extends AppCompatActivity {
                 });
 
                 for(String s:participants){
-
                     mFirestore.collection("Users/"+s+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
@@ -174,7 +178,6 @@ public class Chat extends AppCompatActivity {
                         }
                     });
                 }
-
 
 //                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
 //                    @Override
@@ -425,6 +428,20 @@ public class Chat extends AppCompatActivity {
                                 String nextAdmin = ds.getKey();
                                 dataBase.child("Groups").child(groupID).child("adminID").setValue(nextAdmin);
                                 dataBase.child("Users").child(nextAdmin).child("myGroups").child(groupID).setValue(subject);
+
+                                String oldAdmin = Profile.getCurrentProfile().getName();
+                                final Map<String, Object> notification = new HashMap<>();
+                                String newMessage = oldAdmin + " has left "+subject+" you are now Administrator.";
+                                notification.put("Notification", newMessage);
+                                notification.put("Type","New Message");
+                                notification.put("Sender",Profile.getCurrentProfile().getFirstName());
+                                mFirestore.collection("Users/"+nextAdmin+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+
+                                    }
+                                });
+
                                 break;
                             }
                         }
@@ -552,11 +569,6 @@ public class Chat extends AppCompatActivity {
         }).show();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
 
     @Override
     public boolean onSupportNavigateUp(){
