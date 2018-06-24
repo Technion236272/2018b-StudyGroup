@@ -21,7 +21,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -62,7 +65,23 @@ public class InterestedFragment extends Fragment {
                     for (Group group : allInterestedList) {
                         if(group.getGroupID().equals(g.getGroupID()))
                         {
-                            tempArray.add(g);
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+
+                            Date strDate = null;
+
+                            try {
+                                strDate = sdf.parse(g.getDate() + " " + g.getTime());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (System.currentTimeMillis()+(3*60*60*1000) < strDate.getTime()) {
+                                tempArray.add(g);
+                            }
+                            else{
+                                myRef.child("Users").child(Profile.getCurrentProfile().getId()).child("interested").child(g.getGroupID()).removeValue();
+                            }
+
                         //    allInterestedList.remove(group);
                         //    allInterestedList.add(g);
                         }
