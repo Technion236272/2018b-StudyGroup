@@ -13,42 +13,51 @@
 
         <EditText
             android:id="@+id/subjectAdminEdit"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="44dp"
+            android:layout_marginEnd="80dp"
             android:layout_marginLeft="32dp"
+            android:layout_marginRight="80dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="28dp"
             android:ems="10"
             android:hint="@string/Subject"
             android:inputType="textPersonName"
-            android:textSize="24sp"
             android:textColor="@android:color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/subjectIcon"
             app:layout_constraintTop_toBottomOf="@+id/imageLayout" />
 
         <EditText
             android:id="@+id/locationAdminEdit"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="44dp"
+            android:layout_marginEnd="80dp"
             android:layout_marginLeft="32dp"
+            android:layout_marginRight="80dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="40dp"
             android:ems="10"
             android:hint="@string/Location"
             android:inputType="textPersonName"
-            android:textSize="24sp"
             android:textColor="@android:color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/locationIcon"
             app:layout_constraintTop_toBottomOf="@+id/subjectAdminEdit" />
 
         <Spinner
             android:id="@+id/NumOfParticipants"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="44dp"
+            android:layout_marginEnd="80dp"
             android:layout_marginLeft="32dp"
+            android:layout_marginRight="80dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="40dp"
             android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/numberOfParticipantsIcon"
             app:layout_constraintTop_toBottomOf="@+id/dateAdminEdit" />
 
@@ -154,11 +163,11 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginLeft="172dp"
-                android:layout_marginStart="172dp"
+                android:layout_marginEnd="85dp"
+                android:layout_marginRight="85dp"
                 android:background="@drawable/ic_camera"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toEndOf="@+id/imageAdminEdit" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -167,9 +176,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="32dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="32dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:padding="4dp"

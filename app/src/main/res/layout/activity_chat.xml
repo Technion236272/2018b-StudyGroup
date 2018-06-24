@@ -26,7 +26,8 @@
 
     <EditText
         android:id="@+id/messageToSend"
-        android:layout_width="328dp"
+        android:layout_width="0dp"
+        app:layout_constraintVertical_weight="0"
         android:layout_height="45dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/ic_chat_box"
@@ -36,6 +37,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sendBtn"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -48,7 +50,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintBottom_toTopOf="@+id/messageToSend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

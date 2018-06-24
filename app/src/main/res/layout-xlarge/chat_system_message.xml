@@ -11,7 +11,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/ic_empty_bubble"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
