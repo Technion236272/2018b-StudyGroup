@@ -204,7 +204,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
 
         void bind(UserMessage message) {
-            if(message.getType() == "System_Left")
+            if(message.getType().equals("System_Left"))
             {
                 systemMessageText.setText(message.getSender().getName() + " has left the group!");
             }
