@@ -224,7 +224,7 @@ public class GroupCardsViewAdapter extends RecyclerView.Adapter<GroupCardsViewAd
                 return "Interested";
             }
         }
-        return "Empty";
+        return "Explore";
     }
 
     static class GroupViewHolder extends RecyclerView.ViewHolder {

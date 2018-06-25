@@ -68,6 +68,7 @@ public class Chat extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
     private StorageReference mStorageRef;
     private Uri mImageUri;
+    private Menu mMenuOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -308,25 +309,37 @@ public class Chat extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        final Menu m = menu;
-        dataBase.child("Groups").child(groupID).child("adminID").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(adminID.equals(Profile.getCurrentProfile().getId())) {
-                    menu.clear();
-                    getMenuInflater().inflate(R.menu.chat_menu_edit_details, m);
-                } else {
-                    menu.clear();
-                    getMenuInflater().inflate(R.menu.chat_menu_details, m);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        mMenuOptions = menu;
+        if(adminID.equals(Profile.getCurrentProfile().getId())) {
+            getMenuInflater().inflate(R.menu.chat_menu_edit_details, mMenuOptions);
+        } else {
+            getMenuInflater().inflate(R.menu.chat_menu_details, mMenuOptions);
+        }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mMenuOptions != null) {
+            mMenuOptions.clear();
+            dataBase.child("Groups").child(groupID).child("adminID").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mMenuOptions.clear();
+                    if (dataSnapshot.getValue().toString().equals(Profile.getCurrentProfile().getId())) {
+                        getMenuInflater().inflate(R.menu.chat_menu_edit_details, mMenuOptions);
+                    } else {
+                        getMenuInflater().inflate(R.menu.chat_menu_details, mMenuOptions);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override

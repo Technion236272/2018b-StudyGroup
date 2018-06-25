@@ -192,7 +192,9 @@ public class GroupAdminActivity extends AppCompatActivity {
                         newMonth = month;
                         newDay = dayOfMonth;
                         dateChanged = true;
+                        newDate = String.format("%02d", newDay) + "/" + String.format("%02d", newMonth) + "/" + newYear;
                         dateET.setText(newDate);
+
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH));
                 mDatePicker.show();

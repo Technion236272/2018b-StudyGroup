@@ -3,6 +3,7 @@ package study.group.Groups.Admin;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
@@ -13,15 +14,18 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.Profile;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Date;
 
+import study.group.Groups.Chat.Chat;
 import study.group.R;
 
 import static android.support.annotation.Dimension.DP;
@@ -52,7 +56,7 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
     @Override
     public void onBindViewHolder(@NonNull adminPartHolder holder, int position) {
         holder.leaveAdmin.setVisibility(View.INVISIBLE);
-        Pair<String,String> currentParticipant = participants.get(position);
+        final Pair<String,String> currentParticipant = participants.get(position);
         holder.participant.setText(currentParticipant.second);
 
         if((currentParticipant.first).equals(Profile.getCurrentProfile().getId())) {
@@ -60,6 +64,38 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
             holder.removeUser.setVisibility(View.INVISIBLE);
      //       holder.removeUser.setText(R.string.leave);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!(currentParticipant.first.equals(Profile.getCurrentProfile().getId()))) {
+                    android.support.v7.app.AlertDialog.Builder alertDialog = new android.support.v7.app.AlertDialog.Builder(v.getContext());
+                    alertDialog.setTitle("Do you wish to pass the administraship to " + currentParticipant.second + "?");
+                    alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dataBase.child("Groups").child(groupID).child("subject").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
+                                    dataBase.child("Groups").child(groupID).child("adminID").setValue(currentParticipant.first);
+                                    dataBase.child("Users").child(currentParticipant.first).child("myGroups").child(groupID).setValue(dataSnapshot.getValue());
+                                    ((GroupAdminActivity) groupContext).finish();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -101,6 +137,7 @@ class AdminParticipantsAdapter extends RecyclerView.Adapter<AdminParticipantsAda
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(itemView.getContext());
                     final int pos = getAdapterPosition();
                     final String currPartId = participants.get(pos).first;
+
                     alertDialog.setTitle("Are you sure you want to remove " + participants.get(pos).second + " from the group?");
                     alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
