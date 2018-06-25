@@ -70,30 +70,19 @@ public class JoinedFragment extends Fragment {
                     String time = (String)child.child("time").getValue();
                     String image = (String)child.child("image").getValue();
                     Group g = new Group(groupID, id, subject, date, location, maxNumOfPart, currentNumOfPart, adminID, time, image);
-
+                    boolean flag = false;
                     for (Group group : groups) {
                         if(group.getGroupID().equals(g.getGroupID()))
-                        {
-                            tempGroups.add(g);
-                        }
-                    }
-                }
-
-                for (Group group : groups) {
-                    boolean flag = false;
-                    for(Group g : tempGroups)
-                    {
-                        if(g.getGroupID().equals(group.getGroupID()))
                         {
                             flag = true;
                         }
                     }
-
-                    if(flag == false)
+                    if(flag == true)
                     {
-                        tempGroups.add(group);
+                        tempGroups.add(g);
                     }
                 }
+                
                 groups.clear();
                 groups.addAll(tempGroups);
                 adapter = new GroupInformationAdapter(new ArrayList<>(groups), R.id.joinedGroupsRecyclerView);
