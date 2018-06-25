@@ -143,17 +143,17 @@ public class Chat extends AppCompatActivity {
                 notification.put("Type","New Message");
                 notification.put("From",Profile.getCurrentProfile().getId());
 
-                final Set<String> participants = new HashSet<>();
-                dataBase.child("Groups").child(groupID).child("Chat").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
                         dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                participants.clear();
                                 for (DataSnapshot d : dataSnapshot.getChildren()) {
                                     if (!d.getKey().equals(Profile.getCurrentProfile().getId())){
-                                        participants.add(d.getKey());
+                                        mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+
+                                            }
+                                        });
                                     }
                                 }
                             }
@@ -163,22 +163,7 @@ public class Chat extends AppCompatActivity {
 
                             }
                         });
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-                for(String s:participants){
-                    mFirestore.collection("Users/"+s+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-
-                        }
-                    });
-                }
 
 //                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
 //                    @Override
@@ -444,7 +429,7 @@ public class Chat extends AppCompatActivity {
 
                                 String oldAdmin = Profile.getCurrentProfile().getName();
                                 final Map<String, Object> notification = new HashMap<>();
-                                String newMessage = oldAdmin + " has left "+subject+" you are now Administrator.";
+                                String newMessage = oldAdmin + " has left! "+subject+" you are now Administrator.";
                                 notification.put("Notification", newMessage);
                                 notification.put("Type","New Message");
                                 notification.put("From",Profile.getCurrentProfile().getId());
