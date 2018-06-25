@@ -129,7 +129,7 @@ public class Chat extends AppCompatActivity {
             public void onClick(View v) {
                 //generate a random key for the new message
                 String message = messageToSend.getText().toString();
-                if(message.length() == 0) {
+                if(message.trim().length() == 0) {
                     return;
                 }
 
