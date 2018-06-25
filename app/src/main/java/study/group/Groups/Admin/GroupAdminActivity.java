@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +38,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -45,11 +48,14 @@ import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import study.group.R;
@@ -66,6 +72,7 @@ public class GroupAdminActivity extends AppCompatActivity {
     private Uri mImageUri;
     private Transformation transformation;
     private StorageReference mStorageRef;
+    private FirebaseFirestore mFirestore;
     private Context currentContext = this;
 
     boolean dateChanged = false;
@@ -95,6 +102,7 @@ public class GroupAdminActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_admin);
+        mFirestore = FirebaseFirestore.getInstance();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         //checking connection
@@ -106,7 +114,7 @@ public class GroupAdminActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance().getReference();
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
-        String subject = getIntent().getExtras().getString("groupSubject");
+        final String subject = getIntent().getExtras().getString("groupSubject");
         String date = getIntent().getExtras().getString("groupDate");
         String time = getIntent().getExtras().getString("groupTime");
         String location = getIntent().getExtras().getString("groupLocation");
@@ -283,6 +291,35 @@ public class GroupAdminActivity extends AppCompatActivity {
                         String [] nameArr = groupName.split("-");
                         String newGroupName = nameArr[0] + subjectET.getText().toString();
                         database.child("Groups").child(groupID).child("name").setValue(newGroupName);
+                        final Set<String> participants = new HashSet<>();
+                        database.child("Groups").child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                participants.clear();
+                                final Map<String, Object> notification = new HashMap<>();
+                                String newMessage = Profile.getCurrentProfile().getName() + " has modified"+subject+" details.";
+                                notification.put("Notification", newMessage);
+                                notification.put("Type","Group Modified");
+                                notification.put("From", Profile.getCurrentProfile().getId());
+                                for(DataSnapshot d : dataSnapshot.getChildren()){
+                                    if(!d.getKey().equals(adminID)){
+                                        mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+
+                                            }
+                                        });
+                                    }
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                         finish();
                     }
                 }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {

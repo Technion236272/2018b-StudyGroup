@@ -374,7 +374,7 @@ public class CreateGroup extends AppCompatActivity {
         String newGroupCreated = "Hi, "+subject+ " was created at " + courseName + "  Open up and join the group";
         notification.put("Notification", newGroupCreated);
         notification.put("Type","New Group");
-        notification.put("Admin",Profile.getCurrentProfile().getFirstName());
+        notification.put("From",Profile.getCurrentProfile());
         myRef.child("Courses").child(courseId).child("Followers").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -383,7 +383,6 @@ public class CreateGroup extends AppCompatActivity {
                         mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(CreateGroup.this,"Notification Sent",Toast.LENGTH_SHORT);
                             }
                         });
                     }

@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             final HashMap<String,Object> userData = new HashMap<>();
                             userData.put("id", Profile.getCurrentProfile().getId());
-                            userData.put("name",Profile.getCurrentProfile().getFirstName() + " " + Profile.getCurrentProfile().getLastName());
+                            userData.put("name",Profile.getCurrentProfile().getName());
                             String token_id = FirebaseInstanceId.getInstance().getToken();
                             userData.put("token_id", token_id);
 

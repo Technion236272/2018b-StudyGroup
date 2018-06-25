@@ -137,10 +137,10 @@ public class Chat extends AppCompatActivity {
 
                 String userName = Profile.getCurrentProfile().getName() + Profile.getCurrentProfile().getLastName();
                 final Map<String, Object> notification = new HashMap<>();
-                String newMessage = "New Message From: "+userName + Profile.getCurrentProfile().getLastName() + " in " + subject;
+                String newMessage = "New message from: "+userName + " in " + subject+'.';
                 notification.put("Notification", newMessage);
                 notification.put("Type","New Message");
-                notification.put("Sender",Profile.getCurrentProfile().getFirstName());
+                notification.put("From",Profile.getCurrentProfile().getId());
 
                 final Set<String> participants = new HashSet<>();
                 dataBase.child("Groups").child(groupID).child("Chat").addValueEventListener(new ValueEventListener() {
@@ -434,7 +434,7 @@ public class Chat extends AppCompatActivity {
                                 String newMessage = oldAdmin + " has left "+subject+" you are now Administrator.";
                                 notification.put("Notification", newMessage);
                                 notification.put("Type","New Message");
-                                notification.put("Sender",Profile.getCurrentProfile().getFirstName());
+                                notification.put("From",Profile.getCurrentProfile().getId());
                                 mFirestore.collection("Users/"+nextAdmin+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {

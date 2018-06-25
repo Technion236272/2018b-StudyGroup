@@ -277,10 +277,10 @@ public class GroupActivity extends AppCompatActivity {
                 Toast.makeText(currentContext, "Join request has been sent", Toast.LENGTH_SHORT).show();
 
                 final Map<String, Object> notification = new HashMap<>();
-                String newJoinRequest = "Hi, "+ userName +" "+Profile.getCurrentProfile().getLastName() +" wants to join "+subject;
+                String newJoinRequest = "Hi, "+ userName +" wants to join "+subject+'.';
                 notification.put("Notification", newJoinRequest);
                 notification.put("Type","Join Request");
-                notification.put("Sender", userName + Profile.getCurrentProfile().getLastName());
+                notification.put("From", Profile.getCurrentProfile().getId());
 
                 mFirestore.collection("Users/"+adminID+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -304,9 +304,9 @@ public class GroupActivity extends AppCompatActivity {
 //                    }
 //                });
 
-                           String notificationTitle = "StudyGroup - Join request";
-                           String notificationContent = userName + " is wish to join " + subject;
-                           setNotification(notificationTitle, notificationContent);
+//                           String notificationTitle = "StudyGroup - Join request";
+//                           String notificationContent = userName + " is wish to join " + subject;
+//                           setNotification(notificationTitle, notificationContent);
             }
         });
 
