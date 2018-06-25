@@ -258,18 +258,22 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             final long[] currentParticipants = {0};
             final long[] maxParticipants = {0};
-            database.child("Groups").addListenerForSingleValueEvent(new ValueEventListener() {
+            database.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren())
-                    {
-                        if(ds.child("groupID").getValue().equals(groupID))
-                        {
-                            groupName = (String)ds.child("subject").getValue();
-                            currentParticipants[0] = (long) ds.child("currentNumOfPart").getValue();
-                            maxParticipants[0] = (long) ds.child("maxNumOfPart").getValue();
-                        }
-                    }
+                            currentParticipants[0] = (long) dataSnapshot.getValue();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            database.child("Groups").child(groupID).child("maxNumOfPart").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    maxParticipants[0] = (long) dataSnapshot.getValue();
                 }
 
                 @Override

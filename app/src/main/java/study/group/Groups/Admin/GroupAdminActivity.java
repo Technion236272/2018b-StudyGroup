@@ -141,8 +141,20 @@ public class GroupAdminActivity extends AppCompatActivity {
         final List<Integer> participantsNumList = new ArrayList<>(Arrays.asList(participantsNum));
         final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item, participantsNumList);
         maxNumOfPartSpinner.setAdapter(adapter);
-        int spinnerPosition = adapter.getPosition(maxNumOfParticipants);
-        maxNumOfPartSpinner.setSelection(spinnerPosition);
+        database.child("Groups").child(groupID).child("maxNumOfPart").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                maxNumOfParticipants = Integer.parseInt(dataSnapshot.getValue().toString());
+                int spinnerPosition = adapter.getPosition(maxNumOfParticipants);
+                maxNumOfPartSpinner.setSelection(spinnerPosition);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         transformation = new RoundedTransformationBuilder()
                 .cornerRadiusDp(60)
