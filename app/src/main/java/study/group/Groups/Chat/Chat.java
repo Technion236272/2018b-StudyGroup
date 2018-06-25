@@ -93,8 +93,19 @@ public class Chat extends AppCompatActivity {
         location = getIntent().getExtras().getString("groupLocation");
         currentNumOfParticipants = getIntent().getExtras().getInt("groupCurrentParticipants");
         maxNumOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
+        dataBase = FirebaseDatabase.getInstance().getReference();
 
-        setTitle(groupName);
+        dataBase.child("Groups").child(groupID).child("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setTitle((String) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         messages = new ArrayList<>();
 
@@ -104,7 +115,7 @@ public class Chat extends AppCompatActivity {
         messageToSend = findViewById(R.id.messageToSend);
         // the send button
         Send = findViewById(R.id.sendBtn);
-        dataBase = FirebaseDatabase.getInstance().getReference();
+
 
         mMessageAdapter= new MessageListAdapter(this,messages);
         mMessageRecycler = findViewById(R.id.messagesRecycler);
@@ -312,10 +323,14 @@ public class Chat extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     mMenuOptions.clear();
-                    if (dataSnapshot.getValue().toString().equals(Profile.getCurrentProfile().getId())) {
-                        getMenuInflater().inflate(R.menu.chat_menu_edit_details, mMenuOptions);
-                    } else {
-                        getMenuInflater().inflate(R.menu.chat_menu_details, mMenuOptions);
+                    if(dataSnapshot != null) {
+                        if(dataSnapshot.getValue() != null) {
+                            if (dataSnapshot.getValue().toString().equals(Profile.getCurrentProfile().getId())) {
+                                getMenuInflater().inflate(R.menu.chat_menu_edit_details, mMenuOptions);
+                            } else {
+                                getMenuInflater().inflate(R.menu.chat_menu_details, mMenuOptions);
+                            }
+                        }
                     }
                 }
 
@@ -389,7 +404,7 @@ public class Chat extends AppCompatActivity {
                 alertDialog.setTitle(R.string.only_member_delete_group);
                 alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        final String checkImgUrl = "gs://b-studygroup.appspot.com/uploads/StudyGroup1.png";
+                        final String checkImgUrl = "https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0";
                         mStorageRef.child(groupID).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
@@ -509,7 +524,7 @@ public class Chat extends AppCompatActivity {
         alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String checkImgUrl = "gs://b-studygroup.appspot.com/uploads/StudyGroup1.png";
+                String checkImgUrl = "https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0";
                 if(mImageUri != null) {
                     if (!mImageUri.toString().equals(checkImgUrl)) {
                         StorageReference photoRef = mStorageRef.getStorage().getReferenceFromUrl(mImageUri.toString());

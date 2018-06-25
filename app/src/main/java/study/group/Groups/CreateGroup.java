@@ -273,7 +273,7 @@ public class CreateGroup extends AppCompatActivity {
         }
 
         if(mImageUri == null) {
-            mImageUri = Uri.parse("gs://b-studygroup.appspot.com/uploads/StudyGroup1.png");
+            mImageUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/b-studygroup.appspot.com/o/uploads%2FStudyGroup1.png?alt=media&token=74e1942d-c459-4f5a-a5fa-c024f259fac0");
         }
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -374,7 +374,7 @@ public class CreateGroup extends AppCompatActivity {
         String newGroupCreated = "Hi, "+subject+ " was created at " + courseName + "  Open up and join the group";
         notification.put("Notification", newGroupCreated);
         notification.put("Type","New Group");
-        notification.put("From",Profile.getCurrentProfile());
+        notification.put("From",Profile.getCurrentProfile().getId());
         myRef.child("Courses").child(courseId).child("Followers").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
