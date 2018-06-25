@@ -14,17 +14,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import study.group.R;
 import study.group.Utilities.Group;
@@ -35,7 +40,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
     private static final int VIEW_TYPE_REQUEST = 3;
     private static final int VIEW_TYPE_SYSTEM_MESSAGE = 4;
-
+    private FirebaseFirestore mFirestore;
     private Context myContext;
     private List<UserMessage> MessageList;
     private Transformation transformation;
@@ -231,6 +236,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageTextUser = (TextView) itemView.findViewById(R.id.RequestMessageUserName);
             acceptButton = (Button) itemView.findViewById(R.id.RequestAcceptButton);
             rejectButton = (Button) itemView.findViewById(R.id.RequestRejectButton);
+            mFirestore = FirebaseFirestore.getInstance();
 
         }
 
@@ -258,22 +264,18 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             final long[] currentParticipants = {0};
             final long[] maxParticipants = {0};
-            database.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
+            database.child("Groups").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                            currentParticipants[0] = (long) dataSnapshot.getValue();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            database.child("Groups").child(groupID).child("maxNumOfPart").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    maxParticipants[0] = (long) dataSnapshot.getValue();
+                    for (DataSnapshot ds : dataSnapshot.getChildren())
+                    {
+                        if(ds.child("groupID").getValue().equals(groupID))
+                        {
+                            groupName = (String)ds.child("subject").getValue();
+                            currentParticipants[0] = (long) ds.child("currentNumOfPart").getValue();
+                            maxParticipants[0] = (long) ds.child("maxNumOfPart").getValue();
+                        }
+                    }
                 }
 
                 @Override
@@ -315,6 +317,33 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     database.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(Profile.getCurrentProfile().getId());
 
                     notifyDataSetChanged();
+                    final Map<String, Object> notification = new HashMap<>();
+
+                    String newMessage = "Your join request for " + groupName +" was accepted! You are now a member.";
+                    notification.put("Notification", newMessage);
+                    notification.put("Type","Request Accepted");
+                    notification.put("From",Profile.getCurrentProfile().getId());
+
+                    database.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                if (!d.getKey().equals(Profile.getCurrentProfile().getId())){
+                                    mFirestore.collection("Users/"+d.getKey()+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             });
 
