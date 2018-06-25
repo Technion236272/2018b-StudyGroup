@@ -93,8 +93,19 @@ public class Chat extends AppCompatActivity {
         location = getIntent().getExtras().getString("groupLocation");
         currentNumOfParticipants = getIntent().getExtras().getInt("groupCurrentParticipants");
         maxNumOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
+        dataBase = FirebaseDatabase.getInstance().getReference();
 
-        setTitle(groupName);
+        dataBase.child("Groups").child(groupID).child("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setTitle((String) dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         messages = new ArrayList<>();
 
@@ -104,7 +115,7 @@ public class Chat extends AppCompatActivity {
         messageToSend = findViewById(R.id.messageToSend);
         // the send button
         Send = findViewById(R.id.sendBtn);
-        dataBase = FirebaseDatabase.getInstance().getReference();
+
 
         mMessageAdapter= new MessageListAdapter(this,messages);
         mMessageRecycler = findViewById(R.id.messagesRecycler);

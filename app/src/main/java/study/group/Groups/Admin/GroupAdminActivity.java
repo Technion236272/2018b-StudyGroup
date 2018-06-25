@@ -189,7 +189,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         newYear = year;
-                        newMonth = month + 1;
+                        newMonth = month;
                         newDay = dayOfMonth;
                         dateChanged = true;
                         newDate = String.format("%02d", newDay) + "/" + String.format("%02d", newMonth) + "/" + newYear;
@@ -272,29 +272,6 @@ public class GroupAdminActivity extends AppCompatActivity {
                 }
 
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(currentContext);
-                if(dateChanged && ((newYear < currentYear) || (newMonth < currentMonth && newYear <= currentYear) ||
-                        (newDay < currentDay && newMonth <= currentMonth && newYear <= currentYear))) {
-                    alertDialog.setTitle(R.string.irrelevant_date);
-                    alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                        }
-                    }).show();
-                    return;
-                }
-
-                if(timeChanged && ((newHour < currentHour && newDay <= currentDay && newMonth <= currentMonth && newYear <= currentYear) ||
-                        (newMinute < currentMinute && newHour <= currentHour && newDay <= currentDay && newMonth <= currentMonth && newYear <= currentYear))) {
-                    alertDialog.setTitle(R.string.irrelevant_time);
-                    alertDialog.setPositiveButton(R.string.Continue, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-
-                        }
-                    }).show();
-                    return;
-                }
-
-
                 alertDialog.setTitle(R.string.AreYouSureChanges);
                 alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -313,16 +290,26 @@ public class GroupAdminActivity extends AppCompatActivity {
                         {
                             database.child("Groups").child(groupID).child("maxNumOfPart").setValue(newMaxNumOfPart);
                         }
-                        String [] nameArr = groupName.split("-");
-                        String newGroupName = nameArr[0] + subjectET.getText().toString();
-                        database.child("Groups").child(groupID).child("name").setValue(newGroupName);
+                        database.child("Groups").child(groupID).child("id").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                database.child("Groups").child(groupID).child("name").setValue(dataSnapshot.getValue() + " - "
+                                        + subjectET.getText().toString());
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                         final Set<String> participants = new HashSet<>();
                         database.child("Groups").child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 participants.clear();
                                 final Map<String, Object> notification = new HashMap<>();
-                                String newMessage = Profile.getCurrentProfile().getName() + " has modified "+subject+" details.";
+                                String newMessage = Profile.getCurrentProfile().getName() + " has modified"+subject+" details.";
                                 notification.put("Notification", newMessage);
                                 notification.put("Type","Group Modified");
                                 notification.put("From", Profile.getCurrentProfile().getId());
