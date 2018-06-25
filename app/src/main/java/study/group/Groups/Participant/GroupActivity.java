@@ -375,46 +375,46 @@ public class GroupActivity extends AppCompatActivity {
     }
 
 
-    public void setNotification(String title, String content) {
-        createNotificationChannel();
-
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
-        mBuilder.setSmallIcon(R.drawable.ic_white_logo);
-        mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.study_group_logo));
-        mBuilder.setAutoCancel(true);
-        mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        mBuilder.setWhen(System.currentTimeMillis());
-        mBuilder.setContentTitle(title);
-        mBuilder.setContentText(content);
-//        mBuilder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
-        //      mBuilder.setContentIntent(pendingIntent);
-
-        //      mBuilder.addAction(R.drawable.ic_logo, "Yes", pendingIntent);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
-    }
-
-    public void createNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Personal Notifications";
-            String description = "Include all the personal notifications";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-
-            notificationChannel.setDescription(description);
-
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(notificationChannel);     // TODO : check it out
-        }
-    }
+//    public void setNotification(String title, String content) {
+//        createNotificationChannel();
+//
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//
+//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+//        mBuilder.setSmallIcon(R.drawable.ic_white_logo);
+//        mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.study_group_logo));
+//        mBuilder.setAutoCancel(true);
+//        mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//        mBuilder.setWhen(System.currentTimeMillis());
+//        mBuilder.setContentTitle(title);
+//        mBuilder.setContentText(content);
+////        mBuilder.setStyle(new NotificationCompat.DecoratedCustomViewStyle());
+//        //      mBuilder.setContentIntent(pendingIntent);
+//
+//        //      mBuilder.addAction(R.drawable.ic_logo, "Yes", pendingIntent);
+//
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//        notificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+//
+//    }
+//
+//    public void createNotificationChannel() {
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            CharSequence name = "Personal Notifications";
+//            String description = "Include all the personal notifications";
+//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+//
+//            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+//
+//            notificationChannel.setDescription(description);
+//
+//            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//            notificationManager.createNotificationChannel(notificationChannel);
+//        }
+//    }
 
     @Override
     public boolean onSupportNavigateUp(){
