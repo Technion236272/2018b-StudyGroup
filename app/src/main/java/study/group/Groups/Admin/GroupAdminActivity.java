@@ -84,6 +84,7 @@ public class GroupAdminActivity extends AppCompatActivity {
     String newDate;
     String newTime;
     int newMaxNumOfPart;
+    int numOfParticipants;
 
     Calendar cal;
     int currentDay;
@@ -119,14 +120,24 @@ public class GroupAdminActivity extends AppCompatActivity {
         String time = getIntent().getExtras().getString("groupTime");
         String location = getIntent().getExtras().getString("groupLocation");
         groupID = getIntent().getExtras().getString("groupID");
-        final int numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
+        numOfParticipants = getIntent().getExtras().getInt("numOfParticipants");
         maxNumOfParticipants = getIntent().getExtras().getInt("maxNumOfParticipants");
         adminID = getIntent().getExtras().getString("adminID");
         final String groupName = getIntent().getExtras().getString("groupName");
 
         final Set<Pair<String,String>> participants = new HashSet<>();
 
-        setTitle(groupName);
+        database.child("Groups").child(groupID).child("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setTitle((String)dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         final EditText subjectET = (EditText) findViewById(R.id.subjectAdminEdit);
         final TextView dateET = findViewById(R.id.dateAdminEdit);
         final TextView timeET = findViewById(R.id.timeAdminEdit);
@@ -335,11 +346,9 @@ public class GroupAdminActivity extends AppCompatActivity {
                             }
                         });
 
-                        final Set<String> participants = new HashSet<>();
-                        database.child("Groups").child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                        database.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                participants.clear();
                                 final Map<String, Object> notification = new HashMap<>();
                                 String newMessage = Profile.getCurrentProfile().getName() + " has modified"+subject+" details.";
                                 notification.put("Notification", newMessage);
@@ -366,6 +375,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                         });
                         finish();
                     }
+
                 }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -375,12 +385,70 @@ public class GroupAdminActivity extends AppCompatActivity {
             }
         });
 
-        subjectET.setText(subject);
-        dateET.setText(date);
-        timeET.setText(time);
-        locationET.setText(location);
-        StringBuilder currentMessageBuilder = new StringBuilder(String.valueOf(numOfParticipants)).append(" current participants") ;
-        currentNumOfParticipants.setText(currentMessageBuilder.toString());
+        database.child("Groups").child(groupID).child("subject").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                subjectET.setText((String)dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        database.child("Groups").child(groupID).child("date").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dateET.setText((String)dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        database.child("Groups").child(groupID).child("time").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                timeET.setText((String)dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        database.child("Groups").child(groupID).child("location").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                locationET.setText((String)dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        database.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                numOfParticipants = Integer.parseInt(dataSnapshot.getValue().toString());
+                StringBuilder currentMessageBuilder = new StringBuilder(String.valueOf(numOfParticipants)).append(" current participants") ;
+                currentNumOfParticipants.setText(currentMessageBuilder.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
 //        database.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
 //            @Override

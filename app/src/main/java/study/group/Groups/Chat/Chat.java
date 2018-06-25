@@ -431,61 +431,74 @@ public class Chat extends AppCompatActivity {
                     }
                 }).show();
             } else {
-                // pass the administraship to someone else
-                dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle(R.string.leaving_the_group);
+                alertDialog.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot ds : dataSnapshot.getChildren())
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         {
-                            if(!ds.getKey().equals(Profile.getCurrentProfile().getId())) {
-                                String nextAdmin = ds.getKey();
-                                dataBase.child("Groups").child(groupID).child("adminID").setValue(nextAdmin);
-                                dataBase.child("Users").child(nextAdmin).child("myGroups").child(groupID).setValue(subject);
+                            // pass the administraship to someone else
+                            dataBase.child("Groups").child(groupID).child("participants").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        if (!ds.getKey().equals(Profile.getCurrentProfile().getId())) {
+                                            String nextAdmin = ds.getKey();
+                                            dataBase.child("Groups").child(groupID).child("adminID").setValue(nextAdmin);
+                                            dataBase.child("Users").child(nextAdmin).child("myGroups").child(groupID).setValue(subject);
 
-                                String oldAdmin = Profile.getCurrentProfile().getName();
-                                final Map<String, Object> notification = new HashMap<>();
-                                String newMessage = oldAdmin + " has left! "+subject+" you are now Administrator.";
-                                notification.put("Notification", newMessage);
-                                notification.put("Type","New Message");
-                                notification.put("From",Profile.getCurrentProfile().getId());
-                                mFirestore.collection("Users/"+nextAdmin+"/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
+                                            String oldAdmin = Profile.getCurrentProfile().getName();
+                                            final Map<String, Object> notification = new HashMap<>();
+                                            String newMessage = oldAdmin + " has left! " + subject + " you are now Administrator.";
+                                            notification.put("Notification", newMessage);
+                                            notification.put("Type", "New Message");
+                                            notification.put("From", Profile.getCurrentProfile().getId());
+                                            mFirestore.collection("Users/" + nextAdmin + "/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference documentReference) {
 
+                                                }
+                                            });
+
+                                            break;
+                                        }
                                     }
-                                });
 
-                                break;
-                            }
+                                    //adding a system message that the current participant left
+                                    String key = dataBase.child("Groups").child(groupID).child("Chat").push().getKey();
+                                    dataBase.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
+                                    dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
+                                    dataBase.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
+                                    dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(Profile.getCurrentProfile().getName());
+                                    String pc = Profile.getCurrentProfile().getProfilePictureUri(30, 30).toString();
+                                    dataBase.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
+                                    dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("System_Left");
+                                    dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            dataBase.child("Groups").child(groupID).child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
+                            dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
+                            dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
+                            --currentNumOfParticipants;
+                            dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
+                            // Sending a notification to the new Admin
+                            // User: X , you are the new admin of : YY group
+
+
                         }
-
-                        //adding a system message that the current participant left
-                        String key = dataBase.child("Groups").child(groupID).child("Chat").push().getKey();
-                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("User").setValue(Profile.getCurrentProfile().getId());
-                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Message").setValue("");
-                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("TimeStamp").setValue(new Date());
-                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Name").setValue(Profile.getCurrentProfile().getName());
-                        String pc = Profile.getCurrentProfile().getProfilePictureUri(30,30).toString();
-                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("ProfilePicture").setValue(pc);
-                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("Type").setValue("System_Left");
-                        dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
                     }
-
+                }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
-                });
-
-                dataBase.child("Groups").child(groupID).child("participants").child(Profile.getCurrentProfile().getId()).removeValue();
-                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("Joined").child(groupID).removeValue();
-                dataBase.child("Users").child(Profile.getCurrentProfile().getId()).child("myGroups").child(groupID).removeValue();
-                --currentNumOfParticipants;
-                dataBase.child("Groups").child(groupID).child("currentNumOfPart").setValue(currentNumOfParticipants);
-                // Sending a notification to the new Admin
-                // User: X , you are the new admin of : YY group
-
-
+                }).show();
             }
         } else if(id == R.id.delete_group) {
             deleteTheGroup();
