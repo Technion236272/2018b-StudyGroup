@@ -124,10 +124,10 @@ public class RequestsFragment extends Fragment {
                             noRequested.setText(R.string.no_requests);
                         } else {
                             noRequested.setText("");
-                            adapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
-                            lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
-                            recyclerView.setAdapter(adapter);
                         }
+                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
+                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
+                        recyclerView.setAdapter(adapter);
                     }
 
                     @Override

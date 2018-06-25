@@ -136,7 +136,7 @@ public class Chat extends AppCompatActivity {
                 dataBase.child("Groups").child(groupID).child("Chat").child(key).child("GroupAdminID").setValue(adminID);
                 messageToSend.setText("");
 
-                String userName = Profile.getCurrentProfile().getName() + Profile.getCurrentProfile().getLastName();
+                String userName = Profile.getCurrentProfile().getName();
                 final Map<String, Object> notification = new HashMap<>();
                 String newMessage = "New message from: "+userName + " in " + subject+'.';
                 notification.put("Notification", newMessage);

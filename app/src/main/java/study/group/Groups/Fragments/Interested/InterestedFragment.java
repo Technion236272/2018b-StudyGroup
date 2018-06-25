@@ -171,10 +171,11 @@ public class InterestedFragment extends Fragment {
                             noInterested.setText(R.string.no_interested_groups);
                         } else {
                             noInterested.setText("");
-                            adapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested), R.id.interestedGroupsRecyclerView);
-                            lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested), R.id.interestedGroupsRecyclerView);
-                            recyclerView.setAdapter(adapter);
                         }
+                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested), R.id.interestedGroupsRecyclerView);
+                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpInterested), R.id.interestedGroupsRecyclerView);
+                        recyclerView.setAdapter(adapter);
+
                     }
 
                     @Override

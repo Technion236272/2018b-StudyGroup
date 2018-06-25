@@ -183,10 +183,10 @@ public class JoinedFragment extends Fragment {
                             noJoined.setText(R.string.not_joined_yet);
                         } else {
                             noJoined.setText("");
-                            adapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
-                            lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
-                            recyclerView.setAdapter(adapter);
                         }
+                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
+                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
+                        recyclerView.setAdapter(adapter);
                     }
 
                     @Override
