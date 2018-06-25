@@ -45,11 +45,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         createNotificationChannel();
 
-//      Intent intent = new Intent(this, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_white_logo)
         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.study_group_logo))
@@ -63,31 +58,4 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(id, mBuilder.build());
     }
 
-
-    //This method is only generating push notification
-    //It is same as we did in earlier posts
-//    private void sendNotification(String messageTitle, String messageBody, Map<String, String> row) {
-//        PendingIntent contentIntent = null;
-//        try {
-//            //Intent groupDetailIntent = new Intent(this, UnanimousHomeActivity.class);
-//
-//            contentIntent = PendingIntent.getActivity(this, (int) (Math.random() * 100),
-//                    groupDetailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setContentTitle(messageTitle)
-//                .setContentText(messageBody)
-//                .setAutoCancel(true)
-//                .setSound(defaultSoundUri)
-//                .setContentIntent(contentIntent);
-//
-//        NotificationManager notificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(count, notificationBuilder.build());
-//        count++;
-//    }
 }

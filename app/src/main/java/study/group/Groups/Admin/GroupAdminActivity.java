@@ -364,9 +364,32 @@ public class GroupAdminActivity extends AppCompatActivity {
                                         });
                                     }
                                 }
+                            }
 
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
                             }
+                        });
+
+                        database.child("Groups").child(groupID).child("interested").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                final Map<String, Object> notification = new HashMap<>();
+                                String newMessage = Profile.getCurrentProfile().getName() + " has modified" + subject + " details.";
+                                notification.put("Notification", newMessage);
+                                notification.put("Type", "Group Modified");
+                                notification.put("From", Profile.getCurrentProfile().getId());
+                                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                    mFirestore.collection("Users/" + d.getKey() + "/Notifications").add(notification).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+
+                                        }
+                                    });
+                                }
+                            }
+
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
@@ -447,24 +470,6 @@ public class GroupAdminActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-//        database.child("Groups").child(groupID).child("currentNumOfPart").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                currentNumOfParticipants.setText(dataSnapshot.getValue() + " Participants:");
-//                //TODO: potential Bug
-//                //numOfParticipants = (long)dataSnapshot.getValue();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
 
         database.child("Groups").child(groupID).child("participants").addValueEventListener(new ValueEventListener() {
             @Override
