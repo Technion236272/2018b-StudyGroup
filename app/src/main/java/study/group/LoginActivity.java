@@ -79,18 +79,19 @@ public class LoginActivity extends AppCompatActivity {
 
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            final HashMap<String,Object> userData = new HashMap<>();
-            String token_id = FirebaseInstanceId.getInstance().getToken();
-            userData.put("token_id", token_id);
-            mFirestore.collection("Users").document(Profile.getCurrentProfile().getId()).update(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    myIntent.putExtra("FirstLogin", "no");
-                    startActivity(myIntent);
-                }
-            });
-        }
+//            final HashMap<String,Object> userData = new HashMap<>();
+//            String token_id = FirebaseInstanceId.getInstance().getToken();
+//            userData.put("token_id", token_id);
+//            mFirestore.collection("Users").document(Profile.getCurrentProfile().getId()).update(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                @Override
+//            public void onSuccess (Void aVoid){
+                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                myIntent.putExtra("FirstLogin", "no");
+                startActivity(myIntent);
+            }
+
+//            });
+//        }
     }
 
     @Override
