@@ -82,7 +82,22 @@ public class JoinedFragment extends Fragment {
                         tempGroups.add(g);
                     }
                 }
-                
+
+                for (Group group : groups) {
+                    boolean flag = false;
+                    for(Group g : tempGroups)
+                    {
+                        if(g.getGroupID().equals(group.getGroupID()))
+                        {
+                            flag = true;
+                        }
+                    }
+
+                    if(flag == false)
+                    {
+                        tempGroups.add(group);
+                    }
+                }
                 groups.clear();
                 groups.addAll(tempGroups);
                 adapter = new GroupInformationAdapter(new ArrayList<>(groups), R.id.joinedGroupsRecyclerView);
