@@ -149,7 +149,7 @@ public class Chat extends AppCompatActivity {
 
                 String userName = Profile.getCurrentProfile().getName();
                 final Map<String, Object> notification = new HashMap<>();
-                String newMessage = "New message from: "+userName + " in " + subject+'.';
+                String newMessage = "New message from "+userName + " in " + subject+'.';
                 notification.put("Notification", newMessage);
                 notification.put("Type","New Message");
                 notification.put("From",Profile.getCurrentProfile().getId());
