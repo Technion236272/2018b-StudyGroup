@@ -21,7 +21,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         userData.put("id", Profile.getCurrentProfile().getId());
         userData.put("name",Profile.getCurrentProfile().getName());
         userData.put("token_id",token_id);
-        FirebaseFirestore.getInstance().collection("Users").document(Profile.getCurrentProfile().getId()).set(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
+        FirebaseFirestore.getInstance().collection("Users").document(Profile.getCurrentProfile().getId()).update(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
 
