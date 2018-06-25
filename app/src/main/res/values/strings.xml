@@ -107,5 +107,8 @@
     <string name="nova_credits">https://www.webalys.com/nova</string>
     <string name="group_image">Group image</string>
     <string name="choose_group_image">Choose Group Image</string>
+    <string name="no_interested_groups">There are no interested groups!</string>
+    <string name="no_requests">There are no requests</string>
+    <string name="not_joined_yet">You haven\'t joined any groups yet!</string>
 
 </resources>

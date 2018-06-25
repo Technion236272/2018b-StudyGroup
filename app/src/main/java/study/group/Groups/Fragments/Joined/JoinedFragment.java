@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -95,8 +96,8 @@ public class JoinedFragment extends Fragment {
                 }
                 groups.clear();
                 groups.addAll(tempGroups);
-                adapter = new GroupInformationAdapter(new ArrayList<>(groups), R.id.interestedGroupsRecyclerView);
-                lastAdapter = new GroupInformationAdapter(new ArrayList<>(groups), R.id.interestedGroupsRecyclerView);
+                adapter = new GroupInformationAdapter(new ArrayList<>(groups), R.id.joinedGroupsRecyclerView);
+                lastAdapter = new GroupInformationAdapter(new ArrayList<>(groups), R.id.joinedGroupsRecyclerView);
                 recyclerView.setAdapter(adapter);
             }
 
@@ -143,7 +144,9 @@ public class JoinedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_joined, container, false);
+
         groups = new ArrayList<>();
+        final TextView noJoined = view.findViewById(R.id.noJoinedView);
 
         recyclerView = view.findViewById(R.id.joinedGroupsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -176,9 +179,14 @@ public class JoinedFragment extends Fragment {
                                 groups.add(g);
                             }
                         }
-                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
-                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
-                        recyclerView.setAdapter(adapter);
+                        if(groups.isEmpty()) {
+                            noJoined.setText(R.string.not_joined_yet);
+                        } else {
+                            noJoined.setText("");
+                            adapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
+                            lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpJoined), R.id.joinedGroupsRecyclerView);
+                            recyclerView.setAdapter(adapter);
+                        }
                     }
 
                     @Override

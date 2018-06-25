@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -90,6 +91,7 @@ public class RequestsFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_requests, container, false);
 
         requests = new ArrayList<>();
+        final TextView noRequested = view.findViewById(R.id.noRequestedView);
 
         recyclerView = view.findViewById(R.id.requestsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -118,9 +120,14 @@ public class RequestsFragment extends Fragment {
                                 requests.add(g);
                             }
                         }
-                        adapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
-                        lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
-                        recyclerView.setAdapter(adapter);
+                        if(requests.isEmpty()) {
+                            noRequested.setText(R.string.no_requests);
+                        } else {
+                            noRequested.setText("");
+                            adapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
+                            lastAdapter = new GroupInformationAdapter(new ArrayList<>(tmpRequests), R.id.requestsRecyclerView);
+                            recyclerView.setAdapter(adapter);
+                        }
                     }
 
                     @Override
