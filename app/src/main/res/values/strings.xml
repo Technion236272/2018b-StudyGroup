@@ -110,5 +110,6 @@
     <string name="no_interested_groups">There are no interested groups!</string>
     <string name="no_requests">There are no requests</string>
     <string name="not_joined_yet">You haven\'t joined any groups yet!</string>
+    <string name="shir_cohen">Shir Cohen for helping with the design</string>
 
 </resources>

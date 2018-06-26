@@ -532,7 +532,7 @@ public class Chat extends AppCompatActivity {
                     }
                 }
                 dataBase.child("Groups").child(groupID).child("participants")
-                        .addValueEventListener(new ValueEventListener() {
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot participant : dataSnapshot.getChildren()) {
@@ -549,7 +549,7 @@ public class Chat extends AppCompatActivity {
                         });
 
                 dataBase.child("Groups").child(groupID).child("Requests")
-                        .addValueEventListener(new ValueEventListener() {
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot child : dataSnapshot.getChildren()) {
@@ -562,6 +562,22 @@ public class Chat extends AppCompatActivity {
                             public void onCancelled(DatabaseError databaseError) {
                             }
                         });
+
+                dataBase.child("Groups").child(groupID).child("interested")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                    String currentUser = child.getKey();
+                                    dataBase.child("Users").child(currentUser).child("interested").child(groupID).removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
                 dataBase.child("Groups").child(groupID).removeValue();
                 finish();
             }
