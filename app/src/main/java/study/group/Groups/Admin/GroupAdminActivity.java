@@ -350,7 +350,7 @@ public class GroupAdminActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 final Map<String, Object> notification = new HashMap<>();
-                                String newMessage = Profile.getCurrentProfile().getName() + " has modified"+subject+" details.";
+                                String newMessage = Profile.getCurrentProfile().getName() + " has modified "+subject+" details.";
                                 notification.put("Notification", newMessage);
                                 notification.put("Type","Group Modified");
                                 notification.put("From", Profile.getCurrentProfile().getId());

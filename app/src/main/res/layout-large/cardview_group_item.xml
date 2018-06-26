@@ -43,6 +43,7 @@
                     android:layout_toLeftOf="@+id/userStateInGroupCardView"
                     android:layout_toRightOf="@+id/groupPhotoCardView"
                     android:layout_toStartOf="@+id/userStateInGroupCardView"
+                    android:maxHeight="45dp"
                     android:text="@string/Subject"
                     android:textColor="@android:color/black"
                     android:textSize="30sp" />
